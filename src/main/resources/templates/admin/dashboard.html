@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>Tableau de Bord Admin - BMS Rapid Clean</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <!-- Welcome Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card bg-gradient-primary text-white">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h2 class="card-title mb-2">
+                                        <i class="fas fa-tachometer-alt me-2"></i>
+                                        Tableau de Bord Administrateur
+                                    </h2>
+                                    <p class="card-text mb-0">
+                                        Gérez l'ensemble de la plateforme BMS Rapid Clean.
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <div class="admin-badge">
+                                        <i class="fas fa-crown me-2"></i>Administrateur
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <div class="stat-icon mb-2">
+                                <i class="fas fa-users fa-2x text-primary"></i>
+                            </div>
+                            <h3 class="card-title text-primary" th:text="${totalUsers}">0</h3>
+                            <p class="card-text text-muted">Utilisateurs Total</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <div class="stat-icon mb-2">
+                                <i class="fas fa-list-alt fa-2x text-info"></i>
+                            </div>
+                            <h3 class="card-title text-info" th:text="${totalRequests}">0</h3>
+                            <p class="card-text text-muted">Demandes Total</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <div class="stat-icon mb-2">
+                                <i class="fas fa-envelope fa-2x text-warning"></i>
+                            </div>
+                            <h3 class="card-title text-warning" th:text="${unreadMessages}">0</h3>
+                            <p class="card-text text-muted">Messages Non Lus</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <div class="stat-icon mb-2">
+                                <i class="fas fa-star fa-2x text-success"></i>
+                            </div>
+                            <h3 class="card-title text-success" th:text="${pendingReviews}">0</h3>
+                            <p class="card-text text-muted">Avis en Attente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notifications -->
+            <div class="row mb-4" th:if="${notifications != null and !notifications.empty}">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-bell me-2"></i>
+                                Notifications Récentes
+                                <span class="badge bg-light text-dark ms-2" th:text="${unreadNotifications}">0</span>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="notification-list">
+                                <div class="notification-item" th:each="notification : ${notifications}">
+                                    <div class="notification-content">
+                                        <h6 class="notification-title" th:text="${notification.title}">Titre</h6>
+                                        <p class="notification-message" th:text="${notification.message}">Message</p>
+                                        <small class="text-muted" th:text="${#temporals.format(notification.createdAt, 'dd/MM/yyyy HH:mm')}">Date</small>
+                                    </div>
+                                    <div class="notification-actions">
+                                        <span class="badge" 
+                                              th:classappend="${notification.priority.name() == 'URGENT'} ? 'bg-danger' : 
+                                                             ${notification.priority.name() == 'HIGH'} ? 'bg-warning' :
+                                                             ${notification.priority.name() == 'MEDIUM'} ? 'bg-info' : 'bg-secondary'"
+                                              th:text="${notification.priority.displayName}">Priorité</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-bolt me-2"></i>Actions Rapides
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 mb-3">
+                                    <a href="/admin/services/new" class="btn btn-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center py-3">
+                                        <i class="fas fa-plus fa-2x mb-2"></i>
+                                        <span>Nouveau Service</span>
+                                    </a>
+                                </div>
+                                
+                                <div class="col-lg-3 col-md-6 mb-3">
+                                    <a href="/admin/requests" class="btn btn-info w-100 h-100 d-flex flex-column align-items-center justify-content-center py-3">
+                                        <i class="fas fa-list fa-2x mb-2"></i>
+                                        <span>Gérer Demandes</span>
+                                    </a>
+                                </div>
+                                
+                                <div class="col-lg-3 col-md-6 mb-3">
+                                    <a href="/admin/users" class="btn btn-success w-100 h-100 d-flex flex-column align-items-center justify-content-center py-3">
+                                        <i class="fas fa-users fa-2x mb-2"></i>
+                                        <span>Gérer Utilisateurs</span>
+                                    </a>
+                                </div>
+                                
+                                <div class="col-lg-3 col-md-6 mb-3">
+                                    <a href="/admin/services" class="btn btn-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center py-3">
+                                        <i class="fas fa-broom fa-2x mb-2"></i>
+                                        <span>Gérer Services</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-chart-line me-2"></i>Activité Récente
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-primary"></div>
+                                    <div class="timeline-content">
+                                        <h6 class="timeline-title">Nouvelle demande de service</h6>
+                                        <p class="timeline-text">Demande de nettoyage résidentiel créée</p>
+                                        <small class="text-muted">Il y a 2 heures</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-success"></div>
+                                    <div class="timeline-content">
+                                        <h6 class="timeline-title">Service terminé</h6>
+                                        <p class="timeline-text">Nettoyage commercial #1234 complété</p>
+                                        <small class="text-muted">Il y a 4 heures</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-info"></div>
+                                    <div class="timeline-content">
+                                        <h6 class="timeline-title">Nouvel utilisateur</h6>
+                                        <p class="timeline-text">Client inscrit sur la plateforme</p>
+                                        <small class="text-muted">Il y a 6 heures</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-tasks me-2"></i>Tâches Urgentes
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="task-list">
+                                <div class="task-item">
+                                    <div class="task-priority high"></div>
+                                    <div class="task-content">
+                                        <h6>Demandes en attente</h6>
+                                        <p class="text-muted small">3 demandes nécessitent votre attention</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="task-item">
+                                    <div class="task-priority medium"></div>
+                                    <div class="task-content">
+                                        <h6>Services à mettre à jour</h6>
+                                        <p class="text-muted small">Vérifier les prix des services</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="task-item">
+                                    <div class="task-priority low"></div>
+                                    <div class="task-content">
+                                        <h6>Rapport mensuel</h6>
+                                        <p class="text-muted small">Générer le rapport de performance</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        .admin-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .timeline-title {
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+        
+        .timeline-text {
+            margin-bottom: 5px;
+            color: #666;
+        }
+        
+        .task-list {
+            space-y: 15px;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .task-priority {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .task-priority.high {
+            background-color: #dc3545;
+        }
+        
+        .task-priority.medium {
+            background-color: #ffc107;
+        }
+        
+        .task-priority.low {
+            background-color: #28a745;
+        }
+        
+        .task-content h6 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Base de données MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: rapidclean-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rapidclean123
+      MYSQL_DATABASE: rapidclean
+      MYSQL_USER: rapidclean
+      MYSQL_PASSWORD: rapidclean123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - rapidclean-network
+    restart: unless-stopped
+
+  # Application BMS Rapid Clean
+  app:
+    build: .
+    container_name: rapidclean-app
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/rapidclean?useSSL=false&serverTimezone=UTC
+      DB_USERNAME: rapidclean
+      DB_PASSWORD: rapidclean123
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - rapidclean-network
+    restart: unless-stopped
+    volumes:
+      - app_logs:/app/logs
+
+  # Nginx (optionnel pour le reverse proxy)
+  nginx:
+    image: nginx:alpine
+    container_name: rapidclean-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - app
+    networks:
+      - rapidclean-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+    driver: local
+  app_logs:
+    driver: local
+
+networks:
+  rapidclean-network:
+    driver: bridge

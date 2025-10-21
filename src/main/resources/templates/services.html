@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>Nos Services - BMS Rapid Clean</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <section class="py-5" style="background: var(--gradient-primary); color: white;">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-8 mx-auto">
+                        <h1 class="display-4 fw-bold mb-4">Nos Services de Nettoyage</h1>
+                        <p class="lead">
+                            Découvrez notre gamme complète de services de nettoyage professionnel, 
+                            disponibles 24h/24 pour répondre à tous vos besoins.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Grid -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row g-4" th:if="${services != null and !services.empty}">
+                    <div class="col-lg-4 col-md-6" th:each="service : ${services}">
+                        <div class="card h-100 service-card">
+                            <div class="service-image">
+                                <div class="service-icon">
+                                    <i class="fas fa-broom fa-3x"></i>
+                                </div>
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title" th:text="${service.name}">Service</h5>
+                                <p class="card-text" th:text="${service.description}">Description du service</p>
+                                <div class="service-price mb-3">
+                                    <span class="h4 text-primary" th:text="'$' + ${service.price}">$0.00</span>
+                                    <small class="text-muted d-block">par service</small>
+                                </div>
+                                <a href="/client/request" class="btn btn-primary">
+                                    <i class="fas fa-calendar-plus me-2"></i>Demander ce Service
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-5" th:if="${services == null or services.empty}">
+                    <i class="fas fa-broom fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">Aucun service disponible pour le moment</h4>
+                    <p class="text-muted">Nos services seront bientôt disponibles.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Categories -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="display-5 fw-bold mb-3">Catégories de Services</h2>
+                        <p class="lead text-muted">
+                            Nous offrons des solutions de nettoyage adaptées à tous vos besoins.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="category-card text-center">
+                            <div class="category-icon mb-3">
+                                <i class="fas fa-home fa-3x text-primary"></i>
+                            </div>
+                            <h5>Résidentiel</h5>
+                            <p class="text-muted">Nettoyage de maisons et appartements</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="category-card text-center">
+                            <div class="category-icon mb-3">
+                                <i class="fas fa-building fa-3x text-info"></i>
+                            </div>
+                            <h5>Commercial</h5>
+                            <p class="text-muted">Bureaux, magasins et espaces commerciaux</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="category-card text-center">
+                            <div class="category-icon mb-3">
+                                <i class="fas fa-industry fa-3x text-warning"></i>
+                            </div>
+                            <h5>Industriel</h5>
+                            <p class="text-muted">Usines et installations industrielles</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="category-card text-center">
+                            <div class="category-icon mb-3">
+                                <i class="fas fa-hammer fa-3x text-success"></i>
+                            </div>
+                            <h5>Post-Construction</h5>
+                            <p class="text-muted">Nettoyage après travaux et construction</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="display-5 fw-bold mb-4">Pourquoi Choisir BMS RapidClean ?</h2>
+                        <div class="feature-list">
+                            <div class="feature-item mb-3">
+                                <div class="feature-icon-small">
+                                    <i class="fas fa-clock text-primary"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h6>Disponible 24h/24</h6>
+                                    <p class="text-muted mb-0">Service disponible à tout moment, même les weekends et jours fériés.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item mb-3">
+                                <div class="feature-icon-small">
+                                    <i class="fas fa-shield-alt text-success"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h6>Équipe Professionnelle</h6>
+                                    <p class="text-muted mb-0">Notre équipe est formée et certifiée pour tous types de nettoyage.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item mb-3">
+                                <div class="feature-icon-small">
+                                    <i class="fas fa-leaf text-info"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h6>Produits Écologiques</h6>
+                                    <p class="text-muted mb-0">Nous utilisons des produits respectueux de l'environnement.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item mb-3">
+                                <div class="feature-icon-small">
+                                    <i class="fas fa-star text-warning"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h6>Qualité Garantie</h6>
+                                    <p class="text-muted mb-0">Satisfaction garantie à 100% ou remboursement.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="service-image-large">
+                            <img src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2fcc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                 alt="Service de nettoyage professionnel" class="img-fluid rounded-3 shadow-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5" style="background: var(--gradient-primary); color: white;">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-8 mx-auto">
+                        <h3 class="display-6 fw-bold mb-3">Prêt à Nettoyer ?</h3>
+                        <p class="lead mb-4">
+                            Contactez-nous dès maintenant pour une estimation gratuite et découvrez 
+                            pourquoi nous sommes le choix numéro 1 pour le nettoyage professionnel.
+                        </p>
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <a href="/client/request" class="btn btn-warning btn-lg">
+                                <i class="fas fa-calendar-plus me-2"></i>Demander un Service
+                            </a>
+                            <a href="/contact" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-phone me-2"></i>Nous Contacter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <style>
+        .service-card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .service-image {
+            height: 200px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="white" opacity="0.1"><circle cx="50" cy="50" r="40"/></svg>');
+            background-size: cover;
+        }
+        
+        .service-icon {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+        
+        .service-price {
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+        
+        .category-card {
+            padding: 2rem 1rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(44, 90, 160, 0.1);
+            border-radius: 50%;
+        }
+        
+        .feature-list {
+            margin-top: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .feature-icon-small {
+            width: 40px;
+            height: 40px;
+            background: rgba(44, 90, 160, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .feature-content h6 {
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .service-image-large img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+    </style>
+</body>
+</html>

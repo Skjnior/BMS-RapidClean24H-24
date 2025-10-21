@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>BMS Rapid Clean - Service de Nettoyage 24h/24</title>
+    <div th:replace="~{layout :: head}"></div>
+</head>
+<body>
+    <div th:replace="~{layout :: navbar}"></div>
+    
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="hero-content animate-fade-in">
+                            <h1 class="display-4 fw-bold mb-4">
+                                Nettoyage Professionnel 
+                                <span class="text-warning">24h/24</span>
+                            </h1>
+                            <p class="lead mb-4">
+                                BMS Rapid Clean vous offre des services de nettoyage de qualité supérieure, 
+                                disponibles 24 heures sur 24, 7 jours sur 7. Votre satisfaction est notre priorité.
+                            </p>
+                            <div class="d-flex flex-wrap gap-3">
+                                <a href="#contact" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-calendar-plus me-2"></i>Demander un Service
+                                </a>
+                                <a href="#services" class="btn btn-outline-light btn-lg">
+                                    <i class="fas fa-info-circle me-2"></i>Nos Services
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="text-center animate-slide-up">
+                            <img th:src="@{/images/Banière BMS222.png}" 
+                                 alt="BMS Rapid Clean - Service de nettoyage professionnel" class="img-fluid rounded-3 shadow-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="about" class="py-5">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="display-5 fw-bold mb-3">Pourquoi Choisir BMS RapidClean ?</h2>
+                        <p class="lead text-muted">
+                            Nous nous engageons à fournir des services de nettoyage exceptionnels 
+                            avec une attention particulière aux détails.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-clock fa-3x text-primary"></i>
+                                </div>
+                                <h5 class="card-title">Disponible 24h/24</h5>
+                                <p class="card-text">
+                                    Service disponible à tout moment, même les weekends et jours fériés. 
+                                    Nous nous adaptons à votre emploi du temps.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-shield-alt fa-3x text-success"></i>
+                                </div>
+                                <h5 class="card-title">Équipe Professionnelle</h5>
+                                <p class="card-text">
+                                    Notre équipe est formée et certifiée pour tous types de nettoyage. 
+                                    Nous utilisons des produits écologiques et sécuritaires.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-star fa-3x text-warning"></i>
+                                </div>
+                                <h5 class="card-title">Qualité Garantie</h5>
+                                <p class="card-text">
+                                    Satisfaction garantie à 100%. Si vous n'êtes pas satisfait, 
+                                    nous revenons gratuitement pour corriger le problème.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Preview -->
+        <section id="services" class="py-5 bg-light">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="display-5 fw-bold mb-3">Nos Services</h2>
+                        <p class="lead text-muted">
+                            Découvrez notre gamme complète de services de nettoyage professionnel.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row g-4" th:if="${services != null and !services.empty}">
+                    <div class="col-lg-4 col-md-6" th:each="service : ${services}">
+                        <div class="card h-100">
+                            <div class="card-img-top" style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-broom fa-3x text-white"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${service.name}">Service</h5>
+                                <p class="card-text" th:text="${service.description}">Description du service</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h5 text-primary mb-0" th:text="'$' + ${service.price}">$0.00</span>
+                                    <a href="#contact" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-plus me-1"></i>Demander
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="#services" class="btn btn-primary btn-lg">
+                        <i class="fas fa-list me-2"></i>Voir Tous les Services
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-item">
+                            <div class="stat-number display-4 fw-bold text-primary" data-count="500">0</div>
+                            <div class="stat-label">Clients Satisfaits</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-item">
+                            <div class="stat-number display-4 fw-bold text-success" data-count="1000">0</div>
+                            <div class="stat-label">Services Réalisés</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-item">
+                            <div class="stat-number display-4 fw-bold text-warning" data-count="24">0</div>
+                            <div class="stat-label">Heures de Service</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-item">
+                            <div class="stat-number display-4 fw-bold text-info" data-count="5">0</div>
+                            <div class="stat-label">Années d'Expérience</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-5" style="background: var(--gradient-primary); color: white;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h3 class="display-6 fw-bold mb-3">Contactez-Nous</h3>
+                        <p class="lead mb-4">
+                            Prêt à nettoyer ? Contactez-nous dès maintenant pour une estimation gratuite 
+                            et découvrez pourquoi nous sommes le choix numéro 1 pour le nettoyage professionnel.
+                        </p>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="contact-item">
+                                    <i class="fas fa-phone fa-2x mb-3"></i>
+                                    <h5>Téléphone</h5>
+                                    <p>+33 1 23 45 67 89</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope fa-2x mb-3"></i>
+                                    <h5>Email</h5>
+                                    <p>contact@bmsrapidclean.com</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="contact-item">
+                                    <i class="fas fa-map-marker-alt fa-2x mb-3"></i>
+                                    <h5>Adresse</h5>
+                                    <p>123 Rue du Nettoyage<br>75001 Paris, France</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="/client/request" class="btn btn-warning btn-lg me-3">
+                                <i class="fas fa-calendar-plus me-2"></i>Demander un Service
+                            </a>
+                            <a href="/login" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Connexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <div th:replace="~{layout :: footer}"></div>
+    
+    <style>
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Offset for fixed navbar */
+        section[id] {
+            scroll-margin-top: 80px;
+        }
+        
+        /* Contact section styling */
+        .contact-item {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .contact-item i {
+            color: #ffc107;
+        }
+        
+        /* Hero section styling */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+        }
+        
+        /* Animation classes */
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    
+    <script>
+        // Smooth scrolling for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle navbar links
+            const navbarLinks = document.querySelectorAll('.navbar-nav a[href^="#"]');
+            navbarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Handle buttons in hero section
+            const heroButtons = document.querySelectorAll('.hero-content a[href^="#"]');
+            heroButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 80;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Active navbar link highlighting
+            window.addEventListener('scroll', function() {
+                const sections = document.querySelectorAll('section[id]');
+                const scrollPos = window.scrollY + 100;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    const correspondingLink = document.querySelector(`.navbar-nav a[href="#${sectionId}"]`);
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                        // Remove active class from all links
+                        document.querySelectorAll('.navbar-nav a').forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        // Add active class to current link
+                        if (correspondingLink) {
+                            correspondingLink.classList.add('active');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

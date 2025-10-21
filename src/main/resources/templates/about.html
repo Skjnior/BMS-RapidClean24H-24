@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>À Propos - BMS Rapid Clean</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <section class="py-5" style="background: var(--gradient-primary); color: white;">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1 class="display-4 fw-bold mb-4">À Propos de BMS Rapid Clean</h1>
+                        <p class="lead">
+                            Depuis 2019, nous nous engageons à fournir des services de nettoyage 
+                            professionnel de la plus haute qualité, disponibles 24h/24, 7j/7.
+                        </p>
+                    </div>
+                    <div class="col-lg-6 text-center">
+                        <img src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2fcc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                             alt="Équipe BMS Rapid Clean" class="img-fluid rounded-3 shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Story -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h2 class="display-5 fw-bold mb-4">Notre Histoire</h2>
+                        <p class="lead text-muted mb-5">
+                            Fondée avec la vision de révolutionner l'industrie du nettoyage, 
+                            BMS Rapid Clean est devenue la référence en matière de services 
+                            de nettoyage professionnel.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="story-card text-center">
+                            <div class="story-icon mb-3">
+                                <i class="fas fa-lightbulb fa-3x text-primary"></i>
+                            </div>
+                            <h5>2019 - L'Idée</h5>
+                            <p class="text-muted">
+                                L'idée de créer un service de nettoyage disponible 24h/24 
+                                est née d'un besoin réel du marché.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="story-card text-center">
+                            <div class="story-icon mb-3">
+                                <i class="fas fa-rocket fa-3x text-success"></i>
+                            </div>
+                            <h5>2020 - Le Lancement</h5>
+                            <p class="text-muted">
+                                Lancement officiel avec une équipe de 10 professionnels 
+                                et nos premiers clients satisfaits.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="story-card text-center">
+                            <div class="story-icon mb-3">
+                                <i class="fas fa-trophy fa-3x text-warning"></i>
+                            </div>
+                            <h5>2024 - L'Excellence</h5>
+                            <p class="text-muted">
+                                Plus de 500 clients satisfaits et 1000+ services réalisés 
+                                avec un taux de satisfaction de 99%.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Values -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="display-5 fw-bold mb-3">Nos Valeurs</h2>
+                        <p class="lead text-muted">
+                            Ces valeurs guident chacune de nos actions et définissent 
+                            notre engagement envers l'excellence.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="value-card text-center">
+                            <div class="value-icon mb-3">
+                                <i class="fas fa-star fa-3x text-warning"></i>
+                            </div>
+                            <h5>Qualité</h5>
+                            <p class="text-muted">
+                                Nous nous engageons à fournir des services de la plus haute qualité.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="value-card text-center">
+                            <div class="value-icon mb-3">
+                                <i class="fas fa-clock fa-3x text-primary"></i>
+                            </div>
+                            <h5>Ponctualité</h5>
+                            <p class="text-muted">
+                                Respecter les délais est une priorité absolue pour nous.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="value-card text-center">
+                            <div class="value-icon mb-3">
+                                <i class="fas fa-leaf fa-3x text-success"></i>
+                            </div>
+                            <h5>Écologie</h5>
+                            <p class="text-muted">
+                                Nous utilisons des produits respectueux de l'environnement.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="value-card text-center">
+                            <div class="value-icon mb-3">
+                                <i class="fas fa-handshake fa-3x text-info"></i>
+                            </div>
+                            <h5>Confiance</h5>
+                            <p class="text-muted">
+                                Construire des relations durables basées sur la confiance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Team -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="display-5 fw-bold mb-3">Notre Équipe</h2>
+                        <p class="lead text-muted">
+                            Une équipe de professionnels dédiés et expérimentés, 
+                            formés aux dernières techniques de nettoyage.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="team-card text-center">
+                            <div class="team-avatar mb-3">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                     alt="Jean Dupont" class="rounded-circle">
+                            </div>
+                            <h5>Jean Dupont</h5>
+                            <p class="text-primary mb-2">Directeur Général</p>
+                            <p class="text-muted small">
+                                15 ans d'expérience dans l'industrie du nettoyage. 
+                                Passionné par l'excellence opérationnelle.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="team-card text-center">
+                            <div class="team-avatar mb-3">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                     alt="Marie Martin" class="rounded-circle">
+                            </div>
+                            <h5>Marie Martin</h5>
+                            <p class="text-primary mb-2">Responsable Qualité</p>
+                            <p class="text-muted small">
+                                Spécialiste en contrôle qualité et formation des équipes. 
+                                Certifiée en techniques de nettoyage avancées.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="team-card text-center">
+                            <div class="team-avatar mb-3">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                     alt="Pierre Durand" class="rounded-circle">
+                            </div>
+                            <h5>Pierre Durand</h5>
+                            <p class="text-primary mb-2">Superviseur Opérations</p>
+                            <p class="text-muted small">
+                                Expert en gestion d'équipe et coordination des services. 
+                                Garantit la ponctualité et l'efficacité.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="py-5" style="background: var(--gradient-primary); color: white;">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-item">
+                            <div class="stat-number display-4 fw-bold" data-count="500">0</div>
+                            <div class="stat-label">Clients Satisfaits</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-item">
+                            <div class="stat-number display-4 fw-bold" data-count="1000">0</div>
+                            <div class="stat-label">Services Réalisés</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-item">
+                            <div class="stat-number display-4 fw-bold" data-count="99">0</div>
+                            <div class="stat-label">% Satisfaction</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="stat-item">
+                            <div class="stat-number display-4 fw-bold" data-count="5">0</div>
+                            <div class="stat-label">Années d'Expérience</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-8 mx-auto">
+                        <h3 class="display-6 fw-bold mb-3">Rejoignez Nos Clients Satisfaits</h3>
+                        <p class="lead text-muted mb-4">
+                            Découvrez pourquoi plus de 500 clients nous font confiance 
+                            pour leurs besoins de nettoyage professionnel.
+                        </p>
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <a href="/client/request" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calendar-plus me-2"></i>Demander un Service
+                            </a>
+                            <a href="/contact" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-phone me-2"></i>Nous Contacter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <style>
+        .story-card {
+            padding: 2rem 1rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .story-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(44, 90, 160, 0.1);
+            border-radius: 50%;
+        }
+        
+        .value-card {
+            padding: 2rem 1rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .value-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(44, 90, 160, 0.1);
+            border-radius: 50%;
+        }
+        
+        .team-card {
+            padding: 2rem 1rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .team-avatar img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 4px solid var(--primary-color);
+        }
+        
+        .stat-item {
+            padding: 2rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+    </style>
+</body>
+</html>

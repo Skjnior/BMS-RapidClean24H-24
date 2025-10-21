@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ?: 'BMS RapidClean - Service de Nettoyage 24h/24'">BMS RapidClean</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #1e3a5f;
+            --accent-color: #4a90e2;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --gradient-primary: linear-gradient(135deg, #2c5aa0 0%, #4a90e2 100%);
+            --gradient-secondary: linear-gradient(135deg, #1e3a5f 0%, #2c5aa0 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            background: var(--gradient-primary) !important;
+            box-shadow: 0 2px 20px rgba(44, 90, 160, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white !important;
+            text-decoration: none;
+        }
+        
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: #ffc107 !important;
+            transform: translateY(-2px);
+        }
+        
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background-color: #ffc107;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 90, 160, 0.4);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 25px;
+            padding: 10px 28px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--gradient-primary);
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+        
+        .hero-section {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><polygon points="0,0 1000,100 1000,0"/></svg>');
+            background-size: cover;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .footer {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer h5 {
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: #ffc107;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            border: none;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div th:fragment="navbar">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+            <a class="navbar-brand" href="/">
+                <img th:src="@{/images/logo Rapidclean1.jpg}" alt="BMS RapidClean" height="40" class="me-2">
+                BMS RapidClean24H/24
+            </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#home">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#about">À Propos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#contact">Contact</a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item" th:if="${#authentication == null}">
+                            <a class="nav-link" href="/login">
+                                <i class="fas fa-sign-in-alt me-1"></i>Connexion
+                            </a>
+                        </li>
+                        <li class="nav-item" th:if="${#authentication == null}">
+                            <a class="nav-link" href="/register">
+                                <i class="fas fa-user-plus me-1"></i>Inscription
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown" th:if="${#authentication != null}">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>
+                                <span th:text="${#authentication.name}">Utilisateur</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/dashboard">Tableau de bord</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <!-- Page Content -->
+        <div th:fragment="layout">
+            <!-- Content will be inserted here -->
+        </div>
+    </main>
+    
+    <div th:fragment="footer">
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <img th:src="@{/images/logo Rapidclean1.jpg}" alt="BMS RapidClean" height="50" class="mb-3">
+                        <h5>BMS RapidClean 24H/24</h5>
+                        <p>Service de nettoyage professionnel 24h/24, 7j/7. Nous offrons des solutions de nettoyage de qualité pour tous vos besoins.</p>
+                        <div class="social-links">
+                            <a href="#" class="me-3"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="me-3"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="me-3"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <h5>Services</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Nettoyage Résidentiel</a></li>
+                            <li><a href="#">Nettoyage Commercial</a></li>
+                            <li><a href="#">Nettoyage Industriel</a></li>
+                            <li><a href="#">Nettoyage Post-Construction</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <h5>Liens Utiles</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="/">Accueil</a></li>
+                            <li><a href="/about">À Propos</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                            <li><a href="/services">Services</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <h5>Contact</h5>
+                        <p><i class="fas fa-phone me-2"></i>+1 (555) 123-4567</p>
+                        <p><i class="fas fa-envelope me-2"></i>info@bmsrapidclean.com</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i>123 Rue de la Propreté, Ville</p>
+                        <p><i class="fas fa-clock me-2"></i>Disponible 24h/24, 7j/7</p>
+                    </div>
+                </div>
+                
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+                
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="mb-0">&copy; 2025 BMS RapidClean. Tous droits réservés.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="me-3">Politique de Confidentialité</a>
+                        <a href="#">Conditions d'Utilisation</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Custom JS -->
+        <script th:src="@{/js/main.js}"></script>
+    </div>
+</body>
+</html>

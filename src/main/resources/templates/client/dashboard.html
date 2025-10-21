@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>Tableau de Bord Client - BMS Rapid Clean</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <!-- Welcome Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h2 class="card-title mb-2">
+                                        <i class="fas fa-user-circle me-2"></i>
+                                        Bienvenue, <span th:text="${user.firstName}">Client</span> !
+                                    </h2>
+                                    <p class="card-text mb-0">
+                                        Gérez vos demandes de service et suivez leur progression en temps réel.
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <a href="/client/request" class="btn btn-warning btn-lg">
+                                        <i class="fas fa-plus me-2"></i>Nouvelle Demande
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="stat-icon mb-2">
+                                <i class="fas fa-clock fa-2x text-warning"></i>
+                            </div>
+                            <h5 class="card-title" th:text="${requests != null ? requests.size() : 0}">0</h5>
+                            <p class="card-text text-muted">Demandes Total</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="stat-icon mb-2">
+                                <i class="fas fa-hourglass-half fa-2x text-info"></i>
+                            </div>
+                            <h5 class="card-title" th:text="${requests != null ? requests.stream().filter(r -> r.status.name() == 'PENDING').count() : 0}">0</h5>
+                            <p class="card-text text-muted">En Attente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="stat-icon mb-2">
+                                <i class="fas fa-spinner fa-2x text-primary"></i>
+                            </div>
+                            <h5 class="card-title" th:text="${requests != null ? requests.stream().filter(r -> r.status.name() == 'IN_PROGRESS').count() : 0}">0</h5>
+                            <p class="card-text text-muted">En Cours</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="stat-icon mb-2">
+                                <i class="fas fa-check-circle fa-2x text-success"></i>
+                            </div>
+                            <h5 class="card-title" th:text="${requests != null ? requests.stream().filter(r -> r.status.name() == 'COMPLETED').count() : 0}">0</h5>
+                            <p class="card-text text-muted">Terminées</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Requests -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-list me-2"></i>Mes Demandes Récentes
+                            </h5>
+                            <a href="/client/request" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i>Nouvelle Demande
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${requests != null and !requests.empty}" class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Adresse</th>
+                                            <th>Date</th>
+                                            <th>Statut</th>
+                                            <th>Prix</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="request : ${requests}">
+                                            <td th:text="${request.serviceType}">Type de service</td>
+                                            <td th:text="${request.address}">Adresse</td>
+                                            <td th:text="${#temporals.format(request.serviceDate, 'dd/MM/yyyy HH:mm')}">Date</td>
+                                            <td>
+                                                <span class="badge" 
+                                                      th:classappend="${request.status.name() == 'PENDING'} ? 'bg-warning' : 
+                                                                     ${request.status.name() == 'CONFIRMED'} ? 'bg-info' :
+                                                                     ${request.status.name() == 'IN_PROGRESS'} ? 'bg-primary' :
+                                                                     ${request.status.name() == 'COMPLETED'} ? 'bg-success' : 'bg-danger'"
+                                                      th:text="${request.status.displayName}">Statut</span>
+                                            </td>
+                                            <td th:text="'$' + ${request.price}">$0.00</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" 
+                                                        th:onclick="'viewRequest(' + ${request.id} + ')'">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div th:if="${requests == null or requests.empty}" class="text-center py-5">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Aucune demande pour le moment</h5>
+                                <p class="text-muted">Commencez par créer votre première demande de service.</p>
+                                <a href="/client/request" class="btn btn-primary">
+                                    <i class="fas fa-plus me-2"></i>Créer une Demande
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="row mt-4">
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-calendar-plus fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Nouvelle Demande</h5>
+                            <p class="card-text">Créez une nouvelle demande de service de nettoyage.</p>
+                            <a href="/client/request" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Créer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-list fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Nos Services</h5>
+                            <p class="card-text">Découvrez tous nos services de nettoyage disponibles.</p>
+                            <a href="/client/services" class="btn btn-info">
+                                <i class="fas fa-eye me-2"></i>Voir
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-user-cog fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Mon Profil</h5>
+                            <p class="card-text">Gérez vos informations personnelles et préférences.</p>
+                            <a href="/client/profile" class="btn btn-success">
+                                <i class="fas fa-edit me-2"></i>Modifier
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function viewRequest(requestId) {
+            // Implementation for viewing request details
+            alert('Détails de la demande #' + requestId);
+        }
+    </script>
+</body>
+</html>

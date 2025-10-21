@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<head>
+    <title>Avis - BMS Rapid Clean Admin</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container py-4">
+            <!-- Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h2 class="card-title mb-2">
+                                        <i class="fas fa-star me-2"></i>
+                                        Gestion des Avis
+                                    </h2>
+                                    <p class="card-text mb-0">
+                                        Gérez tous les avis clients.
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <div class="admin-badge">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <span th:text="${pendingReviews != null ? pendingReviews.size() : 0}">0</span> en attente
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pending Reviews -->
+            <div class="row mb-4" th:if="${pendingReviews != null and !pendingReviews.empty}">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Avis en Attente d'Approbation
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-4">
+                                <div class="col-lg-6" th:each="review : ${pendingReviews}">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="avatar me-3">
+                                                    <i class="fas fa-user-circle fa-2x text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0" th:text="${review.customerName}">Client</h6>
+                                                    <div class="stars text-warning" th:text="${review.getStars()}">★★★★★</div>
+                                                </div>
+                                            </div>
+                                            <p class="card-text" th:text="${review.comment}">Commentaire du client</p>
+                                            <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}">Date</small>
+                                            
+                                            <div class="mt-3">
+                                                <form th:action="@{/admin/reviews/{id}/approve(id=${review.id})}" 
+                                                      method="post" style="display: inline;">
+                                                    <button type="submit" class="btn btn-success btn-sm">
+                                                        <i class="fas fa-check me-1"></i>Approuver
+                                                    </button>
+                                                </form>
+                                                <form th:action="@{/admin/reviews/{id}/delete(id=${review.id})}" 
+                                                      method="post" style="display: inline;">
+                                                    <button type="submit" class="btn btn-danger btn-sm" 
+                                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')">
+                                                        <i class="fas fa-trash me-1"></i>Supprimer
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Approved Reviews -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-check-circle me-2"></i>Avis Approuvés
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-4">
+                                <div class="col-lg-4 col-md-6" th:each="review : ${approvedReviews}">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="avatar me-3">
+                                                    <i class="fas fa-user-circle fa-2x text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0" th:text="${review.customerName}">Client</h6>
+                                                    <div class="stars text-warning" th:text="${review.getStars()}">★★★★★</div>
+                                                </div>
+                                            </div>
+                                            <p class="card-text" th:text="${review.comment}">Commentaire du client</p>
+                                            <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}">Date</small>
+                                            
+                                            <div class="mt-3">
+                                                <form th:action="@{/admin/reviews/{id}/delete(id=${review.id})}" 
+                                                      method="post" style="display: inline;">
+                                                    <button type="submit" class="btn btn-danger btn-sm" 
+                                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')">
+                                                        <i class="fas fa-trash me-1"></i>Supprimer
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
