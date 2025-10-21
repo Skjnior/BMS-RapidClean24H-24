@@ -263,11 +263,6 @@
                                 <i class="fas fa-sign-in-alt me-1"></i>Connexion
                             </a>
                         </li>
-                        <li class="nav-item" th:if="${#authentication == null}">
-                            <a class="nav-link" href="/register">
-                                <i class="fas fa-user-plus me-1"></i>Inscription
-                            </a>
-                        </li>
                         <li class="nav-item dropdown" th:if="${#authentication != null}">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user me-1"></i>
@@ -342,12 +337,15 @@
                             <li><a href="/services">Services</a></li>
                         </ul>
                     </div>
-                    
+
+
                     <div class="col-lg-4 col-md-6 mb-4">
                         <h5>Contact</h5>
-                        <p><i class="fas fa-phone me-2"></i>+1 (555) 123-4567</p>
-                        <p><i class="fas fa-envelope me-2"></i>info@bmsrapidclean.com</p>
-                        <p><i class="fas fa-map-marker-alt me-2"></i>123 Rue de la Propreté, Ville</p>
+                        <p><i class="fas fa-phone me-2"></i>+33 06 35 60 24 29</p>
+                        <p><i class="fas fa-phone me-2"></i>+33 06 23 54 17 47</p>
+                        <p><i class="fas fa-phone me-2"></i>+33 01 83 74 71 46</p>
+                        <p><i class="fas fa-envelope me-2"></i>bibsaram@gmail.com</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i>100 rue Balard 5015 Paris , France</p>
                         <p><i class="fas fa-clock me-2"></i>Disponible 24h/24, 7j/7</p>
                     </div>
                 </div>
@@ -357,10 +355,6 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <p class="mb-0">&copy; 2025 BMS RapidClean. Tous droits réservés.</p>
-                    </div>
-                    <div class="col-md-6 text-md-end">
-                        <a href="#" class="me-3">Politique de Confidentialité</a>
-                        <a href="#">Conditions d'Utilisation</a>
                     </div>
                 </div>
             </div>

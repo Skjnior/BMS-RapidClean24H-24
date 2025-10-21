@@ -1,419 +1,419 @@
-<!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
-<head>
-    <title>Contact - BMS Rapid Clean</title>
-</head>
-<body>
-    <div th:fragment="content">
-        <!-- Hero Section -->
-        <section class="py-5" style="background: var(--gradient-primary); color: white;">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-lg-8 mx-auto">
-                        <h1 class="display-4 fw-bold mb-4">Contactez-Nous</h1>
-                        <p class="lead">
-                            Nous sommes disponibles 24h/24, 7j/7 pour répondre à vos besoins 
-                            de nettoyage professionnel. N'hésitez pas à nous contacter !
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!--<!DOCTYPE html>-->
+<!--<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">-->
+<!--<head>-->
+<!--    <title>Contact - BMS Rapid Clean</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div th:fragment="content">-->
+<!--        &lt;!&ndash; Hero Section &ndash;&gt;-->
+<!--        <section class="py-5" style="background: var(&#45;&#45;gradient-primary); color: white;">-->
+<!--            <div class="container">-->
+<!--                <div class="row text-center">-->
+<!--                    <div class="col-lg-8 mx-auto">-->
+<!--                        <h1 class="display-4 fw-bold mb-4">Contactez-Nous</h1>-->
+<!--                        <p class="lead">-->
+<!--                            Nous sommes disponibles 24h/24, 7j/7 pour répondre à vos besoins -->
+<!--                            de nettoyage professionnel. N'hésitez pas à nous contacter !-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
 
-        <!-- Contact Information -->
-        <section class="py-5">
-            <div class="container">
-                <div class="row g-4">
-                    <div class="col-lg-4">
-                        <div class="contact-card text-center">
-                            <div class="contact-icon mb-3">
-                                <i class="fas fa-phone fa-3x text-primary"></i>
-                            </div>
-                            <h5>Téléphone</h5>
-                            <p class="text-muted mb-2">Appelez-nous directement</p>
-                            <a href="tel:+15551234567" class="btn btn-outline-primary">
-                                <i class="fas fa-phone me-2"></i>+1 (555) 123-4567
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4">
-                        <div class="contact-card text-center">
-                            <div class="contact-icon mb-3">
-                                <i class="fas fa-envelope fa-3x text-success"></i>
-                            </div>
-                            <h5>Email</h5>
-                            <p class="text-muted mb-2">Envoyez-nous un message</p>
-                            <a href="mailto:info@bmsrapidclean.com" class="btn btn-outline-success">
-                                <i class="fas fa-envelope me-2"></i>info@bmsrapidclean.com
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4">
-                        <div class="contact-card text-center">
-                            <div class="contact-icon mb-3">
-                                <i class="fas fa-map-marker-alt fa-3x text-warning"></i>
-                            </div>
-                            <h5>Adresse</h5>
-                            <p class="text-muted mb-2">Visitez nos bureaux</p>
-                            <address class="mb-0">
-                                123 Rue de la Propreté<br>
-                                Ville, Province H1H 1H1<br>
-                                Canada
-                            </address>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!--        &lt;!&ndash; Contact Information &ndash;&gt;-->
+<!--        <section class="py-5">-->
+<!--            <div class="container">-->
+<!--                <div class="row g-4">-->
+<!--                    <div class="col-lg-4">-->
+<!--                        <div class="contact-card text-center">-->
+<!--                            <div class="contact-icon mb-3">-->
+<!--                                <i class="fas fa-phone fa-3x text-primary"></i>-->
+<!--                            </div>-->
+<!--                            <h5>Téléphone</h5>-->
+<!--                            <p class="text-muted mb-2">Appelez-nous directement</p>-->
+<!--                            <a href="tel:+15551234567" class="btn btn-outline-primary">-->
+<!--                                <i class="fas fa-phone me-2"></i>+1 (555) 123-4567-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    -->
+<!--                    <div class="col-lg-4">-->
+<!--                        <div class="contact-card text-center">-->
+<!--                            <div class="contact-icon mb-3">-->
+<!--                                <i class="fas fa-envelope fa-3x text-success"></i>-->
+<!--                            </div>-->
+<!--                            <h5>Email</h5>-->
+<!--                            <p class="text-muted mb-2">Envoyez-nous un message</p>-->
+<!--                            <a href="mailto:info@bmsrapidclean.com" class="btn btn-outline-success">-->
+<!--                                <i class="fas fa-envelope me-2"></i>info@bmsrapidclean.com-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    -->
+<!--                    <div class="col-lg-4">-->
+<!--                        <div class="contact-card text-center">-->
+<!--                            <div class="contact-icon mb-3">-->
+<!--                                <i class="fas fa-map-marker-alt fa-3x text-warning"></i>-->
+<!--                            </div>-->
+<!--                            <h5>Adresse</h5>-->
+<!--                            <p class="text-muted mb-2">Visitez nos bureaux</p>-->
+<!--                            <address class="mb-0">-->
+<!--                                123 Rue de la Propreté<br>-->
+<!--                                Ville, Province H1H 1H1<br>-->
+<!--                                Canada-->
+<!--                            </address>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
 
-        <!-- Contact Form -->
-        <section class="py-5 bg-light">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <div class="card shadow-lg border-0">
-                            <div class="card-header text-center" style="background: var(--gradient-primary); color: white;">
-                                <h3 class="mb-0">
-                                    <i class="fas fa-paper-plane me-2"></i>
-                                    Envoyez-Nous un Message
-                                </h3>
-                                <p class="mb-0 mt-2">Nous vous répondrons dans les plus brefs délais</p>
-                            </div>
-                            
-                            <div class="card-body p-4">
-                                <form id="contactForm" data-validate>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="firstName" class="form-label">
-                                                <i class="fas fa-user me-2"></i>Prénom
-                                            </label>
-                                            <input type="text" class="form-control" id="firstName" name="firstName" required>
-                                        </div>
-                                        
-                                        <div class="col-md-6 mb-3">
-                                            <label for="lastName" class="form-label">
-                                                <i class="fas fa-user me-2"></i>Nom
-                                            </label>
-                                            <input type="text" class="form-control" id="lastName" name="lastName" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="email" class="form-label">
-                                                <i class="fas fa-envelope me-2"></i>Email
-                                            </label>
-                                            <input type="email" class="form-control" id="email" name="email" required>
-                                        </div>
-                                        
-                                        <div class="col-md-6 mb-3">
-                                            <label for="phone" class="form-label">
-                                                <i class="fas fa-phone me-2"></i>Téléphone
-                                            </label>
-                                            <input type="tel" class="form-control" id="phone" name="phone">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="subject" class="form-label">
-                                            <i class="fas fa-tag me-2"></i>Sujet
-                                        </label>
-                                        <select class="form-control" id="subject" name="subject" required>
-                                            <option value="">Sélectionnez un sujet</option>
-                                            <option value="general">Question générale</option>
-                                            <option value="service">Demande de service</option>
-                                            <option value="quote">Devis</option>
-                                            <option value="complaint">Réclamation</option>
-                                            <option value="other">Autre</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="message" class="form-label">
-                                            <i class="fas fa-comment me-2"></i>Message
-                                        </label>
-                                        <textarea class="form-control" id="message" name="message" rows="5" 
-                                                  placeholder="Décrivez votre demande en détail..." required></textarea>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="newsletter">
-                                            <label class="form-check-label" for="newsletter">
-                                                Je souhaite recevoir des informations sur vos services
-                                            </label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary btn-lg">
-                                            <i class="fas fa-paper-plane me-2"></i>Envoyer le Message
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!--        &lt;!&ndash; Contact Form &ndash;&gt;-->
+<!--        <section class="py-5 bg-light">-->
+<!--            <div class="container">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-lg-8 mx-auto">-->
+<!--                        <div class="card shadow-lg border-0">-->
+<!--                            <div class="card-header text-center" style="background: var(&#45;&#45;gradient-primary); color: white;">-->
+<!--                                <h3 class="mb-0">-->
+<!--                                    <i class="fas fa-paper-plane me-2"></i>-->
+<!--                                    Envoyez-Nous un Message-->
+<!--                                </h3>-->
+<!--                                <p class="mb-0 mt-2">Nous vous répondrons dans les plus brefs délais</p>-->
+<!--                            </div>-->
+<!--                            -->
+<!--                            <div class="card-body p-4">-->
+<!--                                <form id="contactForm" data-validate>-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-md-6 mb-3">-->
+<!--                                            <label for="firstName" class="form-label">-->
+<!--                                                <i class="fas fa-user me-2"></i>Prénom-->
+<!--                                            </label>-->
+<!--                                            <input type="text" class="form-control" id="firstName" name="firstName" required>-->
+<!--                                        </div>-->
+<!--                                        -->
+<!--                                        <div class="col-md-6 mb-3">-->
+<!--                                            <label for="lastName" class="form-label">-->
+<!--                                                <i class="fas fa-user me-2"></i>Nom-->
+<!--                                            </label>-->
+<!--                                            <input type="text" class="form-control" id="lastName" name="lastName" required>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    -->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-md-6 mb-3">-->
+<!--                                            <label for="email" class="form-label">-->
+<!--                                                <i class="fas fa-envelope me-2"></i>Email-->
+<!--                                            </label>-->
+<!--                                            <input type="email" class="form-control" id="email" name="email" required>-->
+<!--                                        </div>-->
+<!--                                        -->
+<!--                                        <div class="col-md-6 mb-3">-->
+<!--                                            <label for="phone" class="form-label">-->
+<!--                                                <i class="fas fa-phone me-2"></i>Téléphone-->
+<!--                                            </label>-->
+<!--                                            <input type="tel" class="form-control" id="phone" name="phone">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    -->
+<!--                                    <div class="mb-3">-->
+<!--                                        <label for="subject" class="form-label">-->
+<!--                                            <i class="fas fa-tag me-2"></i>Sujet-->
+<!--                                        </label>-->
+<!--                                        <select class="form-control" id="subject" name="subject" required>-->
+<!--                                            <option value="">Sélectionnez un sujet</option>-->
+<!--                                            <option value="general">Question générale</option>-->
+<!--                                            <option value="service">Demande de service</option>-->
+<!--                                            <option value="quote">Devis</option>-->
+<!--                                            <option value="complaint">Réclamation</option>-->
+<!--                                            <option value="other">Autre</option>-->
+<!--                                        </select>-->
+<!--                                    </div>-->
+<!--                                    -->
+<!--                                    <div class="mb-3">-->
+<!--                                        <label for="message" class="form-label">-->
+<!--                                            <i class="fas fa-comment me-2"></i>Message-->
+<!--                                        </label>-->
+<!--                                        <textarea class="form-control" id="message" name="message" rows="5" -->
+<!--                                                  placeholder="Décrivez votre demande en détail..." required></textarea>-->
+<!--                                    </div>-->
+<!--                                    -->
+<!--                                    <div class="mb-3">-->
+<!--                                        <div class="form-check">-->
+<!--                                            <input class="form-check-input" type="checkbox" id="newsletter">-->
+<!--                                            <label class="form-check-label" for="newsletter">-->
+<!--                                                Je souhaite recevoir des informations sur vos services-->
+<!--                                            </label>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    -->
+<!--                                    <div class="d-grid">-->
+<!--                                        <button type="submit" class="btn btn-primary btn-lg">-->
+<!--                                            <i class="fas fa-paper-plane me-2"></i>Envoyer le Message-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                </form>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
 
-        <!-- Business Hours -->
-        <section class="py-5">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card h-100">
-                            <div class="card-header" style="background: var(--gradient-primary); color: white;">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-clock me-2"></i>Heures d'Ouverture
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="schedule-item">
-                                    <div class="day">Lundi - Vendredi</div>
-                                    <div class="hours">24h/24</div>
-                                </div>
-                                <div class="schedule-item">
-                                    <div class="day">Samedi</div>
-                                    <div class="hours">24h/24</div>
-                                </div>
-                                <div class="schedule-item">
-                                    <div class="day">Dimanche</div>
-                                    <div class="hours">24h/24</div>
-                                </div>
-                                <div class="schedule-item">
-                                    <div class="day">Jours Fériés</div>
-                                    <div class="hours">24h/24</div>
-                                </div>
-                                
-                                <div class="mt-4 p-3 bg-light rounded">
-                                    <h6 class="text-primary mb-2">
-                                        <i class="fas fa-info-circle me-2"></i>Service d'Urgence
-                                    </h6>
-                                    <p class="mb-0 small">
-                                        Pour les urgences, appelez-nous directement au 
-                                        <strong>+1 (555) 123-4567</strong>. 
-                                        Nous répondons en moins de 5 minutes.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6">
-                        <div class="card h-100">
-                            <div class="card-header" style="background: var(--gradient-success); color: white;">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-map-marked-alt me-2"></i>Zone de Service
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="service-area">
-                                    <h6 class="text-success mb-3">Nous desservons :</h6>
-                                    <ul class="list-unstyled">
-                                        <li class="mb-2">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            Ville et banlieues (rayon de 50km)
-                                        </li>
-                                        <li class="mb-2">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            Secteurs résidentiels
-                                        </li>
-                                        <li class="mb-2">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            Secteurs commerciaux
-                                        </li>
-                                        <li class="mb-2">
-                                            <i class="fas fa-check text-success me-2"></i>
-                                            Zones industrielles
-                                        </li>
-                                    </ul>
-                                    
-                                    <div class="mt-4 p-3 bg-light rounded">
-                                        <h6 class="text-success mb-2">
-                                            <i class="fas fa-truck me-2"></i>Service Mobile
-                                        </h6>
-                                        <p class="mb-0 small">
-                                            Nos équipes se déplacent avec tout l'équipement nécessaire 
-                                            directement sur votre site.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!--        &lt;!&ndash; Business Hours &ndash;&gt;-->
+<!--        <section class="py-5">-->
+<!--            <div class="container">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-lg-6">-->
+<!--                        <div class="card h-100">-->
+<!--                            <div class="card-header" style="background: var(&#45;&#45;gradient-primary); color: white;">-->
+<!--                                <h5 class="mb-0">-->
+<!--                                    <i class="fas fa-clock me-2"></i>Heures d'Ouverture-->
+<!--                                </h5>-->
+<!--                            </div>-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="schedule-item">-->
+<!--                                    <div class="day">Lundi - Vendredi</div>-->
+<!--                                    <div class="hours">24h/24</div>-->
+<!--                                </div>-->
+<!--                                <div class="schedule-item">-->
+<!--                                    <div class="day">Samedi</div>-->
+<!--                                    <div class="hours">24h/24</div>-->
+<!--                                </div>-->
+<!--                                <div class="schedule-item">-->
+<!--                                    <div class="day">Dimanche</div>-->
+<!--                                    <div class="hours">24h/24</div>-->
+<!--                                </div>-->
+<!--                                <div class="schedule-item">-->
+<!--                                    <div class="day">Jours Fériés</div>-->
+<!--                                    <div class="hours">24h/24</div>-->
+<!--                                </div>-->
+<!--                                -->
+<!--                                <div class="mt-4 p-3 bg-light rounded">-->
+<!--                                    <h6 class="text-primary mb-2">-->
+<!--                                        <i class="fas fa-info-circle me-2"></i>Service d'Urgence-->
+<!--                                    </h6>-->
+<!--                                    <p class="mb-0 small">-->
+<!--                                        Pour les urgences, appelez-nous directement au -->
+<!--                                        <strong>+1 (555) 123-4567</strong>. -->
+<!--                                        Nous répondons en moins de 5 minutes.-->
+<!--                                    </p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    -->
+<!--                    <div class="col-lg-6">-->
+<!--                        <div class="card h-100">-->
+<!--                            <div class="card-header" style="background: var(&#45;&#45;gradient-success); color: white;">-->
+<!--                                <h5 class="mb-0">-->
+<!--                                    <i class="fas fa-map-marked-alt me-2"></i>Zone de Service-->
+<!--                                </h5>-->
+<!--                            </div>-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="service-area">-->
+<!--                                    <h6 class="text-success mb-3">Nous desservons :</h6>-->
+<!--                                    <ul class="list-unstyled">-->
+<!--                                        <li class="mb-2">-->
+<!--                                            <i class="fas fa-check text-success me-2"></i>-->
+<!--                                            Ville et banlieues (rayon de 50km)-->
+<!--                                        </li>-->
+<!--                                        <li class="mb-2">-->
+<!--                                            <i class="fas fa-check text-success me-2"></i>-->
+<!--                                            Secteurs résidentiels-->
+<!--                                        </li>-->
+<!--                                        <li class="mb-2">-->
+<!--                                            <i class="fas fa-check text-success me-2"></i>-->
+<!--                                            Secteurs commerciaux-->
+<!--                                        </li>-->
+<!--                                        <li class="mb-2">-->
+<!--                                            <i class="fas fa-check text-success me-2"></i>-->
+<!--                                            Zones industrielles-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                    -->
+<!--                                    <div class="mt-4 p-3 bg-light rounded">-->
+<!--                                        <h6 class="text-success mb-2">-->
+<!--                                            <i class="fas fa-truck me-2"></i>Service Mobile-->
+<!--                                        </h6>-->
+<!--                                        <p class="mb-0 small">-->
+<!--                                            Nos équipes se déplacent avec tout l'équipement nécessaire -->
+<!--                                            directement sur votre site.-->
+<!--                                        </p>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
 
-        <!-- FAQ Section -->
-        <section class="py-5 bg-light">
-            <div class="container">
-                <div class="row text-center mb-5">
-                    <div class="col-lg-8 mx-auto">
-                        <h2 class="display-5 fw-bold mb-3">Questions Fréquentes</h2>
-                        <p class="lead text-muted">
-                            Trouvez les réponses aux questions les plus courantes.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <div class="accordion" id="faqAccordion">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                        Quels types de nettoyage proposez-vous ?
-                                    </button>
-                                </h2>
-                                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Nous proposons le nettoyage résidentiel, commercial, industriel et post-construction. 
-                                        Nos services incluent le nettoyage de bureaux, maisons, magasins, usines et espaces 
-                                        après travaux de construction.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                        Êtes-vous vraiment disponibles 24h/24 ?
-                                    </button>
-                                </h2>
-                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Oui, nous sommes disponibles 24h/24, 7j/7, y compris les weekends et jours fériés. 
-                                        Notre équipe est toujours prête à répondre à vos besoins urgents.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                        Utilisez-vous des produits écologiques ?
-                                    </button>
-                                </h2>
-                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Absolument ! Nous privilégions les produits écologiques et respectueux de l'environnement. 
-                                        Tous nos produits sont certifiés et sans danger pour la santé.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
-                                        Comment calculez-vous vos tarifs ?
-                                    </button>
-                                </h2>
-                                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Nos tarifs sont basés sur la superficie, le type de nettoyage, la fréquence et l'urgence. 
-                                        Nous offrons des devis gratuits et personnalisés pour chaque client.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    
-    <style>
-        .contact-card {
-            padding: 2rem 1rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-        
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        .contact-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(44, 90, 160, 0.1);
-            border-radius: 50%;
-        }
-        
-        .schedule-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .schedule-item:last-child {
-            border-bottom: none;
-        }
-        
-        .day {
-            font-weight: 500;
-            color: var(--dark-color);
-        }
-        
-        .hours {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-        
-        .accordion-item {
-            border: none;
-            margin-bottom: 1rem;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .accordion-button {
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            font-weight: 500;
-        }
-        
-        .accordion-button:not(.collapsed) {
-            background: var(--gradient-secondary);
-        }
-        
-        .accordion-button:focus {
-            box-shadow: none;
-        }
-    </style>
-    
-    <script>
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Show loading state
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const hideLoading = BMS.showLoading(submitBtn);
-            
-            // Simulate form submission
-            setTimeout(() => {
-                hideLoading();
-                BMS.showAlert('Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.', 'success');
-                this.reset();
-            }, 2000);
-        });
-    </script>
-</body>
-</html>
+<!--        &lt;!&ndash; FAQ Section &ndash;&gt;-->
+<!--        <section class="py-5 bg-light">-->
+<!--            <div class="container">-->
+<!--                <div class="row text-center mb-5">-->
+<!--                    <div class="col-lg-8 mx-auto">-->
+<!--                        <h2 class="display-5 fw-bold mb-3">Questions Fréquentes</h2>-->
+<!--                        <p class="lead text-muted">-->
+<!--                            Trouvez les réponses aux questions les plus courantes.-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                -->
+<!--                <div class="row">-->
+<!--                    <div class="col-lg-8 mx-auto">-->
+<!--                        <div class="accordion" id="faqAccordion">-->
+<!--                            <div class="accordion-item">-->
+<!--                                <h2 class="accordion-header">-->
+<!--                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">-->
+<!--                                        Quels types de nettoyage proposez-vous ?-->
+<!--                                    </button>-->
+<!--                                </h2>-->
+<!--                                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">-->
+<!--                                    <div class="accordion-body">-->
+<!--                                        Nous proposons le nettoyage résidentiel, commercial, industriel et post-construction. -->
+<!--                                        Nos services incluent le nettoyage de bureaux, maisons, magasins, usines et espaces -->
+<!--                                        après travaux de construction.-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            -->
+<!--                            <div class="accordion-item">-->
+<!--                                <h2 class="accordion-header">-->
+<!--                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">-->
+<!--                                        Êtes-vous vraiment disponibles 24h/24 ?-->
+<!--                                    </button>-->
+<!--                                </h2>-->
+<!--                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">-->
+<!--                                    <div class="accordion-body">-->
+<!--                                        Oui, nous sommes disponibles 24h/24, 7j/7, y compris les weekends et jours fériés. -->
+<!--                                        Notre équipe est toujours prête à répondre à vos besoins urgents.-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            -->
+<!--                            <div class="accordion-item">-->
+<!--                                <h2 class="accordion-header">-->
+<!--                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">-->
+<!--                                        Utilisez-vous des produits écologiques ?-->
+<!--                                    </button>-->
+<!--                                </h2>-->
+<!--                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">-->
+<!--                                    <div class="accordion-body">-->
+<!--                                        Absolument ! Nous privilégions les produits écologiques et respectueux de l'environnement. -->
+<!--                                        Tous nos produits sont certifiés et sans danger pour la santé.-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            -->
+<!--                            <div class="accordion-item">-->
+<!--                                <h2 class="accordion-header">-->
+<!--                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">-->
+<!--                                        Comment calculez-vous vos tarifs ?-->
+<!--                                    </button>-->
+<!--                                </h2>-->
+<!--                                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">-->
+<!--                                    <div class="accordion-body">-->
+<!--                                        Nos tarifs sont basés sur la superficie, le type de nettoyage, la fréquence et l'urgence. -->
+<!--                                        Nous offrons des devis gratuits et personnalisés pour chaque client.-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
+<!--    </div>-->
+<!--    -->
+<!--    <style>-->
+<!--        .contact-card {-->
+<!--            padding: 2rem 1rem;-->
+<!--            background: white;-->
+<!--            border-radius: 15px;-->
+<!--            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);-->
+<!--            transition: all 0.3s ease;-->
+<!--            height: 100%;-->
+<!--        }-->
+<!--        -->
+<!--        .contact-card:hover {-->
+<!--            transform: translateY(-5px);-->
+<!--            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);-->
+<!--        }-->
+<!--        -->
+<!--        .contact-icon {-->
+<!--            width: 80px;-->
+<!--            height: 80px;-->
+<!--            margin: 0 auto;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            background: rgba(44, 90, 160, 0.1);-->
+<!--            border-radius: 50%;-->
+<!--        }-->
+<!--        -->
+<!--        .schedule-item {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--            padding: 0.75rem 0;-->
+<!--            border-bottom: 1px solid #eee;-->
+<!--        }-->
+<!--        -->
+<!--        .schedule-item:last-child {-->
+<!--            border-bottom: none;-->
+<!--        }-->
+<!--        -->
+<!--        .day {-->
+<!--            font-weight: 500;-->
+<!--            color: var(&#45;&#45;dark-color);-->
+<!--        }-->
+<!--        -->
+<!--        .hours {-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--            font-weight: 600;-->
+<!--        }-->
+<!--        -->
+<!--        .accordion-item {-->
+<!--            border: none;-->
+<!--            margin-bottom: 1rem;-->
+<!--            border-radius: 10px;-->
+<!--            overflow: hidden;-->
+<!--            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);-->
+<!--        }-->
+<!--        -->
+<!--        .accordion-button {-->
+<!--            background: var(&#45;&#45;gradient-primary);-->
+<!--            color: white;-->
+<!--            border: none;-->
+<!--            font-weight: 500;-->
+<!--        }-->
+<!--        -->
+<!--        .accordion-button:not(.collapsed) {-->
+<!--            background: var(&#45;&#45;gradient-secondary);-->
+<!--        }-->
+<!--        -->
+<!--        .accordion-button:focus {-->
+<!--            box-shadow: none;-->
+<!--        }-->
+<!--    </style>-->
+<!--    -->
+<!--    <script>-->
+<!--        document.getElementById('contactForm').addEventListener('submit', function(e) {-->
+<!--            e.preventDefault();-->
+<!--            -->
+<!--            // Show loading state-->
+<!--            const submitBtn = this.querySelector('button[type="submit"]');-->
+<!--            const hideLoading = BMS.showLoading(submitBtn);-->
+<!--            -->
+<!--            // Simulate form submission-->
+<!--            setTimeout(() => {-->
+<!--                hideLoading();-->
+<!--                BMS.showAlert('Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.', 'success');-->
+<!--                this.reset();-->
+<!--            }, 2000);-->
+<!--        });-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->

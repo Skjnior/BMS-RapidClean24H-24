@@ -6,7 +6,7 @@
 </head>
 <body>
     <div th:replace="~{layout :: navbar}"></div>
-    
+
     <div th:fragment="content">
         <!-- Hero Section -->
         <section id="home" class="hero-section">
@@ -15,11 +15,11 @@
                     <div class="col-lg-6">
                         <div class="hero-content animate-fade-in">
                             <h1 class="display-4 fw-bold mb-4">
-                                Nettoyage Professionnel 
+                                Nettoyage Professionnel
                                 <span class="text-warning">24h/24</span>
                             </h1>
                             <p class="lead mb-4">
-                                BMS Rapid Clean vous offre des services de nettoyage de qualité supérieure, 
+                                BMS Rapid Clean vous offre des services de nettoyage de qualité supérieure,
                                 disponibles 24 heures sur 24, 7 jours sur 7. Votre satisfaction est notre priorité.
                             </p>
                             <div class="d-flex flex-wrap gap-3">
@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="text-center animate-slide-up">
-                            <img th:src="@{/images/Banière BMS222.png}" 
+                            <img th:src="@{/images/Banière BMS222.png}"
                                  alt="BMS Rapid Clean - Service de nettoyage professionnel" class="img-fluid rounded-3 shadow-lg">
                         </div>
                     </div>
@@ -47,14 +47,14 @@
             <div class="container">
                 <div class="row text-center mb-5">
                     <div class="col-lg-8 mx-auto">
-                        <h2 class="display-5 fw-bold mb-3">Pourquoi Choisir BMS RapidClean ?</h2>
+                        <h2 class="display-5 fw-bold mb-3">Pourquoi BMS RapidClean ?</h2>
                         <p class="lead text-muted">
-                            Nous nous engageons à fournir des services de nettoyage exceptionnels 
+                            Nous nous engageons à fournir des services de nettoyage exceptionnels
                             avec une attention particulière aux détails.
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="row g-4">
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100 text-center p-4">
@@ -64,13 +64,13 @@
                                 </div>
                                 <h5 class="card-title">Disponible 24h/24</h5>
                                 <p class="card-text">
-                                    Service disponible à tout moment, même les weekends et jours fériés. 
+                                    Service disponible à tout moment, même les weekends et jours fériés.
                                     Nous nous adaptons à votre emploi du temps.
                                 </p>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100 text-center p-4">
                             <div class="card-body">
@@ -79,13 +79,13 @@
                                 </div>
                                 <h5 class="card-title">Équipe Professionnelle</h5>
                                 <p class="card-text">
-                                    Notre équipe est formée et certifiée pour tous types de nettoyage. 
+                                    Notre équipe est formée et certifiée pour tous types de nettoyage.
                                     Nous utilisons des produits écologiques et sécuritaires.
                                 </p>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100 text-center p-4">
                             <div class="card-body">
@@ -94,7 +94,7 @@
                                 </div>
                                 <h5 class="card-title">Qualité Garantie</h5>
                                 <p class="card-text">
-                                    Satisfaction garantie à 100%. Si vous n'êtes pas satisfait, 
+                                    Satisfaction garantie à 100%. Si vous n'êtes pas satisfait,
                                     nous revenons gratuitement pour corriger le problème.
                                 </p>
                             </div>
@@ -107,42 +107,680 @@
         <!-- Services Preview -->
         <section id="services" class="py-5 bg-light">
             <div class="container">
+                <!-- Titre -->
                 <div class="row text-center mb-5">
                     <div class="col-lg-8 mx-auto">
                         <h2 class="display-5 fw-bold mb-3">Nos Services</h2>
                         <p class="lead text-muted">
-                            Découvrez notre gamme complète de services de nettoyage professionnel.
+                            Spécialisée dans le nettoyage des fast-foods 🍔 et restaurants,
+                            <strong>BMS RapidClean</strong> assure des prestations complètes, rigoureuses et adaptées à votre activité.
                         </p>
                     </div>
                 </div>
-                
-                <div class="row g-4" th:if="${services != null and !services.empty}">
-                    <div class="col-lg-4 col-md-6" th:each="service : ${services}">
-                        <div class="card h-100">
-                            <div class="card-img-top" style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-broom fa-3x text-white"></i>
-                            </div>
+
+
+                <!-- Liste des services -->
+                <div class="row g-4">
+
+                    <!-- Nettoyage Professionnel Fast-Food -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${service.name}">Service</h5>
-                                <p class="card-text" th:text="${service.description}">Description du service</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="h5 text-primary mb-0" th:text="'$' + ${service.price}">$0.00</span>
-                                    <a href="#contact" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-plus me-1"></i>Demander
-                                    </a>
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-hamburger fa-3x text-danger"></i>
                                 </div>
+                                <h5 class="card-title">Nettoyage Professionnel Fast-Food</h5>
+                                <p class="card-text">
+                                    Prestations spécialisées pour les chaînes de restauration rapide :
+                                    cuisines, salles, drives, zones clients et extérieurs selon les normes d’hygiène HACCP.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Salle -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-chair fa-3x text-primary"></i>
+                                </div>
+                                <h5 class="card-title">Nettoyage des Salles</h5>
+                                <p class="card-text">
+                                    Balayage, brossage, raclage, moppage, nettoyage des tables, chaises, vitres, murs et portes.
+                                    La salle de restauration reste impeccable à tout moment.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Sanitaires -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-restroom fa-3x text-success"></i>
+                                </div>
+                                <h5 class="card-title">Entretien des Sanitaires</h5>
+                                <p class="card-text">
+                                    Lavage complet des sanitaires, miroirs, robinets, faïences et sols.
+                                    Détartrage régulier pour une hygiène parfaite.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vitres -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-window-maximize fa-3x text-info"></i>
+                                </div>
+                                <h5 class="card-title">Nettoyage des Vitres</h5>
+                                <p class="card-text">
+                                    Nettoyage intérieur et extérieur des vitres, portes vitrées et encadrements
+                                    pour une transparence sans traces.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cuisine -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-utensils fa-3x text-danger"></i>
+                                </div>
+                                <h5 class="card-title">Nettoyage de Cuisine</h5>
+                                <p class="card-text">
+                                    Dégraissage complet des hottes, grills, friteuses, plans de travail, inox et sols.
+                                    Désinfection et nettoyage de tout le matériel alimentaire.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Caisse et Drive -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-cash-register fa-3x text-warning"></i>
+                                </div>
+                                <h5 class="card-title">Caisse & Drive</h5>
+                                <p class="card-text">
+                                    Nettoyage des comptoirs, bornes de commande, guichets drive et zones clients.
+                                    Entretien complet des surfaces en contact avec le public.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrière et locaux techniques -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-boxes-stacked fa-3x text-secondary"></i>
+                                </div>
+                                <h5 class="card-title">Locaux Techniques & Arrières</h5>
+                                <p class="card-text">
+                                    Nettoyage des couloirs, zones techniques, plonge, local boissons, ventilation et poubelles.
+                                    Maintien d’un espace de travail sain et ordonné.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vestiaires -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-tshirt fa-3x text-success"></i>
+                                </div>
+                                <h5 class="card-title">Vestiaires & Douches</h5>
+                                <p class="card-text">
+                                    Nettoyage complet des vestiaires, casiers, douches et sanitaires du personnel
+                                    pour un environnement propre et confortable.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Extérieurs -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-tree fa-3x text-primary"></i>
+                                </div>
+                                <h5 class="card-title">Nettoyage Extérieur</h5>
+                                <p class="card-text">
+                                    Ramassage des déchets, lavage des terrasses, entretien des jardinières et cabines drive.
+                                    Nettoyage haute pression mensuel des sols et façades.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="text-center mt-4">
-                    <a href="#services" class="btn btn-primary btn-lg">
-                        <i class="fas fa-list me-2"></i>Voir Tous les Services
-                    </a>
-                </div>
+                <br> <br>
+
+                <!-- Nos Outils -->
+                <section id="outils" class="py-5 bg-light">
+                    <div class="container text-center">
+                        <h2 class="display-6 fw-bold mb-3">Quelques matériels utilisés lors de nos interventions</h2>
+                        <p class="lead text-muted mb-5">
+                            BMS RapidClean dispose d’équipements professionnels modernes pour garantir un nettoyage
+                            efficace, rapide et respectueux de l’environnement — du sol aux vitres, en passant par la
+                            désinfection complète des cuisines et espaces clients.
+                        </p>
+
+                        <!-- Grille des outils -->
+                        <div class="row g-4 justify-content-center">
+
+                            <!-- Outil 1 -->
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <div class="card text-center border-0 shadow-sm rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/outils/3.jpeg}"
+                                         alt="Matériel de nettoyage"
+                                         class="img-fluid mb-3 rounded-3"
+                                         style="max-height:130px; object-fit:contain;">
+                                </div>
+                            </div>
+
+                            <!-- Outil 2 -->
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <div class="card text-center border-0 shadow-sm rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/outils/bionic-gb-01-monobrosse.jpg.webp}"
+                                         alt="Matériel de nettoyage"
+                                         class="img-fluid mb-3 rounded-3"
+                                         style="max-height:130px; object-fit:contain;">
+                                </div>
+                            </div>
+
+                            <!-- Outil 3 -->
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <div class="card text-center border-0 shadow-sm rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/outils/karcher.jpg}"
+                                         alt="Matériel de nettoyage"
+                                         class="img-fluid mb-3 rounded-3"
+                                         style="max-height:130px; object-fit:contain;">
+                                </div>
+                            </div>
+
+                            <!-- Outil 4 -->
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <div class="card text-center border-0 shadow-sm rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/outils/mono-brosse.webp}"
+                                         alt="Matériel de nettoyage"
+                                         class="img-fluid mb-3 rounded-3"
+                                         style="max-height:130px; object-fit:contain;">
+                                </div>
+                            </div>
+
+                            <!-- Outil 5 -->
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <div class="card text-center border-0 shadow-sm rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/outils/téléchargement.jpeg}"
+                                         alt="Matériel de nettoyage"
+                                         class="img-fluid mb-3 rounded-3"
+                                         style="max-height:130px; object-fit:contain;">
+                                </div>
+                            </div>
+
+                            <!-- Outil 6 -->
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <div class="card text-center border-0 shadow-sm rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/outils/téléchargement (1).jpeg}"
+                                         alt="Matériel de nettoyage"
+                                         class="img-fluid mb-3 rounded-3"
+                                         style="max-height:130px; object-fit:contain;">
+                                </div>
+                            </div>
+
+                            <!-- Outil 7 -->
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <div class="card text-center border-0 shadow-sm rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/outils/téléchargement (2).jpeg}"
+                                         alt="Matériel de nettoyage"
+                                         class="img-fluid mb-3 rounded-3"
+                                         style="max-height:130px; object-fit:contain;">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <br> <br>
+
+                <!-- Partenaires -->
+                <section id="partners" class="py-5 bg-white">
+                    <div class="container text-center">
+                        <h2 class="display-5 fw-bold mb-4">Nos Partenaires</h2>
+                        <p class="lead text-muted mb-5">
+                            BMS RapidClean collabore avec les plus grandes enseignes de restauration rapide en France 🇫🇷.
+                        </p>
+
+                        <div class="row g-4 justify-content-center">
+                            <!-- McDonald's -->
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/partners/macdonalds.png}" alt="McDonald's" class="img-fluid mx-auto mb-3" style="max-height:70px;">
+                                    <h6 class="fw-semibold text-dark">McDonald's</h6>
+                                </div>
+                            </div>
+
+                            <!-- Burger King -->
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/partners/burgerKing.png}" alt="Burger King" class="img-fluid mx-auto mb-3" style="max-height:70px;">
+                                    <h6 class="fw-semibold text-dark">Burger King</h6>
+                                </div>
+                            </div>
+
+                            <!-- KFC -->
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/partners/kfc.png}" alt="KFC" class="img-fluid mx-auto mb-3" style="max-height:70px;">
+                                    <h6 class="fw-semibold text-dark">KFC</h6>
+                                </div>
+                            </div>
+
+                            <!-- Domino's Pizza -->
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/partners/dominos.png}" alt="Domino's Pizza" class="img-fluid mx-auto mb-3" style="max-height:70px;">
+                                    <h6 class="fw-semibold text-dark">Domino's Pizza</h6>
+                                </div>
+                            </div>
+
+                            <!-- O'Tacos -->
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/partners/o-tacos.png}" alt="O'Tacos" class="img-fluid mx-auto mb-3" style="max-height:70px;">
+                                    <h6 class="fw-semibold text-dark">O'Tacos</h6>
+                                </div>
+                            </div>
+
+                            <!-- Quick -->
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/partners/quick.png}" alt="Quick" class="img-fluid mx-auto mb-3" style="max-height:70px;">
+                                    <h6 class="fw-semibold text-dark">Quick</h6>
+                                </div>
+                            </div>
+
+                            <!-- Subway -->
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/partners/subwayfrance.png}" alt="Subway" class="img-fluid mx-auto mb-3" style="max-height:70px;">
+                                    <h6 class="fw-semibold text-dark">Subway</h6>
+                                </div>
+                            </div>
+
+                            <!-- Five Guys -->
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                    <img th:src="@{/images/partners/fiveguys.png}" alt="Five Guys" class="img-fluid mx-auto mb-3" style="max-height:70px;">
+                                    <h6 class="fw-semibold text-dark">Five Guys</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <br> <br>
+
+                <!-- SECTION AVIS CLIENTS -->
+                <section id="avis" class="py-5 bg-light">
+                    <div class="container">
+                        <!-- TITRE -->
+                        <div class="text-center mb-5">
+                            <h2 class="display-6 fw-bold mb-3">Ce que disent nos clients</h2>
+                            <p class="lead text-muted">
+                                Découvrez les retours de nos clients et partagez à votre tour votre expérience avec <strong>BMS RapidClean</strong> 💬.
+                            </p>
+                        </div>
+
+                        <!-- CAROUSEL D’AVIS -->
+                        <div id="avisCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                            <div class="carousel-inner">
+                                <!-- Avis exemple -->
+                                <div class="carousel-item active">
+                                    <div class="card border-0 shadow-sm rounded-4 p-4 mx-auto" style="max-width:700px;">
+                                        <div class="card-body text-center">
+                                            <div class="mb-3">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="far fa-star text-warning"></i>
+                                            </div>
+                                            <p class="fst-italic text-muted">"Service impeccable, personnel professionnel et ponctuel. Je recommande fortement !"</p>
+                                            <h6 class="fw-bold mt-3">— Sarah Dupuis</h6>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="carousel-item">
+                                    <div class="card border-0 shadow-sm rounded-4 p-4 mx-auto" style="max-width:700px;">
+                                        <div class="card-body text-center">
+                                            <div class="mb-3">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star-half-alt text-warning"></i>
+                                                <i class="far fa-star text-warning"></i>
+                                            </div>
+                                            <p class="fst-italic text-muted">"BMS RapidClean a transformé notre restaurant, tout est d’une propreté exemplaire !"</p>
+                                            <h6 class="fw-bold mt-3">— Karim B.</h6>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="carousel-item">
+                                    <div class="card border-0 shadow-sm rounded-4 p-4 mx-auto" style="max-width:700px;">
+                                        <div class="card-body text-center">
+                                            <div class="mb-3">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                            </div>
+                                            <p class="fst-italic text-muted">"Une équipe au top ! Toujours souriante et très efficace. Merci pour votre sérieux."</p>
+                                            <h6 class="fw-bold mt-3">— Julie Laurent</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contrôles du carrousel -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#avisCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#avisCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+
+                        <hr class="my-5" style="opacity: 0.2;">
+
+                        <!-- FORMULAIRE D’AVIS -->
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="card border-0 shadow-lg rounded-4 p-4">
+                                    <h4 class="fw-bold mb-4 text-center">Donnez votre avis ⭐</h4>
+
+                                    <form th:action="@{/avis/save}" method="post" class="needs-validation" novalidate>
+                                        <!-- Nom -->
+                                        <div class="mb-3">
+                                            <label for="nom" class="form-label fw-semibold">Nom complet</label>
+                                            <input type="text" id="nom" name="nom" class="form-control rounded-3" placeholder="Votre nom" required>
+                                            <div class="invalid-feedback">Veuillez entrer votre nom.</div>
+                                        </div>
+
+                                        <!-- Note (étoiles interactives) -->
+                                        <div class="mb-3 text-center">
+                                            <label class="form-label fw-semibold d-block mb-2">Votre note</label>
+                                            <div class="rating">
+                                                <input type="radio" name="note" value="5" id="star5"><label for="star5"><i class="fas fa-star"></i></label>
+                                                <input type="radio" name="note" value="4" id="star4"><label for="star4"><i class="fas fa-star"></i></label>
+                                                <input type="radio" name="note" value="3" id="star3"><label for="star3"><i class="fas fa-star"></i></label>
+                                                <input type="radio" name="note" value="2" id="star2"><label for="star2"><i class="fas fa-star"></i></label>
+                                                <input type="radio" name="note" value="1" id="star1" required><label for="star1"><i class="fas fa-star"></i></label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Commentaire -->
+                                        <div class="mb-3">
+                                            <label for="commentaire" class="form-label fw-semibold">Votre avis</label>
+                                            <textarea id="commentaire" name="commentaire" class="form-control rounded-3" rows="4" placeholder="Partagez votre expérience..." required></textarea>
+                                            <div class="invalid-feedback">Veuillez écrire un commentaire.</div>
+                                        </div>
+
+                                        <!-- Bouton Envoyer -->
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-warning btn-lg px-5 rounded-pill">
+                                                <i class="fas fa-paper-plane me-2"></i>Envoyer
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <br> <br>
+
+
+                <!-- Galerie -->
+                <section id="gallerie" class="py-5 bg-light">
+                    <div class="container">
+                        <!-- Titre -->
+                        <div class="row text-center mb-5">
+                            <div class="col-lg-8 mx-auto">
+                                <h2 class="display-6 fw-bold mb-3">Galerie de Réalisations</h2>
+                                <p class="lead text-muted">
+                                    Découvrez en images quelques interventions de <strong>BMS RapidClean</strong>
+                                    dans les restaurants et fast-foods partenaires 🍟✨.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Grille d'images -->
+                        <div class="row g-2 justify-content-center">
+
+                            <!-- Liste des 15 images -->
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix1.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix2.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix4.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix5.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix6.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix7.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix8.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix9.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix10.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix12.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix13.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix14.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix15.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix16.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="gallery-item position-relative overflow-hidden rounded-3">
+                                    <img th:src="@{/images/gallerie/choix17.jpeg}"
+                                         alt="Galerie RapidClean"
+                                         class="img-fluid gallery-thumb"
+                                         onclick="openLightbox(this)">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Lightbox (image agrandie) -->
+                    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+                        <img id="lightbox-img" src="#" alt="aperçu">
+                    </div>
+                </section>
+
+
+
+
+                <!-- Contact Section -->
+                <section id="contact" class="py-5" style="background: var(--gradient-primary); color: white;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h3 class="display-6 fw-bold mb-3">Contactez-Nous</h3>
+                                <p class="lead mb-4">
+                                    Prêt à nettoyer ? Contactez-nous dès maintenant pour une estimation gratuite
+                                    et découvrez pourquoi nous sommes le choix numéro 1 pour le nettoyage professionnel.
+                                </p>
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <div class="contact-item">
+                                            <i class="fas fa-phone fa-2x mb-3"></i>
+                                            <h5>Gérant Mr BARRY IBRAHIMA </h5>
+                                            <p>+33 06 35 60 24 29</p>
+                                            <h5>Resp. D’exploitation</h5>
+                                            <p>+33 06 23 54 17 47</p>
+                                            <h5>Bureau</h5>
+                                            <p>+33 01 83 74 71 46</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="contact-item">
+                                            <i class="fas fa-envelope fa-2x mb-3"></i>
+                                            <h5>Email</h5>
+                                            <p>bibsaram@gmail.com    </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="contact-item">
+                                            <i class="fas fa-map-marker-alt fa-2x mb-3"></i>
+                                            <h5>Adresse</h5>
+                                            <p>100 rue Balard<br>75015 Paris , France</p>
+                                            <h5>Siret</h5>
+                                            <p>897 512 901 RCS Bobigny</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="/client/request" class="btn btn-warning btn-lg me-3">
+                                        <i class="fas fa-calendar-plus me-2"></i>Demander un Service
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+<!--                &lt;!&ndash; CTA &ndash;&gt;-->
+<!--                <div class="text-center mt-5">-->
+<!--                    <a href="#contact" class="btn btn-primary btn-lg">-->
+<!--                        <i class="fas fa-phone me-2"></i>Demandez un devis gratuit-->
+<!--                    </a>-->
+<!--                </div>-->
             </div>
         </section>
+
 
         <!-- Statistics Section -->
         <section class="py-5">
@@ -176,66 +814,22 @@
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="py-5" style="background: var(--gradient-primary); color: white;">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto text-center">
-                        <h3 class="display-6 fw-bold mb-3">Contactez-Nous</h3>
-                        <p class="lead mb-4">
-                            Prêt à nettoyer ? Contactez-nous dès maintenant pour une estimation gratuite 
-                            et découvrez pourquoi nous sommes le choix numéro 1 pour le nettoyage professionnel.
-                        </p>
-                        <div class="row g-4">
-                            <div class="col-md-4">
-                                <div class="contact-item">
-                                    <i class="fas fa-phone fa-2x mb-3"></i>
-                                    <h5>Téléphone</h5>
-                                    <p>+33 1 23 45 67 89</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="contact-item">
-                                    <i class="fas fa-envelope fa-2x mb-3"></i>
-                                    <h5>Email</h5>
-                                    <p>contact@bmsrapidclean.com</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="contact-item">
-                                    <i class="fas fa-map-marker-alt fa-2x mb-3"></i>
-                                    <h5>Adresse</h5>
-                                    <p>123 Rue du Nettoyage<br>75001 Paris, France</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <a href="/client/request" class="btn btn-warning btn-lg me-3">
-                                <i class="fas fa-calendar-plus me-2"></i>Demander un Service
-                            </a>
-                            <a href="/login" class="btn btn-outline-light btn-lg">
-                                <i class="fas fa-sign-in-alt me-2"></i>Connexion
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+
     </div>
-    
+
     <div th:replace="~{layout :: footer}"></div>
-    
+
     <style>
         /* Smooth scrolling for anchor links */
         html {
             scroll-behavior: smooth;
         }
-        
+
         /* Offset for fixed navbar */
         section[id] {
             scroll-margin-top: 80px;
         }
-        
+
         /* Contact section styling */
         .contact-item {
             padding: 20px;
@@ -243,43 +837,119 @@
             border-radius: 10px;
             transition: transform 0.3s ease;
         }
-        
+
         .contact-item:hover {
             transform: translateY(-5px);
             background: rgba(255, 255, 255, 0.2);
         }
-        
+
         .contact-item i {
             color: #ffc107;
         }
-        
+
         /* Hero section styling */
         .hero-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 100px 0;
         }
-        
+
         /* Animation classes */
         .animate-fade-in {
             animation: fadeIn 1s ease-in;
         }
-        
+
         .animate-slide-up {
             animation: slideUp 1s ease-out;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(50px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-    
+
+    <!-- CSS pour la galerie -->
+    <style>
+        .gallery-thumb {
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .gallery-thumb:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Lightbox plein écran */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.show {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+    </style>
+
+
+    <!-- STYLES DES ÉTOILES -->
+    <style>
+        .rating {
+            direction: rtl;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        .rating input { display: none; }
+        .rating label {
+            color: #ccc;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #ffc107;
+        }
+        .carousel-item {
+            transition: transform 1s ease, opacity 1s ease-in-out;
+        }
+    </style>
+
+    <!-- VALIDATION BOOTSTRAP -->
+    <script>
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+
+
     <script>
         // Smooth scrolling for anchor links
         document.addEventListener('DOMContentLoaded', function() {
@@ -299,7 +969,7 @@
                     }
                 });
             });
-            
+
             // Handle buttons in hero section
             const heroButtons = document.querySelectorAll('.hero-content a[href^="#"]');
             heroButtons.forEach(button => {
@@ -316,18 +986,18 @@
                     }
                 });
             });
-            
+
             // Active navbar link highlighting
             window.addEventListener('scroll', function() {
                 const sections = document.querySelectorAll('section[id]');
                 const scrollPos = window.scrollY + 100;
-                
+
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     const sectionHeight = section.offsetHeight;
                     const sectionId = section.getAttribute('id');
                     const correspondingLink = document.querySelector(`.navbar-nav a[href="#${sectionId}"]`);
-                    
+
                     if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
                         // Remove active class from all links
                         document.querySelectorAll('.navbar-nav a').forEach(link => {
@@ -341,6 +1011,19 @@
                 });
             });
         });
+    </script>
+
+    <!-- Script Lightbox -->
+    <script>
+        function openLightbox(img) {
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+            lightboxImg.src = img.src;
+            lightbox.classList.add("show");
+        }
+        function closeLightbox() {
+            document.getElementById("lightbox").classList.remove("show");
+        }
     </script>
 </body>
 </html>
