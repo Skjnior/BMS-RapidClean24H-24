@@ -23,7 +23,7 @@
                                 disponibles 24 heures sur 24, 7 jours sur 7. Votre satisfaction est notre priorité.
                             </p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="#contact" class="btn btn-warning btn-lg">
+                                <a href="/request-service" class="btn btn-warning btn-lg">
                                     <i class="fas fa-calendar-plus me-2"></i>Demander un Service
                                 </a>
                                 <a href="#services" class="btn btn-outline-light btn-lg">
@@ -119,150 +119,41 @@
                 </div>
 
 
-                <!-- Liste des services -->
-                <div class="row g-4">
-
-                    <!-- Nettoyage Professionnel Fast-Food -->
-                    <div class="col-lg-4 col-md-6">
+                <!-- Services Dynamiques -->
+                <div class="row g-4" th:if="${services != null and !services.empty}">
+                    <div class="col-lg-4 col-md-6" th:each="service : ${services}">
                         <div class="card h-100 text-center p-4">
                             <div class="card-body">
                                 <div class="feature-icon mb-3">
-                                    <i class="fas fa-hamburger fa-3x text-danger"></i>
+                                    <!-- Icônes spécifiques selon le service -->
+                                    <i th:if="${service.name == 'Nettoyage professionnel des fast-food'}" class="fas fa-hamburger fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Nettoyage des salles'}" class="fas fa-chair fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Entretien sanitaires'}" class="fas fa-toilet fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Nettoyage des vitres'}" class="fas fa-window-maximize fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Nettoyage de cuisine'}" class="fas fa-utensils fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Caisse et divers'}" class="fas fa-cash-register fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Locaux techniques et arrières'}" class="fas fa-cogs fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Vestiaires et douches'}" class="fas fa-shower fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Nettoyage extérieurs'}" class="fas fa-tree fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Nettoyage des équipements de friture'}" class="fas fa-fire fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Nettoyage des systèmes de ventilation'}" class="fas fa-wind fa-3x text-warning"></i>
+                                    <i th:if="${service.name == 'Nettoyage des sols industriels'}" class="fas fa-layer-group fa-3x text-warning"></i>
+                                    <!-- Icône par défaut si aucun match -->
+                                    <i th:unless="${service.name == 'Nettoyage professionnel des fast-food' or service.name == 'Nettoyage des salles' or service.name == 'Entretien sanitaires' or service.name == 'Nettoyage des vitres' or service.name == 'Nettoyage de cuisine' or service.name == 'Caisse et divers' or service.name == 'Locaux techniques et arrières' or service.name == 'Vestiaires et douches' or service.name == 'Nettoyage extérieurs' or service.name == 'Nettoyage des équipements de friture' or service.name == 'Nettoyage des systèmes de ventilation' or service.name == 'Nettoyage des sols industriels'}" class="fas fa-tools fa-3x text-warning"></i>
                                 </div>
-                                <h5 class="card-title">Nettoyage Professionnel Fast-Food</h5>
-                                <p class="card-text">
-                                    Prestations spécialisées pour les chaînes de restauration rapide :
-                                    cuisines, salles, drives, zones clients et extérieurs selon les normes d’hygiène HACCP.
-                                </p>
+                                <h5 class="card-title" th:text="${service.name}">Nom du service</h5>
+                                <p class="card-text" th:text="${service.description}">Description du service</p>
                             </div>
                         </div>
                     </div>
-                    <!-- Salle -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 text-center p-4">
-                            <div class="card-body">
-                                <div class="feature-icon mb-3">
-                                    <i class="fas fa-chair fa-3x text-primary"></i>
-                                </div>
-                                <h5 class="card-title">Nettoyage des Salles</h5>
-                                <p class="card-text">
-                                    Balayage, brossage, raclage, moppage, nettoyage des tables, chaises, vitres, murs et portes.
-                                    La salle de restauration reste impeccable à tout moment.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- Sanitaires -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 text-center p-4">
-                            <div class="card-body">
-                                <div class="feature-icon mb-3">
-                                    <i class="fas fa-restroom fa-3x text-success"></i>
-                                </div>
-                                <h5 class="card-title">Entretien des Sanitaires</h5>
-                                <p class="card-text">
-                                    Lavage complet des sanitaires, miroirs, robinets, faïences et sols.
-                                    Détartrage régulier pour une hygiène parfaite.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Vitres -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 text-center p-4">
-                            <div class="card-body">
-                                <div class="feature-icon mb-3">
-                                    <i class="fas fa-window-maximize fa-3x text-info"></i>
-                                </div>
-                                <h5 class="card-title">Nettoyage des Vitres</h5>
-                                <p class="card-text">
-                                    Nettoyage intérieur et extérieur des vitres, portes vitrées et encadrements
-                                    pour une transparence sans traces.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Cuisine -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 text-center p-4">
-                            <div class="card-body">
-                                <div class="feature-icon mb-3">
-                                    <i class="fas fa-utensils fa-3x text-danger"></i>
-                                </div>
-                                <h5 class="card-title">Nettoyage de Cuisine</h5>
-                                <p class="card-text">
-                                    Dégraissage complet des hottes, grills, friteuses, plans de travail, inox et sols.
-                                    Désinfection et nettoyage de tout le matériel alimentaire.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Caisse et Drive -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 text-center p-4">
-                            <div class="card-body">
-                                <div class="feature-icon mb-3">
-                                    <i class="fas fa-cash-register fa-3x text-warning"></i>
-                                </div>
-                                <h5 class="card-title">Caisse & Drive</h5>
-                                <p class="card-text">
-                                    Nettoyage des comptoirs, bornes de commande, guichets drive et zones clients.
-                                    Entretien complet des surfaces en contact avec le public.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Arrière et locaux techniques -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 text-center p-4">
-                            <div class="card-body">
-                                <div class="feature-icon mb-3">
-                                    <i class="fas fa-boxes-stacked fa-3x text-secondary"></i>
-                                </div>
-                                <h5 class="card-title">Locaux Techniques & Arrières</h5>
-                                <p class="card-text">
-                                    Nettoyage des couloirs, zones techniques, plonge, local boissons, ventilation et poubelles.
-                                    Maintien d’un espace de travail sain et ordonné.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Vestiaires -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 text-center p-4">
-                            <div class="card-body">
-                                <div class="feature-icon mb-3">
-                                    <i class="fas fa-tshirt fa-3x text-success"></i>
-                                </div>
-                                <h5 class="card-title">Vestiaires & Douches</h5>
-                                <p class="card-text">
-                                    Nettoyage complet des vestiaires, casiers, douches et sanitaires du personnel
-                                    pour un environnement propre et confortable.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Extérieurs -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 text-center p-4">
-                            <div class="card-body">
-                                <div class="feature-icon mb-3">
-                                    <i class="fas fa-tree fa-3x text-primary"></i>
-                                </div>
-                                <h5 class="card-title">Nettoyage Extérieur</h5>
-                                <p class="card-text">
-                                    Ramassage des déchets, lavage des terrasses, entretien des jardinières et cabines drive.
-                                    Nettoyage haute pression mensuel des sols et façades.
-                                </p>
-                            </div>
+                </div>
+                
+                <!-- Message si aucun service -->
+                <div class="row" th:if="${services == null or services.empty}">
+                    <div class="col-12 text-center">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Aucun service disponible pour le moment.
                         </div>
                     </div>
                 </div>
@@ -445,110 +336,57 @@
                             </p>
                         </div>
 
-                        <!-- CAROUSEL D’AVIS -->
-                        <div id="avisCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-                            <div class="carousel-inner">
-                                <!-- Avis exemple -->
-                                <div class="carousel-item active">
-                                    <div class="card border-0 shadow-sm rounded-4 p-4 mx-auto" style="max-width:700px;">
-                                        <div class="card-body text-center">
-                                            <div class="mb-3">
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="far fa-star text-warning"></i>
+                        <!-- AVIS DYNAMIQUES -->
+                        <div th:if="${reviews != null and !reviews.empty}">
+                            <div id="avisCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item" th:each="review, iterStat : ${reviews}" th:classappend="${iterStat.first} ? 'active'">
+                                        <div class="card border-0 shadow-sm rounded-4 p-4 mx-auto" style="max-width:700px;">
+                                            <div class="card-body text-center">
+                                                <div class="mb-3">
+                                                    <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                                        <i th:if="${i <= review.rating}" class="fas fa-star text-warning"></i>
+                                                        <i th:unless="${i <= review.rating}" class="far fa-star text-warning"></i>
+                                                    </span>
+                                                </div>
+                                                <p class="fst-italic text-muted" th:text="'&quot;' + ${review.comment} + '&quot;'">Commentaire</p>
+                                                <h6 class="fw-bold mt-3" th:text="'— ' + ${review.customerName}">Nom du client</h6>
                                             </div>
-                                            <p class="fst-italic text-muted">"Service impeccable, personnel professionnel et ponctuel. Je recommande fortement !"</p>
-                                            <h6 class="fw-bold mt-3">— Sarah Dupuis</h6>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="carousel-item">
-                                    <div class="card border-0 shadow-sm rounded-4 p-4 mx-auto" style="max-width:700px;">
-                                        <div class="card-body text-center">
-                                            <div class="mb-3">
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star-half-alt text-warning"></i>
-                                                <i class="far fa-star text-warning"></i>
-                                            </div>
-                                            <p class="fst-italic text-muted">"BMS RapidClean a transformé notre restaurant, tout est d’une propreté exemplaire !"</p>
-                                            <h6 class="fw-bold mt-3">— Karim B.</h6>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="carousel-item">
-                                    <div class="card border-0 shadow-sm rounded-4 p-4 mx-auto" style="max-width:700px;">
-                                        <div class="card-body text-center">
-                                            <div class="mb-3">
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                            </div>
-                                            <p class="fst-italic text-muted">"Une équipe au top ! Toujours souriante et très efficace. Merci pour votre sérieux."</p>
-                                            <h6 class="fw-bold mt-3">— Julie Laurent</h6>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- Contrôles du carrousel -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#avisCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#avisCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button>
                             </div>
+                        </div>
 
-                            <!-- Contrôles du carrousel -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#avisCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon"></span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#avisCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon"></span>
-                            </button>
+                        <!-- Message si aucun avis -->
+                        <div th:if="${reviews == null or reviews.empty}" class="text-center">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Aucun avis client disponible pour le moment.
+                            </div>
                         </div>
 
                         <hr class="my-5" style="opacity: 0.2;">
 
-                        <!-- FORMULAIRE D’AVIS -->
+                        <!-- LIEN VERS FORMULAIRE D'AVIS -->
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
-                                <div class="card border-0 shadow-lg rounded-4 p-4">
-                                    <h4 class="fw-bold mb-4 text-center">Donnez votre avis ⭐</h4>
-
-                                    <form th:action="@{/avis/save}" method="post" class="needs-validation" novalidate>
-                                        <!-- Nom -->
-                                        <div class="mb-3">
-                                            <label for="nom" class="form-label fw-semibold">Nom complet</label>
-                                            <input type="text" id="nom" name="nom" class="form-control rounded-3" placeholder="Votre nom" required>
-                                            <div class="invalid-feedback">Veuillez entrer votre nom.</div>
-                                        </div>
-
-                                        <!-- Note (étoiles interactives) -->
-                                        <div class="mb-3 text-center">
-                                            <label class="form-label fw-semibold d-block mb-2">Votre note</label>
-                                            <div class="rating">
-                                                <input type="radio" name="note" value="5" id="star5"><label for="star5"><i class="fas fa-star"></i></label>
-                                                <input type="radio" name="note" value="4" id="star4"><label for="star4"><i class="fas fa-star"></i></label>
-                                                <input type="radio" name="note" value="3" id="star3"><label for="star3"><i class="fas fa-star"></i></label>
-                                                <input type="radio" name="note" value="2" id="star2"><label for="star2"><i class="fas fa-star"></i></label>
-                                                <input type="radio" name="note" value="1" id="star1" required><label for="star1"><i class="fas fa-star"></i></label>
-                                            </div>
-                                        </div>
-
-                                        <!-- Commentaire -->
-                                        <div class="mb-3">
-                                            <label for="commentaire" class="form-label fw-semibold">Votre avis</label>
-                                            <textarea id="commentaire" name="commentaire" class="form-control rounded-3" rows="4" placeholder="Partagez votre expérience..." required></textarea>
-                                            <div class="invalid-feedback">Veuillez écrire un commentaire.</div>
-                                        </div>
-
-                                        <!-- Bouton Envoyer -->
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-warning btn-lg px-5 rounded-pill">
-                                                <i class="fas fa-paper-plane me-2"></i>Envoyer
-                                            </button>
-                                        </div>
-                                    </form>
+                                <div class="card border-0 shadow-lg rounded-4 p-4 text-center">
+                                    <h4 class="fw-bold mb-4">Donnez votre avis ⭐</h4>
+                                    <p class="text-muted mb-4">
+                                        Partagez votre expérience avec BMS RapidClean et aidez d'autres clients à nous découvrir.
+                                    </p>
+                                    <a href="/submit-review" class="btn btn-warning btn-lg px-5 rounded-pill">
+                                        <i class="fas fa-star me-2"></i>Donner mon avis
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -738,7 +576,7 @@
                                             <i class="fas fa-phone fa-2x mb-3"></i>
                                             <h5>Gérant Mr BARRY IBRAHIMA </h5>
                                             <p>+33 06 35 60 24 29</p>
-                                            <h5>Resp. D’exploitation</h5>
+                                            <h5>Resp. D'exploitation</h5>
                                             <p>+33 06 23 54 17 47</p>
                                             <h5>Bureau</h5>
                                             <p>+33 01 83 74 71 46</p>
@@ -761,23 +599,18 @@
                                         </div>
                                     </div>
                                 </div>
-<!--                                <div class="mt-4">-->
-<!--                                    <a href="/client/request" class="btn btn-warning btn-lg me-3">-->
-<!--                                        <i class="fas fa-calendar-plus me-2"></i>Demander un Service-->
-<!--                                    </a>-->
-
-<!--                                </div>-->
+                                <div class="mt-4">
+                                    <a href="/request-service" class="btn btn-warning btn-lg me-3">
+                                        <i class="fas fa-calendar-plus me-2"></i>Demander un Service
+                                    </a>
+                                    <a href="/submit-review" class="btn btn-outline-light btn-lg">
+                                        <i class="fas fa-star me-2"></i>Donner un avis
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
-
-<!--                &lt;!&ndash; CTA &ndash;&gt;-->
-<!--                <div class="text-center mt-5">-->
-<!--                    <a href="#contact" class="btn btn-primary btn-lg">-->
-<!--                        <i class="fas fa-phone me-2"></i>Demandez un devis gratuit-->
-<!--                    </a>-->
-<!--                </div>-->
             </div>
         </section>
 

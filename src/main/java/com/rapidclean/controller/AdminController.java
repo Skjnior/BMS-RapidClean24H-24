@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -62,7 +63,7 @@ public class AdminController {
         model.addAttribute("notifications", notifications);
         model.addAttribute("unreadNotifications", notificationRepository.countUnreadNotifications());
         
-        return "admin/dashboard";
+        return "admin/dashboard-test";
     }
 
     @GetMapping("/services")
@@ -81,10 +82,68 @@ public class AdminController {
     @PostMapping("/services")
     public String saveService(Service service, RedirectAttributes redirectAttributes) {
         try {
+            service.setActive(true);
+            service.setCreatedAt(LocalDateTime.now());
             serviceRepository.save(service);
             redirectAttributes.addFlashAttribute("success", "Service créé avec succès");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la création du service");
+        }
+        return "redirect:/admin/services";
+    }
+
+    @GetMapping("/services/{id}/edit")
+    public String editService(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Service service = serviceRepository.findById(id).orElse(null);
+            if (service == null) {
+                redirectAttributes.addFlashAttribute("error", "Service non trouvé");
+                return "redirect:/admin/services";
+            }
+            model.addAttribute("service", service);
+            return "admin/service-form";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Erreur lors du chargement du service");
+            return "redirect:/admin/services";
+        }
+    }
+
+    @PostMapping("/services/{id}/update")
+    public String updateService(@PathVariable Long id, Service service, RedirectAttributes redirectAttributes) {
+        try {
+            Service existingService = serviceRepository.findById(id).orElse(null);
+            if (existingService == null) {
+                redirectAttributes.addFlashAttribute("error", "Service non trouvé");
+                return "redirect:/admin/services";
+            }
+            
+            existingService.setName(service.getName());
+            existingService.setDescription(service.getDescription());
+            existingService.setPrice(service.getPrice());
+            existingService.setImageUrl(service.getImageUrl());
+            existingService.setActive(service.isActive());
+            
+            serviceRepository.save(existingService);
+            redirectAttributes.addFlashAttribute("success", "Service mis à jour avec succès");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Erreur lors de la mise à jour du service");
+        }
+        return "redirect:/admin/services";
+    }
+
+    @PostMapping("/services/{id}/delete")
+    public String deleteService(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            Service service = serviceRepository.findById(id).orElse(null);
+            if (service == null) {
+                redirectAttributes.addFlashAttribute("error", "Service non trouvé");
+                return "redirect:/admin/services";
+            }
+            
+            serviceRepository.delete(service);
+            redirectAttributes.addFlashAttribute("success", "Service supprimé avec succès");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Erreur lors de la suppression du service");
         }
         return "redirect:/admin/services";
     }

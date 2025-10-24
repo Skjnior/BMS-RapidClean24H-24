@@ -3,8 +3,6 @@ package com.rapidclean.controller;
 import com.rapidclean.entity.User;
 import com.rapidclean.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,17 +58,12 @@ public class AuthController {
 
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(principal.getName()).orElse(null);
         
-        if (user != null) {
-            if (user.getRole() == User.Role.ADMIN) {
-                return "redirect:/admin/dashboard";
-            } else {
-                return "redirect:/client/dashboard";
-            }
+        if (user != null && user.getRole() == User.Role.ADMIN) {
+            return "redirect:/admin/dashboard";
         }
         
-        return "redirect:/login";
+        return "redirect:/admin-secret-access";
     }
 }

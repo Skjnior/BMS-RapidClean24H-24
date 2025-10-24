@@ -259,9 +259,6 @@
                     
                     <ul class="navbar-nav">
                         <li class="nav-item" th:if="${#authentication == null}">
-                            <a class="nav-link" href="/login">
-                                <i class="fas fa-sign-in-alt me-1"></i>Connexion
-                            </a>
                         </li>
                         <li class="nav-item dropdown" th:if="${#authentication != null}">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">

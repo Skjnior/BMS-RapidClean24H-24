@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Tableau de Bord Admin - BMS Rapid Clean</title>
+    <div th:replace="~{layout :: head}"></div>
 </head>
 <body>
+    <div th:replace="~{layout :: navbar}"></div>
+
     <div th:fragment="content">
         <div class="container py-4">
             <!-- Welcome Section -->
