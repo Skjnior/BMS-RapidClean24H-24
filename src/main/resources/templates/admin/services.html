@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestion des Services - Admin BMS Rapid Clean</title>
+    <div th:replace="~{layout :: head}"></div>
+</head>
+<body>
+    <div th:replace="~{layout :: navbar}"></div>
+
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>Gestion des Services
+                    </h2>
+                    <a href="/admin/services/new" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Ajouter un Service
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages d'alerte -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Liste des services -->
+        <div class="row" th:if="${services != null and !services.empty}">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nom</th>
+                                        <th>Description</th>
+                                        <th>Prix</th>
+                                        <th>Statut</th>
+                                        <th>Créé le</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="service : ${services}">
+                                        <td th:text="${service.id}">1</td>
+                                        <td th:text="${service.name}">Nom du service</td>
+                                        <td>
+                                            <span th:text="${#strings.abbreviate(service.description, 50)}">Description...</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success" th:text="${service.price} + '€'">150€</span>
+                                        </td>
+                                        <td>
+                                            <span th:if="${service.active}" class="badge bg-success">Actif</span>
+                                            <span th:unless="${service.active}" class="badge bg-secondary">Inactif</span>
+                                        </td>
+                                        <td th:text="${#temporals.format(service.createdAt, 'dd/MM/yyyy')}">01/01/2024</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a th:href="@{/admin/services/{id}/edit(id=${service.id})}" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                        th:onclick="'deleteService(' + ${service.id} + ')'">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message si aucun service -->
+        <div th:if="${services == null or services.empty}" class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-tools fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Aucun service disponible</h5>
+                        <p class="text-muted">Commencez par ajouter votre premier service.</p>
+                        <a href="/admin/services/new" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Ajouter un Service
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmer la suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer ce service ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <form id="deleteForm" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function deleteService(serviceId) {
+            document.getElementById('deleteForm').action = '/admin/services/' + serviceId + '/delete';
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+    </script>
+    
+    <div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

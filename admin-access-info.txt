@@ -1,0 +1,43 @@
+🔐 ACCÈS ADMINISTRATEUR BMS RAPID CLEAN
+==========================================
+
+CHEMIN CACHÉ POUR L'ADMINISTRATEUR :
+====================================
+
+URL d'accès : http://localhost:8997/admin-secret-access
+
+IDENTIFIANTS :
+==============
+Email : admin@bmsrapidclean.com
+Mot de passe : admin123
+
+FONCTIONNALITÉS :
+=================
+✅ Interface admin complète
+✅ Gestion des services
+✅ Gestion des demandes
+✅ Gestion des utilisateurs
+✅ Messages de contact
+✅ Avis clients
+✅ Statistiques et rapports
+
+SÉCURITÉ :
+==========
+- Chemin caché non visible sur le site public
+- Accès réservé aux administrateurs uniquement
+- Redirection automatique vers le dashboard admin
+- Interface sécurisée avec authentification
+
+DÉMARRAGE :
+===========
+1. Lancer l'application : ./start-h2.sh
+2. Aller sur : http://localhost:8997/admin-secret-access
+3. Se connecter avec les identifiants ci-dessus
+4. Accéder au dashboard admin
+
+NOTES :
+=======
+- Ce chemin est réservé aux administrateurs
+- Aucun bouton de connexion visible sur le site public
+- Interface client désactivée pour l'instant
+- Focus sur la gestion administrative uniquement

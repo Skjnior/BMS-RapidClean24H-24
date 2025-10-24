@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Donner votre avis - BMS Rapid Clean</title>
+    <div th:replace="~{layout :: head}"></div>
+</head>
+<body>
+    <div th:replace="~{layout :: navbar}"></div>
+<br>
+<br>
+<br>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-star me-2"></i>
+                            Donner votre avis
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Messages d'alerte -->
+                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span th:text="${success}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span th:text="${error}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <form th:action="@{/submit-review}" th:object="${review}" method="post">
+                            <div class="row">
+                                <!-- Informations client -->
+                                <div class="col-md-6">
+                                    <h5 class="text-success mb-3">
+                                        <i class="fas fa-user me-2"></i>Vos Informations
+                                    </h5>
+                                    
+                                    <div class="mb-3">
+                                        <label for="customerName" class="form-label">Nom complet *</label>
+                                        <input type="text" class="form-control" id="customerName" name="customerName" 
+                                               placeholder="Jean Dupont" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="customerEmail" class="form-label">Email *</label>
+                                        <input type="email" class="form-control" id="customerEmail" name="customerEmail" 
+                                               placeholder="jean.dupont@email.com" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Évaluation -->
+                                <div class="col-md-6">
+                                    <h5 class="text-success mb-3">
+                                        <i class="fas fa-star me-2"></i>Votre Évaluation
+                                    </h5>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Note *</label>
+                                        <div class="rating-input">
+                                            <input type="radio" id="star5" name="rating" value="5" required>
+                                            <label for="star5" class="star-label">★</label>
+                                            
+                                            <input type="radio" id="star4" name="rating" value="4" required>
+                                            <label for="star4" class="star-label">★</label>
+                                            
+                                            <input type="radio" id="star3" name="rating" value="3" required>
+                                            <label for="star3" class="star-label">★</label>
+                                            
+                                            <input type="radio" id="star2" name="rating" value="2" required>
+                                            <label for="star2" class="star-label">★</label>
+                                            
+                                            <input type="radio" id="star1" name="rating" value="1" required>
+                                            <label for="star1" class="star-label">★</label>
+                                        </div>
+                                        <small class="form-text text-muted">Cliquez sur une étoile pour noter</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Commentaire -->
+                            <div class="mb-4">
+                                <label for="comment" class="form-label">Votre commentaire *</label>
+                                <textarea class="form-control" id="comment" name="comment" rows="4" 
+                                          placeholder="Partagez votre expérience avec nos services..." required></textarea>
+                                <small class="form-text text-muted">Votre avis sera publié après validation par notre équipe.</small>
+                            </div>
+                            
+                            <!-- Boutons -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/" class="btn btn-outline-secondary me-md-2">
+                                    <i class="fas fa-arrow-left me-2"></i>Retour
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-paper-plane me-2"></i>Envoyer l'avis
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Informations sur les avis -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-info-circle me-2"></i>À propos des avis
+                                </h6>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2">
+                                        <i class="fas fa-check text-success me-2"></i>
+                                        Tous les avis sont modérés avant publication
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check text-success me-2"></i>
+                                        Seuls les avis avec 4+ étoiles sont affichés sur le site
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check text-success me-2"></i>
+                                        Nous nous réservons le droit de refuser les avis inappropriés
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        .rating-input {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 5px;
+        }
+        
+        .rating-input input[type="radio"] {
+            display: none;
+        }
+        
+        .star-label {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .rating-input input[type="radio"]:checked ~ .star-label,
+        .rating-input input[type="radio"]:checked ~ .star-label ~ .star-label {
+            color: #ffc107;
+        }
+        
+        .star-label:hover,
+        .star-label:hover ~ .star-label {
+            color: #ffc107;
+        }
+    </style>
+    
+    <div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

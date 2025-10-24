@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${service.id != null ? 'Modifier le Service' : 'Nouveau Service'} - Admin BMS Rapid Clean</title>
+    <div th:replace="~{layout :: head}"></div>
+</head>
+<body>
+    <div th:replace="~{layout :: navbar}"></div>
+
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/services">Services</a></li>
+                        <li class="breadcrumb-item active" th:text="${service.id != null ? 'Modifier' : 'Nouveau'}">Nouveau</li>
+                    </ol>
+                </nav>
+                <h2 class="mb-0">
+                    <i class="fas fa-tools me-2"></i>
+                    <span th:text="${service.id != null ? 'Modifier le Service' : 'Nouveau Service'}">Nouveau Service</span>
+                </h2>
+            </div>
+        </div>
+
+        <!-- Messages d'alerte -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Formulaire -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <form th:action="${service.id != null ? '/admin/services/' + service.id + '/update' : '/admin/services'}" 
+                              th:object="${service}" method="post">
+                            
+                            <!-- Nom du service -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nom du service *</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       th:field="*{name}" placeholder="Ex: Nettoyage de bureaux" required>
+                            </div>
+                            
+                            <!-- Description -->
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description *</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" 
+                                          th:field="*{description}" 
+                                          placeholder="Décrivez le service en détail..." required></textarea>
+                            </div>
+                            
+                            <!-- Prix -->
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Prix (€) *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="price" name="price" 
+                                           th:field="*{price}" placeholder="150" min="0" step="0.01" required>
+                                    <span class="input-group-text">€</span>
+                                </div>
+                            </div>
+                            
+                            <!-- URL de l'image -->
+                            <div class="mb-3">
+                                <label for="imageUrl" class="form-label">URL de l'image</label>
+                                <input type="url" class="form-control" id="imageUrl" name="imageUrl" 
+                                       th:field="*{imageUrl}" placeholder="https://example.com/image.jpg">
+                                <div class="form-text">Laissez vide si pas d'image</div>
+                            </div>
+                            
+                            <!-- Statut -->
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="active" name="active" 
+                                           th:checked="*{active}">
+                                    <label class="form-check-label" for="active">
+                                        Service actif
+                                    </label>
+                                </div>
+                                <div class="form-text">Un service inactif ne sera pas affiché sur le site public</div>
+                            </div>
+                            
+                            <!-- Boutons -->
+                            <div class="d-flex justify-content-between">
+                                <a href="/admin/services" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Retour
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>
+                                    <span th:text="${service.id != null ? 'Mettre à jour' : 'Créer'}">Créer</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{layout :: footer}"></div>
+</body>
+</html>
