@@ -1,0 +1,633 @@
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Breadcrumb -->
+        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb(null, null, null, 'Utilisateurs', 'fas fa-users')}"></div>
+        
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">
+                    <i class="fas fa-users me-2"></i>
+                    Gestion des Utilisateurs
+                </h2>
+                <p class="text-muted mb-0">Gérez tous les utilisateurs de la plateforme</p>
+            </div>
+            <a th:href="@{/admin/users/new}" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-2"></i>
+                Ajouter un Utilisateur
+            </a>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stat-card primary">
+                    <div class="stat-header">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <div class="stat-number" th:text="${users.size()}">0</div>
+                            <div class="stat-label">Utilisateurs Totaux</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <div class="stat-icon success">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div>
+                            <div class="stat-number" th:text="${#lists.size(users.?[enabled])}">0</div>
+                            <div class="stat-label">Actifs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="stat-card warning">
+                    <div class="stat-header">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div>
+                            <div class="stat-number" th:text="${#lists.size(users.?[role.name() == 'ADMIN'])}">0</div>
+                            <div class="stat-label">Administrateurs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="card mb-4 animate-fade-in">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-search me-1"></i>
+                            Rechercher un utilisateur
+                        </label>
+                        <input type="text" class="form-control" id="searchUsers" placeholder="Nom, email, téléphone...">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            <i class="fas fa-filter me-1"></i>
+                            Filtrer par Rôle
+                        </label>
+                        <select class="form-select" id="roleFilter">
+                            <option value="">Tous les rôles</option>
+                            <option value="ADMIN">Administrateur</option>
+                            <option value="CLIENT">Client</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            <i class="fas fa-toggle-on me-1"></i>
+                            Filtrer par Statut
+                        </label>
+                        <select class="form-select" id="statusFilter">
+                            <option value="">Tous les statuts</option>
+                            <option value="true">Actif</option>
+                            <option value="false">Inactif</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Users Table -->
+        <div class="card animate-fade-in">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list me-2"></i>
+                    Liste des Utilisateurs
+                    <span class="badge bg-primary ms-2" th:text="${users.size()}">0</span>
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Utilisateur</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Rôle</th>
+                                <th>Statut</th>
+                                <th>Date d'inscription</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="user : ${users}" th:if="${!users.isEmpty()}" th:data-role="${user.role.name()}" th:data-enabled="${user.enabled}">
+                                <td><strong th:text="'#' + ${user.id}">#1</strong></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-2" style="width: 40px; height: 40px; background: linear-gradient(135deg, #2c5aa0 0%, #4a90e2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                            <span th:text="${#strings.substring(user.firstName, 0, 1) + #strings.substring(user.lastName, 0, 1)}">AB</span>
+                                        </div>
+                                        <div>
+                                            <strong th:text="${user.fullName}">Nom Complet</strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <i class="fas fa-envelope me-1 text-muted"></i>
+                                    <span th:text="${user.email}">email@exemple.com</span>
+                                </td>
+                                <td>
+                                    <i class="fas fa-phone me-1 text-muted"></i>
+                                    <span th:text="${user.phone}">+33 6 00 00 00 00</span>
+                                </td>
+                                <td>
+                                    <span class="badge" th:classappend="${user.role.name() == 'ADMIN' ? 'bg-danger' : 'bg-info'}" th:text="${user.role.name()}">
+                                        Role
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge" th:classappend="${user.enabled ? 'bg-success' : 'bg-secondary'}" th:text="${user.enabled ? 'Actif' : 'Inactif'}">
+                                        Statut
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        <span th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">01/01/2024</span>
+                                    </small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a th:href="@{/admin/users/{id}/edit(id=${user.id})}" class="btn btn-sm btn-primary" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-info" 
+                                                data-bs-toggle="modal" 
+                                                th:data-bs-target="'#viewUserModal' + ${user.id}" 
+                                                title="Voir détails">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <form th:action="@{/admin/users/{id}/toggle(id=${user.id})}" method="post" style="display: inline;" th:if="${user.role.name() != 'ADMIN'}">
+                                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                                            <button type="submit" class="btn btn-sm" th:classappend="${user.enabled ? 'btn-warning' : 'btn-success'}" th:title="${user.enabled ? 'Désactiver' : 'Activer'}">
+                                                <i class="fas" th:classappend="${user.enabled ? 'fa-ban' : 'fa-check'}"></i>
+                                            </button>
+                                        </form>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-danger btn-delete-user" 
+                                                th:data-id="${user.id}" 
+                                                th:data-name="${user.fullName}"
+                                                th:data-role="${user.role.name()}" 
+                                                title="Supprimer" 
+                                                th:if="${user.role.name() != 'ADMIN'}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr th:if="${users.isEmpty()}">
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="fas fa-users-slash fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">Aucun utilisateur trouvé</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View User Modals -->
+        <div th:each="user : ${users}" class="modal fade" th:id="'viewUserModal' + ${user.id}" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 15px; overflow: hidden;">
+                    <!-- Modal Header avec gradient moderne -->
+                    <div class="modal-header border-0 text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px 30px;">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                                <i class="fas fa-user-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5 class="modal-title mb-0 fw-bold" style="font-size: 1.3rem;">
+                                    Profil de <span th:text="${user.fullName}">Utilisateur</span>
+                                </h5>
+                                <small class="opacity-75">ID: #<span th:text="${user.id}">1</span></small>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="opacity: 0.9;"></button>
+                    </div>
+                    
+                    <div class="modal-body p-4" style="background: #f8f9fa;">
+                        <!-- Avatar et badges -->
+                        <div class="text-center mb-4">
+                            <div class="user-avatar mx-auto mb-3" style="width: 120px; height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 3rem; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); border: 5px solid white;">
+                                <span th:text="${#strings.substring(user.firstName, 0, 1) + #strings.substring(user.lastName, 0, 1)}">AB</span>
+                            </div>
+                            <h4 class="mt-3 mb-2 fw-bold" style="color: #2c3e50;" th:text="${user.fullName}">Nom Complet</h4>
+                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                <span class="badge px-3 py-2" style="font-size: 0.85rem; font-weight: 600;" th:classappend="${user.role.name() == 'ADMIN' ? 'bg-danger' : user.role.name() == 'EMPLOYEE' ? 'bg-info' : 'bg-primary'}" th:text="${user.role.name()}">Role</span>
+                                <span class="badge px-3 py-2" style="font-size: 0.85rem; font-weight: 600;" th:classappend="${user.enabled ? 'bg-success' : 'bg-secondary'}" th:text="${user.enabled ? 'Actif' : 'Inactif'}">Statut</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Informations utilisateur dans des cartes stylées -->
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="user-info-card">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="info-icon info-icon-primary">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <label class="info-label">Prénom</label>
+                                    </div>
+                                    <p class="info-value" th:text="${user.firstName}">Prénom</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="user-info-card">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="info-icon info-icon-primary">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <label class="info-label">Nom</label>
+                                    </div>
+                                    <p class="info-value" th:text="${user.lastName}">Nom</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="user-info-card">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="info-icon info-icon-email">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <label class="info-label">Email</label>
+                                    </div>
+                                    <p class="mb-0">
+                                        <a th:href="'mailto:' + ${user.email}" th:text="${user.email}" class="info-link">email@exemple.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="user-info-card">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="info-icon info-icon-phone">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                        <label class="info-label">Téléphone</label>
+                                    </div>
+                                    <p class="mb-0">
+                                        <a th:href="'tel:' + ${user.phone}" th:text="${user.phone}" class="info-link">+33 6 00 00 00 00</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="user-info-card">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="info-icon info-icon-calendar">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                        <label class="info-label">Date d'inscription</label>
+                                    </div>
+                                    <p class="info-value-small">
+                                        <span th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="user-info-card">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="info-icon info-icon-id">
+                                            <i class="fas fa-id-card"></i>
+                                        </div>
+                                        <label class="info-label">ID Utilisateur</label>
+                                    </div>
+                                    <p class="mb-0">
+                                        <code class="user-id-code" th:text="${user.id}">#1</code>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${user.serviceRequests != null && !user.serviceRequests.isEmpty()}">
+                            <hr>
+                            <h6 class="mb-3">
+                                <i class="fas fa-clipboard-list me-2"></i>
+                                Demandes de Service
+                                <span class="badge bg-primary" th:text="${user.serviceRequests.size()}">0</span>
+                            </h6>
+                            <div class="list-group">
+                                <div class="list-group-item" th:each="request : ${user.serviceRequests}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1" th:text="${request.serviceType}">Service</h6>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                <span th:text="${#temporals.format(request.serviceDate, 'dd/MM/yyyy')}">Date</span>
+                                            </small>
+                                        </div>
+                                        <span class="badge" th:classappend="${request.status.name() == 'PENDING' ? 'bg-pending' : request.status.name() == 'CONFIRMED' ? 'bg-confirmed' : request.status.name() == 'IN_PROGRESS' ? 'bg-in-progress' : request.status.name() == 'COMPLETED' ? 'bg-completed' : 'bg-cancelled'}" th:text="${request.status.displayName}">
+                                            Statut
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0" style="background: #f8f9fa; padding: 20px 30px;">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" style="border-radius: 25px; padding: 10px 25px; font-weight: 600; border: 2px solid #e9ecef; transition: all 0.3s ease;"
+                                onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea';"
+                                onmouseout="this.style.borderColor='#e9ecef'; this.style.color='#6c757d';">
+                            <i class="fas fa-times me-2"></i>Fermer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Delete Form (Hidden) -->
+        <form id="deleteUserForm" method="post" style="display: none;">
+            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+        </form>
+
+        <!-- Styles pour le modal de profil utilisateur -->
+        <style>
+            /* Cartes d'information utilisateur */
+            .user-info-card {
+                background: white;
+                border-radius: 12px;
+                padding: 20px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                transition: all 0.3s ease;
+                border: 1px solid #f0f0f0;
+            }
+            
+            .user-info-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+                border-color: #667eea;
+            }
+            
+            /* Icônes d'information */
+            .info-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                margin-right: 12px;
+                font-size: 1rem;
+                flex-shrink: 0;
+            }
+            
+            .info-icon-primary {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+            
+            .info-icon-email {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            }
+            
+            .info-icon-phone {
+                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            }
+            
+            .info-icon-calendar {
+                background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            }
+            
+            .info-icon-id {
+                background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            }
+            
+            /* Labels d'information */
+            .info-label {
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.75rem;
+                letter-spacing: 0.5px;
+                color: #6c757d;
+                margin-bottom: 0;
+            }
+            
+            /* Valeurs d'information */
+            .info-value {
+                color: #2c3e50;
+                font-size: 1.1rem;
+                font-weight: 700;
+                margin-left: 52px;
+                margin-bottom: 0;
+            }
+            
+            .info-value-small {
+                color: #2c3e50;
+                font-size: 1rem;
+                font-weight: 700;
+                margin-left: 52px;
+                margin-bottom: 0;
+            }
+            
+            /* Liens d'information */
+            .info-link {
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 1rem;
+                transition: all 0.2s ease;
+                margin-left: 52px;
+                display: inline-block;
+            }
+            
+            .info-link:hover {
+                color: #764ba2;
+                text-decoration: underline;
+                transform: translateX(2px);
+            }
+            
+            /* Code ID utilisateur */
+            .user-id-code {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                padding: 8px 14px;
+                border-radius: 8px;
+                color: #667eea;
+                font-weight: 700;
+                font-size: 1rem;
+                border: 2px solid #e9ecef;
+                margin-left: 52px;
+                display: inline-block;
+                transition: all 0.2s ease;
+            }
+            
+            .user-info-card:hover .user-id-code {
+                border-color: #667eea;
+                background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 100%);
+                transform: scale(1.05);
+            }
+            
+            /* Avatar utilisateur amélioré */
+            .user-avatar {
+                animation: fadeInScale 0.5s ease-out;
+            }
+            
+            @keyframes fadeInScale {
+                from {
+                    opacity: 0;
+                    transform: scale(0.8);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+            
+            /* Badges améliorés */
+            .modal-body .badge {
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+                transition: all 0.2s ease;
+            }
+            
+            .modal-body .badge:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            }
+            
+            /* Responsive pour petits écrans */
+            @media (max-width: 768px) {
+                .user-info-card {
+                    padding: 15px;
+                }
+                
+                .info-value,
+                .info-value-small,
+                .info-link {
+                    margin-left: 0;
+                    margin-top: 8px;
+                }
+                
+                .user-id-code {
+                    margin-left: 0;
+                }
+            }
+        </style>
+
+        <script>
+            // Confirm delete user - define globally immediately
+            window.confirmDeleteUser = function(button) {
+                const userId = button.getAttribute('data-id');
+                const userName = button.getAttribute('data-name');
+                const form = document.getElementById('deleteUserForm');
+                if (!form) {
+                    console.error('Delete form not found');
+                    return;
+                }
+                form.action = '/admin/users/' + userId + '/delete';
+                
+                // Add CSRF token if available
+                const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');
+                if (csrfTokenMeta) {
+                    const csrfToken = csrfTokenMeta.getAttribute('content');
+                    // Remove existing CSRF input if any
+                    const existingCsrf = form.querySelector('input[name="_csrf"]');
+                    if (existingCsrf) {
+                        existingCsrf.value = csrfToken;
+                    } else {
+                        // Add CSRF token
+                        const csrfInput = document.createElement('input');
+                        csrfInput.type = 'hidden';
+                        csrfInput.name = '_csrf'; // Standard parameter name for CookieCsrfTokenRepository
+                        csrfInput.value = csrfToken;
+                        form.appendChild(csrfInput);
+                    }
+                } else {
+                    console.warn('CSRF token not found in meta tags');
+                }
+                
+                if (typeof window.showConfirmModal === 'function') {
+                    window.showConfirmModal(
+                        'Êtes-vous sûr de vouloir supprimer l\'utilisateur <strong>' + userName + '</strong> ? Cette action est irréversible et supprimera toutes les données associées.',
+                        function() {
+                            form.submit();
+                        }
+                    );
+                } else {
+                    // Fallback to native confirm if showConfirmModal is not available
+                    if (confirm('Êtes-vous sûr de vouloir supprimer l\'utilisateur ' + userName + ' ? Cette action est irréversible et supprimera toutes les données associées.')) {
+                        form.submit();
+                    }
+                }
+            };
+            
+            // Combined filter function
+            function filterUsers() {
+                const searchTerm = document.getElementById('searchUsers')?.value.toLowerCase() || '';
+                const role = document.getElementById('roleFilter')?.value || '';
+                const status = document.getElementById('statusFilter')?.value || '';
+                const rows = document.querySelectorAll('#usersTable tbody tr');
+                let visibleCount = 0;
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const rowRole = row.getAttribute('data-role');
+                    const rowEnabled = row.getAttribute('data-enabled');
+                    
+                    const matchesSearch = !searchTerm || text.includes(searchTerm);
+                    const matchesRole = !role || rowRole === role;
+                    const matchesStatus = !status || rowEnabled === status;
+                    
+                    if (matchesSearch && matchesRole && matchesStatus) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Wait for DOM to be ready
+            document.addEventListener('DOMContentLoaded', function() {
+                // Search functionality
+                const searchInput = document.getElementById('searchUsers');
+                if (searchInput) {
+                    searchInput.addEventListener('keyup', filterUsers);
+                }
+                
+                // Role filter
+                const roleFilter = document.getElementById('roleFilter');
+                if (roleFilter) {
+                    roleFilter.addEventListener('change', filterUsers);
+                }
+                
+                // Status filter
+                const statusFilter = document.getElementById('statusFilter');
+                if (statusFilter) {
+                    statusFilter.addEventListener('change', filterUsers);
+                }
+                
+                // Initialize Bootstrap modals
+                const modalElements = document.querySelectorAll('.modal');
+                modalElements.forEach(function(modalEl) {
+                    if (!bootstrap.Modal.getInstance(modalEl)) {
+                        new bootstrap.Modal(modalEl);
+                    }
+                });
+                
+                // Attach delete button event listeners
+                document.querySelectorAll('.btn-delete-user').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        window.confirmDeleteUser(this);
+                    });
+                });
+            });
+        </script>
+    </div>
+</div>

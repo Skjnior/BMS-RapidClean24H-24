@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:fragment="layout (content)">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title} ?: 'BMS RapidClean - Service de Nettoyage 24h/24'">BMS RapidClean</title>
+    <title th:text="${title} ?: ' BMS Clean Solutions - Service de Nettoyage 24h/24'">BMS RapidClean</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="apple-touch-icon" th:href="@{/images/logo Rapidclean.png}">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -45,6 +50,10 @@
             background: var(--gradient-primary) !important;
             box-shadow: 0 2px 20px rgba(44, 90, 160, 0.3);
             transition: all 0.3s ease;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
         }
         
         .navbar-brand {
@@ -211,19 +220,41 @@
         
         .alert {
             border: none;
-            border-radius: 10px;
-            padding: 15px 20px;
+            border-radius: 12px;
+            padding: 18px 25px;
             margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 1.05rem;
+            font-weight: 500;
+            animation: slideDown 0.4s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .alert-success {
             background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
             color: #155724;
+            border-left: 4px solid #28a745;
         }
         
         .alert-danger {
             background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .alert i {
+            font-size: 1.2rem;
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -234,7 +265,7 @@
             <div class="container">
             <a class="navbar-brand" href="/">
                 <img th:src="@{/images/logo Rapidclean1.jpg}" alt="BMS RapidClean" height="40" class="me-2">
-                BMS RapidClean24H/24
+                BMS Clean Solutions
             </a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -253,12 +284,21 @@
                             <a class="nav-link" href="/#about">À Propos</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="/faq">
+                                <i class="fas fa-question-circle me-1"></i>FAQ
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="/#contact">Contact</a>
                         </li>
                     </ul>
                     
                     <ul class="navbar-nav">
                         <li class="nav-item" th:if="${#authentication == null}">
+                            <a class="nav-link" href="/login-choice">
+                                <i class="fas fa-sign-in-alt me-1"></i>
+                                Connexion
+                            </a>
                         </li>
                         <li class="nav-item dropdown" th:if="${#authentication != null}">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -278,25 +318,37 @@
     </div>
     
     <!-- Main Content -->
-    <main style="margin-top: 80px;">
-        <!-- Flash Messages -->
-        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            <span th:text="${success}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <main id="main-content" style="margin-top: 80px;" role="main">
+                    <!-- Flash Messages -->
+        <div th:if="${success}" class="container mt-4">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="max-width: 100%;">
+                <i class="fas fa-check-circle"></i>
+                <strong>Succès !</strong> <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         </div>
         
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>
-            <span th:text="${error}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div th:if="${error}" class="container mt-4">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="max-width: 100%;">
+                <i class="fas fa-exclamation-circle"></i>
+                <strong>Erreur !</strong> <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         </div>
         
         <!-- Page Content -->
-        <div th:fragment="layout">
+        <div th:replace="${content}">
             <!-- Content will be inserted here -->
         </div>
     </main>
+    
+    <!-- Bouton retour haut -->
+    <button id="backToTop" class="btn btn-primary" 
+            style="position: fixed; right: 20px; bottom: 20px; display: none; border-radius: 50%; width: 50px; height: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1000; transition: all 0.3s ease;"
+            aria-label="Retourner en haut de la page"
+            title="Retourner en haut">
+        <i class="fas fa-arrow-up"></i>
+    </button>
     
     <div th:fragment="footer">
         <!-- Footer -->
@@ -305,7 +357,7 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-6 mb-4">
                         <img th:src="@{/images/logo Rapidclean1.jpg}" alt="BMS RapidClean" height="50" class="mb-3">
-                        <h5>BMS RapidClean 24H/24</h5>
+                        <h5>BMS Clean Solutions</h5>
                         <p>Service de nettoyage professionnel 24h/24, 7j/7. Nous offrons des solutions de nettoyage de qualité pour tous vos besoins.</p>
                         <div class="social-links">
                             <a href="#" class="me-3"><i class="fab fa-facebook-f"></i></a>
@@ -330,6 +382,7 @@
                         <ul class="list-unstyled">
                             <li><a href="/">Accueil</a></li>
                             <li><a href="/about">À Propos</a></li>
+                            <li><a href="/faq">FAQ</a></li>
                             <li><a href="/contact">Contact</a></li>
                             <li><a href="/services">Services</a></li>
                         </ul>
@@ -353,6 +406,11 @@
                     <div class="col-md-6">
                         <p class="mb-0">&copy; 2025 BMS RapidClean. Tous droits réservés.</p>
                     </div>
+                    <div class="col-md-6 text-end">
+                        <a href="/privacy-policy" class="text-white text-decoration-none me-3">
+                            <i class="fas fa-shield-alt me-1"></i>Politique de Confidentialité
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -361,6 +419,49 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Custom JS -->
         <script th:src="@{/js/main.js}"></script>
+        <!-- Form Enhancements (Validation, Spinners, Lazy Loading, Accessibility) -->
+        <script th:src="@{/js/form-enhancements.js}"></script>
+        
+        <!-- Cookie Banner -->
+        <div th:replace="~{fragments/cookie-banner :: cookie-banner}"></div>
+        <script>
+            // Ajuste le décalage d'ancrage pour la navbar fixe
+            document.querySelectorAll('section[id]').forEach(sec => sec.style.scrollMarginTop = '90px');
+            
+            // Bouton retour haut avec animation
+            const backToTop = document.getElementById('backToTop');
+            if (backToTop) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTop.style.display = 'block';
+                        backToTop.style.opacity = '1';
+                        backToTop.style.transform = 'translateY(0)';
+                    } else {
+                        backToTop.style.opacity = '0';
+                        backToTop.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            if (window.scrollY <= 300) {
+                                backToTop.style.display = 'none';
+                            }
+                        }, 300);
+                    }
+                });
+                
+                backToTop.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                });
+                
+                // Animation au survol
+                backToTop.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.1)';
+                });
+                
+                backToTop.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            }
+        </script>
     </div>
 </body>
 </html>

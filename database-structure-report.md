@@ -168,4 +168,4 @@ PGPASSWORD='toor' psql -h localhost -p 5432 -U kaba -d rapidclean
 
 *Rapport généré le : $(date)*
 *Base de données : PostgreSQL*
-*Application : BMS Rapid Clean v1.0.0*
+*Application : BMS Clean Solutions v1.0.0*

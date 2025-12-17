@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Breadcrumb Fragment avec deux niveaux -->
+    <div th:fragment="breadcrumb(parentLabel, parentUrl, parentIcon, currentLabel, currentIcon)" class="breadcrumb-container mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0" style="background: transparent; padding: 8px 0;">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/admin/dashboard}" style="color: var(--primary); text-decoration: none;">
+                        <i class="fas fa-home me-1"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item" th:if="${parentLabel != null and parentLabel != ''}">
+                    <a th:if="${parentUrl != null}" 
+                       th:href="${parentUrl}" 
+                       style="color: var(--primary); text-decoration: none;">
+                        <i th:if="${parentIcon != null}" th:class="${parentIcon}" class="me-1"></i>
+                        <span th:text="${parentLabel}">Page</span>
+                    </a>
+                    <span th:if="${parentUrl == null}" style="color: #6c757d;">
+                        <i th:if="${parentIcon != null}" th:class="${parentIcon}" class="me-1"></i>
+                        <span th:text="${parentLabel}">Page</span>
+                    </span>
+                </li>
+                <li class="breadcrumb-item active" th:if="${currentLabel != null and currentLabel != ''}">
+                    <span style="color: #495057;">
+                        <i th:if="${currentIcon != null}" th:class="${currentIcon}" class="me-1"></i>
+                        <span th:text="${currentLabel}">Page Actuelle</span>
+                    </span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+    
+    <style>
+        .breadcrumb-container {
+            padding: 8px 0;
+        }
+        
+        .breadcrumb {
+            font-size: 0.9rem;
+            background: transparent;
+            padding: 0;
+        }
+        
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            color: #6c757d;
+            padding: 0 10px;
+            font-weight: normal;
+            font-size: 1.1rem;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--primary) !important;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: var(--primary) !important;
+            text-decoration: underline !important;
+        }
+        
+        .breadcrumb-item.active span {
+            color: #495057;
+            font-weight: 500;
+        }
+    </style>
+</body>
+</html>
+

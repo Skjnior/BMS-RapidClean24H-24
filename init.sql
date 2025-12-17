@@ -1,4 +1,4 @@
--- BMS Rapid Clean - Initialisation de la base de données pour Docker
+-- BMS Clean Solutions - Initialisation de la base de données pour Docker
 
 -- Créer la base de données si elle n'existe pas
 CREATE DATABASE IF NOT EXISTS rapidclean;

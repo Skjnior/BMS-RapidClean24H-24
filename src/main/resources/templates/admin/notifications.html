@@ -1,0 +1,468 @@
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Breadcrumb -->
+        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb(null, null, null, 'Notifications', 'fas fa-bell')}"></div>
+        
+        <!-- Page Header -->
+        <div class="mb-4">
+            <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; overflow: hidden;">
+                <div class="card-body text-white p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="me-4" style="width: 70px; height: 70px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-bell fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h2 class="mb-1 text-white fw-bold" style="font-size: 1.8rem;">
+                                Centre de Notifications
+                            </h2>
+                            <p class="mb-0 opacity-90">Gérez toutes vos notifications système</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4 g-3">
+            <div class="col-md-4">
+                <div class="stat-card-modern stat-card-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); transition: all 0.3s ease; border: none;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="stat-label-modern" style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px;">Notifications Totales</div>
+                            <div class="stat-number-modern" style="color: white; font-size: 2.5rem; font-weight: 700; line-height: 1;" th:text="${notifications.size()}">0</div>
+                        </div>
+                        <div class="stat-icon-modern" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-bell fa-2x" style="color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="stat-card-modern stat-card-danger" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3); transition: all 0.3s ease; border: none;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="stat-label-modern" style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px;">Non Lues</div>
+                            <div class="stat-number-modern" style="color: white; font-size: 2.5rem; font-weight: 700; line-height: 1;" th:text="${unreadNotifications}">0</div>
+                        </div>
+                        <div class="stat-icon-modern" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-bell-slash fa-2x" style="color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="stat-card-modern stat-card-success" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; padding: 25px; box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3); transition: all 0.3s ease; border: none;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="stat-label-modern" style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px;">Lues</div>
+                            <div class="stat-number-modern" style="color: white; font-size: 2.5rem; font-weight: 700; line-height: 1;" th:text="${notifications.size() - unreadNotifications}">0</div>
+                        </div>
+                        <div class="stat-icon-modern" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-check-circle fa-2x" style="color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="card mb-4 border-0 shadow-lg animate-fade-in" style="border-radius: 15px; overflow: hidden; background: #fff;">
+            <div class="card-header" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 2px solid #dee2e6; padding: 20px;">
+                <h5 class="mb-0 fw-bold" style="color: #495057; font-size: 1.1rem;">
+                    <i class="fas fa-filter me-2" style="color: #667eea;"></i>
+                    Filtres de Recherche
+                </h5>
+            </div>
+            <div class="card-body" style="padding: 25px; background: #fff;">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-search me-1 text-primary"></i>
+                            Rechercher
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="searchNotifications" 
+                               placeholder="Titre, message..."
+                               style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                               onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                               onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-filter me-1 text-success"></i>
+                            Filtrer par Type
+                        </label>
+                        <select class="form-select form-select-lg" 
+                                id="typeFilter"
+                                style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                                onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                                onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                            <option value="">Tous les types</option>
+                            <option value="NEW_MESSAGE">Nouveaux Messages</option>
+                            <option value="NEW_REVIEW">Nouveaux Avis</option>
+                            <option value="NEW_REQUEST">Nouvelles Demandes</option>
+                            <option value="SYSTEM">Système</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-exclamation-circle me-1 text-danger"></i>
+                            Priorité
+                        </label>
+                        <select class="form-select form-select-lg" 
+                                id="priorityFilter"
+                                style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                                onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                                onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                            <option value="">Toutes</option>
+                            <option value="URGENT">Urgente</option>
+                            <option value="HIGH">Élevée</option>
+                            <option value="MEDIUM">Moyenne</option>
+                            <option value="LOW">Faible</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-toggle-on me-1 text-warning"></i>
+                            Statut
+                        </label>
+                        <select class="form-select form-select-lg" 
+                                id="statusFilter"
+                                style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                                onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                                onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                            <option value="">Toutes</option>
+                            <option value="unread">Non lues</option>
+                            <option value="read">Lues</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notifications List -->
+        <div class="card animate-fade-in shadow-lg" style="border: none; border-radius: 15px; overflow: hidden; background: #fff;">
+            <div class="card-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 25px;">
+                <h3 class="card-title mb-0 text-white" style="font-size: 1.4rem; font-weight: 700; display: flex; align-items: center;">
+                    <i class="fas fa-list me-3" style="font-size: 1.5rem;"></i>
+                    Toutes les Notifications
+                    <span class="badge ms-3" style="background: rgba(255,255,255,0.25); color: white; padding: 8px 15px; border-radius: 20px; font-size: 1rem; font-weight: 600; backdrop-filter: blur(10px);" id="notificationsCount" th:text="${notifications.size()}">0</span>
+                </h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="notificationsTable">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                                <th style="width: 60px; padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">
+                                    <i class="fas fa-bell text-primary"></i>
+                                </th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Type</th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Titre</th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Message</th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Priorité</th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Date</th>
+                                <th style="width: 150px; padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057; text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="notificationsList">
+                            <tr th:each="notification : ${notifications}" 
+                                class="notification-row"
+                                th:classappend="${!notification.read} ? 'unread' : ''"
+                                th:data-type="${notification.type.name()}"
+                                th:data-priority="${notification.priority.name()}"
+                                th:data-read="${notification.read}"
+                                style="transition: all 0.2s ease; cursor: pointer;">
+                                
+                                <!-- Icon Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <div style="position: relative; display: inline-block;">
+                                        <div class="notification-icon-table" 
+                                             th:classappend="${notification.type.name() == 'NEW_MESSAGE'} ? 'type-message' : (${notification.type.name() == 'NEW_REQUEST'} ? 'type-request' : (${notification.type.name() == 'NEW_REVIEW'} ? 'type-review' : (${notification.type.name() == 'SYSTEM'} ? 'type-other' : '')))"
+                                             style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: white;">
+                                            <i class="fas fa-envelope" th:if="${notification.type.name() == 'NEW_MESSAGE'}"></i>
+                                            <i class="fas fa-clipboard-list" th:if="${notification.type.name() == 'NEW_REQUEST'}"></i>
+                                            <i class="fas fa-star" th:if="${notification.type.name() == 'NEW_REVIEW'}"></i>
+                                            <i class="fas fa-bell" th:if="${notification.type.name() == 'SYSTEM'}"></i>
+                                        </div>
+                                        <span th:if="${!notification.read}" 
+                                              style="position: absolute; top: -3px; right: -3px; width: 12px; height: 12px; background: #dc3545; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
+                                    </div>
+                                </td>
+                                
+                                <!-- Type Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <span class="notification-type-badge" th:text="${notification.type.displayName}" 
+                                          style="font-size: 0.85rem; padding: 4px 10px; background: #e9ecef; color: #6c757d; border-radius: 8px; font-weight: 500;"></span>
+                                </td>
+                                
+                                <!-- Title Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <h6 class="mb-0" 
+                                        th:classappend="${!notification.read} ? 'fw-bold' : ''"
+                                        th:text="${notification.title}"
+                                        th:style="${!notification.read} ? 'color: #667eea;' : 'color: #495057;'"
+                                        style="font-size: 0.95rem; margin: 0;">
+                                        Titre de la notification
+                                    </h6>
+                                </td>
+                                
+                                <!-- Message Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <p class="mb-0 text-muted" 
+                                       th:text="${#strings.abbreviate(notification.message, 80)}"
+                                       style="font-size: 0.9rem; margin: 0; line-height: 1.4;">
+                                        Message de la notification...
+                                    </p>
+                                </td>
+                                
+                                <!-- Priority Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <span class="priority-badge-table" 
+                                          th:classappend="${(notification.priority.name() == 'HIGH' or notification.priority.name() == 'URGENT') ? 'priority-high' : (notification.priority.name() == 'MEDIUM' ? 'priority-medium' : (notification.priority.name() == 'LOW' ? 'priority-low' : ''))}"
+                                          th:text="${notification.priority.displayName}"
+                                          style="font-size: 0.8rem; padding: 4px 10px; border-radius: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        Priorité
+                                    </span>
+                                </td>
+                                
+                                <!-- Date Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <small class="text-muted" style="font-size: 0.85rem; white-space: nowrap;">
+                                        <i class="fas fa-clock me-1"></i>
+                                        <span th:text="${#temporals.format(notification.createdAt, 'dd/MM/yyyy')}">01/01/2024</span>
+                                        <br>
+                                        <span th:text="${#temporals.format(notification.createdAt, 'HH:mm')}" style="font-size: 0.8rem;">10:00</span>
+                                    </small>
+                                </td>
+                                
+                                <!-- Actions Column -->
+                                <td style="padding: 15px; vertical-align: middle; text-align: center;">
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <form th:action="@{/admin/notifications/{id}/mark-read(id=${notification.id})}" method="post" style="display: inline;" th:if="${!notification.read}">
+                                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                                            <button type="submit" class="btn btn-sm btn-success" title="Marquer comme lu" style="border-radius: 20px; padding: 4px 12px;" onclick="event.stopPropagation();">
+                                                <i class="fas fa-check me-1"></i>Lu
+                                            </button>
+                                        </form>
+                                        <form th:action="@{/admin/notifications/{id}/delete(id=${notification.id})}" method="post" style="display: inline;" class="delete-notification-form" th:data-id="${notification.id}" onclick="event.stopPropagation();">
+                                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                                            <button type="submit" class="btn btn-sm btn-danger delete-notification-submit-btn" title="Supprimer" style="border-radius: 20px; padding: 4px 12px;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr th:if="${notifications.isEmpty()}">
+                                <td colspan="7" class="text-center py-5" style="padding: 80px 20px;">
+                                    <div style="width: 120px; height: 120px; margin: 0 auto 25px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-bell-slash fa-4x" style="color: #667eea; opacity: 0.5;"></i>
+                                    </div>
+                                    <p class="text-muted fs-5 fw-semibold" style="color: #6c757d;">Aucune notification</p>
+                                    <p class="text-muted small">Les notifications système apparaîtront ici</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <style>
+        /* Styles pour le tableau de notifications */
+        #notificationsTable {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        #notificationsTable thead th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .notification-row {
+            transition: all 0.2s ease;
+        }
+        
+        .notification-row:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%) !important;
+            transform: scale(1.005);
+        }
+        
+        .notification-row.unread {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, #fff 3%);
+            border-left: 4px solid #667eea;
+        }
+        
+        .notification-icon-table.type-message,
+        .notification-icon-table.type-request,
+        .notification-icon-table.type-review,
+        .notification-icon-table.type-other,
+        .notification-icon-table:not(.type-message):not(.type-request):not(.type-review):not(.type-other) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .priority-badge-table.priority-high {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+        
+        .priority-badge-table.priority-medium {
+            background: linear-gradient(135deg, #ffd93d 0%, #f6c23e 100%);
+            color: #333;
+        }
+        
+        .priority-badge-table.priority-low {
+            background: linear-gradient(135deg, #95e1d3 0%, #6bcf9f 100%);
+            color: white;
+        }
+        
+        .priority-badge-table:not(.priority-high):not(.priority-medium):not(.priority-low) {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+        
+        .stat-card-modern:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.85rem;
+            }
+            
+            #notificationsTable th,
+            #notificationsTable td {
+                padding: 10px 8px;
+            }
+            
+            .notification-icon-table {
+                width: 35px !important;
+                height: 35px !important;
+                font-size: 1rem !important;
+            }
+        }
+    </style>
+    
+    <script>
+        // Initialize delete notification forms
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteForms = document.querySelectorAll('.delete-notification-form');
+            deleteForms.forEach(function(form) {
+                // Prevent form submission and show modal instead
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const message = 'Êtes-vous sûr de vouloir supprimer cette notification ?<br><small class="text-muted">Cette action est irréversible et supprimera définitivement la notification.</small>';
+                    
+                    // Store reference to form for later submission
+                    const formToSubmit = this;
+                    
+                    if (typeof window.showConfirmModal === 'function') {
+                        window.showConfirmModal(
+                            message,
+                            function() {
+                                formToSubmit.submit();
+                            }
+                        );
+                    } else {
+                        if (confirm('Êtes-vous sûr de vouloir supprimer cette notification ? Cette action est irréversible.')) {
+                            formToSubmit.submit();
+                        }
+                    }
+                    
+                    return false;
+                });
+            });
+        });
+        
+        // Combined filter function
+        function filterNotifications() {
+            const searchTerm = document.getElementById('searchNotifications')?.value.toLowerCase() || '';
+            const type = document.getElementById('typeFilter')?.value || '';
+            const priority = document.getElementById('priorityFilter')?.value || '';
+            const status = document.getElementById('statusFilter')?.value || '';
+            const rows = document.querySelectorAll('.notification-row');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                // Skip the empty row (it doesn't have data attributes)
+                if (!row.hasAttribute('data-type')) {
+                    return;
+                }
+                
+                const text = row.textContent.toLowerCase();
+                const itemType = row.getAttribute('data-type') || '';
+                const itemPriority = row.getAttribute('data-priority') || '';
+                const isRead = row.getAttribute('data-read') === 'true';
+                
+                const matchesSearch = !searchTerm || text.includes(searchTerm);
+                const matchesType = !type || itemType === type;
+                const matchesPriority = !priority || itemPriority === priority;
+                const matchesStatus = !status || 
+                    (status === 'read' && isRead) ||
+                    (status === 'unread' && !isRead);
+                
+                if (matchesSearch && matchesType && matchesPriority && matchesStatus) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Update count
+            const countBadge = document.getElementById('notificationsCount');
+            if (countBadge) {
+                countBadge.textContent = visibleCount;
+            }
+        }
+        
+        // Initialize filters when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search functionality
+            const searchInput = document.getElementById('searchNotifications');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', filterNotifications);
+            }
+            
+            // Type filter
+            const typeFilter = document.getElementById('typeFilter');
+            if (typeFilter) {
+                typeFilter.addEventListener('change', filterNotifications);
+            }
+            
+            // Priority filter
+            const priorityFilter = document.getElementById('priorityFilter');
+            if (priorityFilter) {
+                priorityFilter.addEventListener('change', filterNotifications);
+            }
+            
+            // Status filter
+            const statusFilter = document.getElementById('statusFilter');
+            if (statusFilter) {
+                statusFilter.addEventListener('change', filterNotifications);
+            }
+            
+            // Initial filter call to set correct count on page load
+            filterNotifications();
+        });
+        
+        
+        
+    </script>
+</div>

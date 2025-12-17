@@ -48,6 +48,8 @@ public class User implements UserDetails {
     
     private LocalDateTime createdAt;
     
+    private boolean firstLogin = true;
+    
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ServiceRequest> serviceRequests;
     
@@ -122,6 +124,9 @@ public class User implements UserDetails {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     
+    public boolean isFirstLogin() { return firstLogin; }
+    public void setFirstLogin(boolean firstLogin) { this.firstLogin = firstLogin; }
+    
     public List<ServiceRequest> getServiceRequests() { return serviceRequests; }
     public void setServiceRequests(List<ServiceRequest> serviceRequests) { this.serviceRequests = serviceRequests; }
     
@@ -130,6 +135,6 @@ public class User implements UserDetails {
     }
     
     public enum Role {
-        ADMIN, CLIENT
+        ADMIN, EMPLOYEE, CLIENT
     }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>BMS Rapid Clean - Service de Nettoyage 24h/24</title>
+    <title>BMS Clean Solutions - Service de Nettoyage 24h/24</title>
     <div th:replace="~{layout :: head}"></div>
 </head>
 <body>
@@ -19,7 +19,7 @@
                                 <span class="text-warning">24h/24</span>
                             </h1>
                             <p class="lead mb-4">
-                                BMS Rapid Clean vous offre des services de nettoyage de qualité supérieure,
+                                BMS Clean Solutions vous offre des services de nettoyage de qualité supérieure,
                                 disponibles 24 heures sur 24, 7 jours sur 7. Votre satisfaction est notre priorité.
                             </p>
                             <div class="d-flex flex-wrap gap-3">
@@ -35,19 +35,26 @@
                     <div class="col-lg-6">
                         <div class="text-center animate-slide-up">
                             <img th:src="@{/images/Banière BMS222.png}"
-                                 alt="BMS Rapid Clean - Service de nettoyage professionnel" class="img-fluid rounded-3 shadow-lg">
+                                 alt="BMS Clean Solutions- Service de nettoyage professionnel" class="img-fluid rounded-3 shadow-lg">
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Separator Wave -->
+        <div class="section-separator">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" style="display: block; width: 100%; height: 60px;">
+                <path d="M0,0 C300,100 600,20 900,60 C1050,80 1150,40 1200,60 L1200,120 L0,120 Z" fill="#f8f9fa"></path>
+            </svg>
+        </div>
+
         <!-- Features Section -->
         <section id="about" class="py-5">
             <div class="container">
                 <div class="row text-center mb-5">
                     <div class="col-lg-8 mx-auto">
-                        <h2 class="display-5 fw-bold mb-3">Pourquoi BMS RapidClean ?</h2>
+                        <h2 class="display-5 fw-bold mb-3">Pourquoi BMS Clean Solutions ?</h2>
                         <p class="lead text-muted">
                             Nous nous engageons à fournir des services de nettoyage exceptionnels
                             avec une attention particulière aux détails.
@@ -104,6 +111,11 @@
             </div>
         </section>
 
+        <!-- Separator -->
+        <div class="section-separator bg-light">
+            <div class="separator-line"></div>
+        </div>
+
         <!-- Services Preview -->
         <section id="services" class="py-5 bg-light">
             <div class="container">
@@ -113,7 +125,7 @@
                         <h2 class="display-5 fw-bold mb-3">Nos Services</h2>
                         <p class="lead text-muted">
                             Spécialisée dans le nettoyage des fast-foods 🍔 et restaurants,
-                            <strong>BMS RapidClean</strong> assure des prestations complètes, rigoureuses et adaptées à votre activité.
+                            <strong>BMS Clean Solutions </strong> assure des prestations complètes, rigoureuses et adaptées à votre activité.
                         </p>
                     </div>
                 </div>
@@ -125,21 +137,71 @@
                         <div class="card h-100 text-center p-4">
                             <div class="card-body">
                                 <div class="feature-icon mb-3">
-                                    <!-- Icônes spécifiques selon le service -->
-                                    <i th:if="${service.name == 'Nettoyage professionnel des fast-food'}" class="fas fa-hamburger fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Nettoyage des salles'}" class="fas fa-chair fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Entretien sanitaires'}" class="fas fa-toilet fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Nettoyage des vitres'}" class="fas fa-window-maximize fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Nettoyage de cuisine'}" class="fas fa-utensils fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Caisse et divers'}" class="fas fa-cash-register fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Locaux techniques et arrières'}" class="fas fa-cogs fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Vestiaires et douches'}" class="fas fa-shower fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Nettoyage extérieurs'}" class="fas fa-tree fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Nettoyage des équipements de friture'}" class="fas fa-fire fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Nettoyage des systèmes de ventilation'}" class="fas fa-wind fa-3x text-warning"></i>
-                                    <i th:if="${service.name == 'Nettoyage des sols industriels'}" class="fas fa-layer-group fa-3x text-warning"></i>
+                                    <!-- Icônes spécifiques selon le service - Matching flexible avec contains() -->
+                                    <!-- Fast-Food -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Fast-Food') or #strings.containsIgnoreCase(service.name, 'fast-food')}" 
+                                       class="fas fa-hamburger fa-3x" 
+                                       style="color: #ff6b6b; background: linear-gradient(135deg, rgba(255,107,107,0.1) 0%, rgba(255,159,64,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Salles -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Salles')}" 
+                                       class="fas fa-chair fa-3x" 
+                                       style="color: #4ecdc4; background: linear-gradient(135deg, rgba(78,205,196,0.1) 0%, rgba(46,213,115,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Sanitaires -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Sanitaires')}" 
+                                       class="fas fa-toilet fa-3x" 
+                                       style="color: #45b7d1; background: linear-gradient(135deg, rgba(69,183,209,0.1) 0%, rgba(52,152,219,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Vitres -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Vitres')}" 
+                                       class="fas fa-window-maximize fa-3x" 
+                                       style="color: #96ceb4; background: linear-gradient(135deg, rgba(150,206,180,0.1) 0%, rgba(116,185,255,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Cuisine -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Cuisine')}" 
+                                       class="fas fa-utensils fa-3x" 
+                                       style="color: #feca57; background: linear-gradient(135deg, rgba(254,202,87,0.1) 0%, rgba(255,159,64,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Caisse & Drive -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Caisse') or #strings.containsIgnoreCase(service.name, 'Drive')}" 
+                                       class="fas fa-cash-register fa-3x" 
+                                       style="color: #ff9ff3; background: linear-gradient(135deg, rgba(255,159,243,0.1) 0%, rgba(236,111,102,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Locaux Techniques -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Locaux Techniques') or #strings.containsIgnoreCase(service.name, 'Arrières')}" 
+                                       class="fas fa-cogs fa-3x" 
+                                       style="color: #a29bfe; background: linear-gradient(135deg, rgba(162,155,254,0.1) 0%, rgba(108,92,231,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Vestiaires & Douches -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Vestiaires') or #strings.containsIgnoreCase(service.name, 'Douches')}" 
+                                       class="fas fa-shower fa-3x" 
+                                       style="color: #74b9ff; background: linear-gradient(135deg, rgba(116,185,255,0.1) 0%, rgba(52,152,219,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Extérieur -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'Extérieur')}" 
+                                       class="fas fa-tree fa-3x" 
+                                       style="color: #55efc4; background: linear-gradient(135deg, rgba(85,239,196,0.1) 0%, rgba(0,184,148,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Équipements de friture -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'friture')}" 
+                                       class="fas fa-fire fa-3x" 
+                                       style="color: #fd79a8; background: linear-gradient(135deg, rgba(253,121,168,0.1) 0%, rgba(225,112,85,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Ventilation -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'ventilation')}" 
+                                       class="fas fa-wind fa-3x" 
+                                       style="color: #81ecec; background: linear-gradient(135deg, rgba(129,236,236,0.1) 0%, rgba(0,206,209,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
+                                    <!-- Sols industriels -->
+                                    <i th:if="${#strings.containsIgnoreCase(service.name, 'sols industriels')}" 
+                                       class="fas fa-layer-group fa-3x" 
+                                       style="color: #fab1a0; background: linear-gradient(135deg, rgba(250,177,160,0.1) 0%, rgba(255,107,107,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
+                                    
                                     <!-- Icône par défaut si aucun match -->
-                                    <i th:unless="${service.name == 'Nettoyage professionnel des fast-food' or service.name == 'Nettoyage des salles' or service.name == 'Entretien sanitaires' or service.name == 'Nettoyage des vitres' or service.name == 'Nettoyage de cuisine' or service.name == 'Caisse et divers' or service.name == 'Locaux techniques et arrières' or service.name == 'Vestiaires et douches' or service.name == 'Nettoyage extérieurs' or service.name == 'Nettoyage des équipements de friture' or service.name == 'Nettoyage des systèmes de ventilation' or service.name == 'Nettoyage des sols industriels'}" class="fas fa-tools fa-3x text-warning"></i>
+                                    <i th:unless="${#strings.containsIgnoreCase(service.name, 'Fast-Food') or #strings.containsIgnoreCase(service.name, 'Salles') or #strings.containsIgnoreCase(service.name, 'Sanitaires') or #strings.containsIgnoreCase(service.name, 'Vitres') or #strings.containsIgnoreCase(service.name, 'Cuisine') or #strings.containsIgnoreCase(service.name, 'Caisse') or #strings.containsIgnoreCase(service.name, 'Drive') or #strings.containsIgnoreCase(service.name, 'Locaux Techniques') or #strings.containsIgnoreCase(service.name, 'Arrières') or #strings.containsIgnoreCase(service.name, 'Vestiaires') or #strings.containsIgnoreCase(service.name, 'Douches') or #strings.containsIgnoreCase(service.name, 'Extérieur') or #strings.containsIgnoreCase(service.name, 'friture') or #strings.containsIgnoreCase(service.name, 'ventilation') or #strings.containsIgnoreCase(service.name, 'sols industriels')}" 
+                                       class="fas fa-broom fa-3x" 
+                                       style="color: #667eea; background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;"></i>
                                 </div>
                                 <h5 class="card-title" th:text="${service.name}">Nom du service</h5>
                                 <p class="card-text" th:text="${service.description}">Description du service</p>
@@ -159,12 +221,19 @@
                 </div>
                 <br> <br>
 
+                <!-- Separator entre Services et Outils -->
+                <div class="section-separator bg-light">
+                    <svg viewBox="0 0 1200 60" preserveAspectRatio="none" style="display: block; width: 100%; height: 60px;">
+                        <path d="M0,0 Q300,30 600,20 T1200,30 L1200,60 L0,60 Z" fill="#ffffff" opacity="0.8"></path>
+                    </svg>
+                </div>
+
                 <!-- Nos Outils -->
                 <section id="outils" class="py-5 bg-light">
                     <div class="container text-center">
                         <h2 class="display-6 fw-bold mb-3">Quelques matériels utilisés lors de nos interventions</h2>
                         <p class="lead text-muted mb-5">
-                            BMS RapidClean dispose d’équipements professionnels modernes pour garantir un nettoyage
+                            BMS Clean Solutions dispose d’équipements professionnels modernes pour garantir un nettoyage
                             efficace, rapide et respectueux de l’environnement — du sol aux vitres, en passant par la
                             désinfection complète des cuisines et espaces clients.
                         </p>
@@ -248,12 +317,19 @@
 
                 <br> <br>
 
+                <!-- Separator -->
+                <div class="section-separator bg-light">
+                    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="display: block; width: 100%; height: 80px;">
+                        <path d="M0,0 L1200,0 L1200,80 Q600,40 0,80 Z" fill="white"></path>
+                    </svg>
+                </div>
+
                 <!-- Partenaires -->
                 <section id="partners" class="py-5 bg-white">
                     <div class="container text-center">
                         <h2 class="display-5 fw-bold mb-4">Nos Partenaires</h2>
                         <p class="lead text-muted mb-5">
-                            BMS RapidClean collabore avec les plus grandes enseignes de restauration rapide en France 🇫🇷.
+                            BMS Clean Solutions collabore avec les plus grandes enseignes de restauration rapide en France 🇫🇷.
                         </p>
 
                         <div class="row g-4 justify-content-center">
@@ -325,6 +401,16 @@
                 </section>
                 <br> <br>
 
+                <!-- Separator entre Partenaires et Avis -->
+                <div class="section-separator bg-white">
+                    <svg viewBox="0 0 1200 100" preserveAspectRatio="none" style="display: block; width: 100%; height: 100px;">
+                        <path d="M0,100 Q200,50 400,70 T800,50 T1200,70 L1200,0 L0,0 Z" fill="#f8f9fa"></path>
+                        <circle cx="300" cy="50" r="3" fill="rgba(44, 90, 160, 0.3)"></circle>
+                        <circle cx="600" cy="50" r="3" fill="rgba(44, 90, 160, 0.3)"></circle>
+                        <circle cx="900" cy="50" r="3" fill="rgba(44, 90, 160, 0.3)"></circle>
+                    </svg>
+                </div>
+
                 <!-- SECTION AVIS CLIENTS -->
                 <section id="avis" class="py-5 bg-light">
                     <div class="container">
@@ -332,7 +418,7 @@
                         <div class="text-center mb-5">
                             <h2 class="display-6 fw-bold mb-3">Ce que disent nos clients</h2>
                             <p class="lead text-muted">
-                                Découvrez les retours de nos clients et partagez à votre tour votre expérience avec <strong>BMS RapidClean</strong> 💬.
+                                Découvrez les retours de nos clients et partagez à votre tour votre expérience avec <strong>BMS Clean Solutions</strong> 💬.
                             </p>
                         </div>
 
@@ -382,7 +468,7 @@
                                 <div class="card border-0 shadow-lg rounded-4 p-4 text-center">
                                     <h4 class="fw-bold mb-4">Donnez votre avis ⭐</h4>
                                     <p class="text-muted mb-4">
-                                        Partagez votre expérience avec BMS RapidClean et aidez d'autres clients à nous découvrir.
+                                        Partagez votre expérience avec BMS Clean Solutions et aidez d'autres clients à nous découvrir.
                                     </p>
                                     <a href="/submit-review" class="btn btn-warning btn-lg px-5 rounded-pill">
                                         <i class="fas fa-star me-2"></i>Donner mon avis
@@ -395,6 +481,17 @@
                 <br> <br>
 
 
+                <!-- Separator entre Avis et Galerie -->
+                <div class="section-separator bg-light">
+                    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="display: block; width: 100%; height: 80px;">
+                        <path d="M0,0 C400,40 800,40 1200,0 L1200,80 C800,40 400,40 0,80 Z" fill="white"></path>
+                        <line x1="200" y1="40" x2="1000" y2="40" stroke="rgba(44, 90, 160, 0.2)" stroke-width="1"></line>
+                        <circle cx="300" cy="40" r="4" fill="rgba(44, 90, 160, 0.4)"></circle>
+                        <circle cx="600" cy="40" r="4" fill="rgba(44, 90, 160, 0.4)"></circle>
+                        <circle cx="900" cy="40" r="4" fill="rgba(44, 90, 160, 0.4)"></circle>
+                    </svg>
+                </div>
+
                 <!-- Galerie -->
                 <section id="gallerie" class="py-5 bg-light">
                     <div class="container">
@@ -403,7 +500,7 @@
                             <div class="col-lg-8 mx-auto">
                                 <h2 class="display-6 fw-bold mb-3">Galerie de Réalisations</h2>
                                 <p class="lead text-muted">
-                                    Découvrez en images quelques interventions de <strong>BMS RapidClean</strong>
+                                    Découvrez en images quelques interventions de <strong>BMS Clean Solutions</strong>
                                     dans les restaurants et fast-foods partenaires 🍟✨.
                                 </p>
                             </div>
@@ -560,6 +657,19 @@
 
 
 
+                <!-- Separator Wave to Contact -->
+                <div class="section-separator bg-light">
+                    <svg viewBox="0 0 1200 100" preserveAspectRatio="none" style="display: block; width: 100%; height: 100px;">
+                        <path d="M0,0 Q300,50 600,30 T1200,50 L1200,100 L0,100 Z" fill="url(#gradientContact)"></path>
+                        <defs>
+                            <linearGradient id="gradientContact" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+
                 <!-- Contact Section -->
                 <section id="contact" class="py-5" style="background: var(--gradient-primary); color: white;">
                     <div class="container">
@@ -603,8 +713,11 @@
                                     <a href="/request-service" class="btn btn-warning btn-lg me-3">
                                         <i class="fas fa-calendar-plus me-2"></i>Demander un Service
                                     </a>
-                                    <a href="/submit-review" class="btn btn-outline-light btn-lg">
+                                    <a href="/submit-review" class="btn btn-outline-light btn-lg me-3">
                                         <i class="fas fa-star me-2"></i>Donner un avis
+                                    </a>
+                                    <a href="/contact" class="btn btn-outline-light btn-lg">
+                                        <i class="fas fa-envelope me-2"></i>Nous laisser un message
                                     </a>
                                 </div>
                             </div>
@@ -614,6 +727,13 @@
             </div>
         </section>
 
+
+        <!-- Separator Wave to Stats -->
+        <div class="section-separator" style="background: var(--gradient-primary);">
+            <svg viewBox="0 0 1200 100" preserveAspectRatio="none" style="display: block; width: 100%; height: 100px;">
+                <path d="M0,100 Q300,50 600,70 T1200,50 L1200,0 L0,0 Z" fill="white"></path>
+            </svg>
+        </div>
 
         <!-- Statistics Section -->
         <section class="py-5">
@@ -663,6 +783,113 @@
             scroll-margin-top: 80px;
         }
 
+        /* Section Separators */
+        .section-separator {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .separator-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(44, 90, 160, 0.3), transparent);
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .separator-line::before,
+        .separator-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-color, #2c5aa0);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+
+        .separator-line::before {
+            left: 20%;
+        }
+
+        .separator-line::after {
+            right: 20%;
+        }
+
+        .separator-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+            gap: 15px;
+        }
+
+        .separator-dots::before,
+        .separator-dots::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(44, 90, 160, 0.2), transparent);
+        }
+
+        .separator-dots::before {
+            margin-right: 20px;
+        }
+
+        .separator-dots::after {
+            margin-left: 20px;
+        }
+
+        /* Amélioration des sections */
+        section {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        section.bg-light {
+            background-color: #f8f9fa !important;
+        }
+
+        section.bg-white {
+            background-color: #ffffff !important;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Effet de profondeur pour les sections */
+        section:not(.hero-section):not(#contact) {
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+
+        /* Ombres subtiles entre sections */
+        section.bg-white + .section-separator,
+        section.bg-light + .section-separator {
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Animation au scroll */
+        @media (prefers-reduced-motion: no-preference) {
+            section {
+                opacity: 0;
+                transform: translateY(20px);
+                animation: fadeInUp 0.6s ease-out forwards;
+            }
+
+            section:nth-child(1) { animation-delay: 0.1s; }
+            section:nth-child(2) { animation-delay: 0.2s; }
+            section:nth-child(3) { animation-delay: 0.3s; }
+            section:nth-child(4) { animation-delay: 0.4s; }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Contact section styling */
         .contact-item {
             padding: 20px;
@@ -685,6 +912,42 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 100px 0;
+        }
+        
+        /* Espacement entre le bouton et l'image bannière sur mobile */
+        @media (max-width: 991px) {
+            .hero-section .col-lg-6:last-child {
+                margin-top: 30px;
+            }
+            
+            .hero-section .hero-content {
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section .col-lg-6:last-child {
+                margin-top: 40px;
+            }
+            
+            .hero-section {
+                padding: 60px 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-section .col-lg-6:last-child {
+                margin-top: 50px;
+            }
+            
+            .hero-section .hero-content .d-flex {
+                flex-direction: column;
+                gap: 15px !important;
+            }
+            
+            .hero-section .hero-content .btn {
+                width: 100%;
+            }
         }
 
         /* Animation classes */
@@ -847,6 +1110,7 @@
     </script>
 
     <!-- Script Lightbox -->
+
     <script>
         function openLightbox(img) {
             const lightbox = document.getElementById("lightbox");

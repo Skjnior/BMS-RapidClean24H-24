@@ -1,0 +1,406 @@
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Back Button & Header -->
+        <div class="mb-4">
+            <a th:href="@{/admin/audit}" class="btn btn-outline-secondary mb-3">
+                <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+            </a>
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="fas fa-clipboard-list me-2" style="color: #2c5aa0;"></i>
+                        <span th:text="${pageTitle}">Détails du Log d'Audit</span>
+                    </h2>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-info-circle me-1"></i>
+                        <span th:text="${pageDescription}">Informations détaillées sur cette activité</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row">
+            <!-- Left Column - Main Info -->
+            <div class="col-lg-8">
+                <!-- Basic Information Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-info-circle me-2 text-primary"></i>
+                            Informations Générales
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-hashtag me-2"></i>ID
+                                </label>
+                                <p class="mb-0" th:text="${log.id}">-</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-calendar me-2"></i>Date et Heure
+                                </label>
+                                <p class="mb-0">
+                                    <span th:text="${#temporals.format(log.timestamp, 'dd/MM/yyyy HH:mm:ss')}">-</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-tasks me-2"></i>Action
+                                </label>
+                                <p class="mb-0">
+                                    <span class="badge" 
+                                          th:classappend="${log.action == 'LOGIN' ? 'bg-success' : (log.action == 'LOGOUT' ? 'bg-danger' : (log.action.contains('CREATE') ? 'bg-primary' : (log.action.contains('DELETE') ? 'bg-danger' : 'bg-secondary')))}"
+                                          th:text="${log.action}">ACTION</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-tag me-2"></i>Type d'Action
+                                </label>
+                                <p class="mb-0" th:text="${log.actionType}">-</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3" th:if="${log.resourceType != null}">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-folder me-2"></i>Type de Ressource
+                                </label>
+                                <p class="mb-0" th:text="${log.resourceType}">-</p>
+                            </div>
+                            <div class="col-md-6" th:if="${log.resourceId != null}">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-key me-2"></i>ID Ressource
+                                </label>
+                                <p class="mb-0" th:text="${log.resourceId}">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Information Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2 text-info"></i>
+                            Informations Utilisateur
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${log.user != null}">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-user me-2"></i>Nom Complet
+                                    </label>
+                                    <p class="mb-0" th:text="${log.user.fullName}">-</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-envelope me-2"></i>Email
+                                    </label>
+                                    <p class="mb-0" th:text="${log.user.email}">-</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-muted">
+                                        <i class="fas fa-tag me-2"></i>Rôle
+                                    </label>
+                                    <p class="mb-0">
+                                        <span class="badge" 
+                                              th:classappend="${log.user.role.name() == 'ADMIN' ? 'bg-danger' : (log.user.role.name() == 'EMPLOYEE' ? 'bg-warning' : 'bg-info')}"
+                                              th:text="${log.user.role.name()}">ROLE</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:unless="${log.user != null}" class="text-muted">
+                            <i class="fas fa-user-slash me-2"></i>Utilisateur anonyme
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request Information Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-globe me-2 text-success"></i>
+                            Informations de Requête
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-link me-2"></i>URL
+                                </label>
+                                <p class="mb-0">
+                                    <code th:text="${log.requestUrl}">-</code>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-code me-2"></i>Méthode HTTP
+                                </label>
+                                <p class="mb-0">
+                                    <span class="badge bg-info" th:text="${log.requestMethod}">-</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mb-3" th:if="${log.requestParams != null and !log.requestParams.isEmpty()}">
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-list me-2"></i>Paramètres
+                                </label>
+                                <p class="mb-0">
+                                    <code class="small" th:text="${log.requestParams}">-</code>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mb-3" th:if="${log.requestBody != null and !log.requestBody.isEmpty()}">
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-file-code me-2"></i>Corps de la Requête
+                                </label>
+                                <pre class="bg-light p-3 rounded small" style="max-height: 200px; overflow-y: auto;" th:text="${log.requestBody}">-</pre>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-check-circle me-2"></i>Code Statut
+                                </label>
+                                <p class="mb-0">
+                                    <span class="badge" 
+                                          th:classappend="${log.statusCode != null and log.statusCode >= 200 and log.statusCode < 300 ? 'bg-success' : (log.statusCode != null and log.statusCode >= 400 ? 'bg-danger' : 'bg-warning')}"
+                                          th:text="${log.statusCode}">-</span>
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-clock me-2"></i>Temps de Réponse
+                                </label>
+                                <p class="mb-0" th:if="${log.responseTimeMs != null}" th:text="${log.responseTimeMs + ' ms'}">-</p>
+                                <p class="mb-0 text-muted" th:unless="${log.responseTimeMs != null}">-</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-id-badge me-2"></i>Session ID
+                                </label>
+                                <p class="mb-0">
+                                    <code class="small" th:text="${log.sessionId}">-</code>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mb-3" th:if="${log.referer != null}">
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-muted">
+                                    <i class="fas fa-external-link-alt me-2"></i>Referer
+                                </label>
+                                <p class="mb-0">
+                                    <a th:href="${log.referer}" target="_blank" th:text="${log.referer}">-</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mb-3" th:if="${log.errorMessage != null}">
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-danger">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Message d'Erreur
+                                </label>
+                                <div class="alert alert-danger mb-0">
+                                    <code th:text="${log.errorMessage}">-</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Location & Device Info -->
+            <div class="col-lg-4">
+                <!-- Location Information Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-map-marker-alt me-2 text-danger"></i>
+                            Localisation
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-network-wired me-2"></i>Adresse IP
+                            </label>
+                            <p class="mb-0">
+                                <code th:text="${log.ipAddress}">-</code>
+                            </p>
+                        </div>
+                        <div class="mb-3" th:if="${log.country != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-flag me-2"></i>Pays
+                            </label>
+                            <p class="mb-0" th:text="${log.country}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.countryCode != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-code me-2"></i>Code Pays
+                            </label>
+                            <p class="mb-0">
+                                <span class="badge bg-info" th:text="${log.countryCode}">-</span>
+                            </p>
+                        </div>
+                        <div class="mb-3" th:if="${log.city != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-city me-2"></i>Ville
+                            </label>
+                            <p class="mb-0" th:text="${log.city}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.latitude != null and log.longitude != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-map-pin me-2"></i>Coordonnées
+                            </label>
+                            <p class="mb-0">
+                                <small th:text="${log.latitude + ', ' + log.longitude}">-</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Device Information Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-desktop me-2 text-warning"></i>
+                            Appareil & Navigateur
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3" th:if="${log.browser != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-window-maximize me-2"></i>Navigateur
+                            </label>
+                            <p class="mb-0" th:text="${log.browser}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.browserVersion != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-code-branch me-2"></i>Version Navigateur
+                            </label>
+                            <p class="mb-0" th:text="${log.browserVersion}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.operatingSystem != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-laptop me-2"></i>Système d'Exploitation
+                            </label>
+                            <p class="mb-0" th:text="${log.operatingSystem}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.deviceType != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-mobile-alt me-2"></i>Type d'Appareil
+                            </label>
+                            <p class="mb-0">
+                                <span class="badge bg-secondary" th:text="${log.deviceType}">-</span>
+                            </p>
+                        </div>
+                        <div class="mb-3" th:if="${log.isMobile != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-mobile-alt me-2"></i>Mobile
+                            </label>
+                            <p class="mb-0">
+                                <span class="badge" 
+                                      th:classappend="${log.isMobile ? 'bg-success' : 'bg-secondary'}"
+                                      th:text="${log.isMobile ? 'Oui' : 'Non'}">-</span>
+                            </p>
+                        </div>
+                        <div class="mb-3" th:if="${log.isBot != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-robot me-2"></i>Bot
+                            </label>
+                            <p class="mb-0">
+                                <span class="badge" 
+                                      th:classappend="${log.isBot ? 'bg-danger' : 'bg-success'}"
+                                      th:text="${log.isBot ? 'Oui' : 'Non'}">-</span>
+                            </p>
+                        </div>
+                        <div class="mb-3" th:if="${log.screenResolution != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-expand me-2"></i>Résolution Écran
+                            </label>
+                            <p class="mb-0" th:text="${log.screenResolution}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.timezone != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-clock me-2"></i>Fuseau Horaire
+                            </label>
+                            <p class="mb-0" th:text="${log.timezone}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.acceptLanguage != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-language me-2"></i>Langue Acceptée
+                            </label>
+                            <p class="mb-0" th:text="${log.acceptLanguage}">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Details Card -->
+                <div class="card border-0 shadow-sm mb-4" th:if="${log.details != null or log.userAgent != null}">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-info-circle me-2 text-secondary"></i>
+                            Détails Supplémentaires
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3" th:if="${log.details != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-sticky-note me-2"></i>Détails
+                            </label>
+                            <p class="mb-0" th:text="${log.details}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.userAgent != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-user-secret me-2"></i>User-Agent
+                            </label>
+                            <p class="mb-0">
+                                <code class="small" style="word-break: break-all;" th:text="${log.userAgent}">-</code>
+                            </p>
+                        </div>
+                        <div class="mb-3" th:if="${log.requestSizeBytes != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-upload me-2"></i>Taille Requête
+                            </label>
+                            <p class="mb-0" th:text="${log.requestSizeBytes + ' bytes'}">-</p>
+                        </div>
+                        <div class="mb-3" th:if="${log.responseSizeBytes != null}">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-download me-2"></i>Taille Réponse
+                            </label>
+                            <p class="mb-0" th:text="${log.responseSizeBytes + ' bytes'}">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

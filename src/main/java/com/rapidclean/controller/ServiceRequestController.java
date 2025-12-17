@@ -6,6 +6,9 @@ import com.rapidclean.entity.Notification;
 import com.rapidclean.repository.ServiceRequestRepository;
 import com.rapidclean.repository.UserRepository;
 import com.rapidclean.repository.NotificationRepository;
+import com.rapidclean.service.RateLimitingService;
+import com.rapidclean.service.SpamProtectionService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +29,12 @@ public class ServiceRequestController {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private RateLimitingService rateLimitingService;
+
+    @Autowired
+    private SpamProtectionService spamProtectionService;
+
     @GetMapping("/request-service")
     public String requestForm(Model model) {
         model.addAttribute("serviceRequest", new ServiceRequest());
@@ -33,12 +42,38 @@ public class ServiceRequestController {
     }
 
     @PostMapping("/request-service")
-    public String submitRequest(@ModelAttribute ServiceRequest serviceRequest,
-                              @RequestParam String clientName,
-                              @RequestParam String clientEmail,
-                              @RequestParam String clientPhone,
-                              RedirectAttributes redirectAttributes) {
+    public String submitRequest(
+            @ModelAttribute ServiceRequest serviceRequest,
+            @RequestParam String clientName,
+            @RequestParam String clientEmail,
+            @RequestParam String clientPhone,
+            @RequestParam(value = "website", required = false) String honeypot,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
         try {
+            // Vérification honeypot
+            if (!spamProtectionService.isHoneypotValid(honeypot)) {
+                redirectAttributes.addFlashAttribute("error", "Requête invalide.");
+                return "redirect:/request-service";
+            }
+            
+            // Vérification rate limiting
+            String clientIp = getClientIp(request);
+            String identifier = clientIp + "_request_" + clientEmail;
+            
+            if (!rateLimitingService.isAllowed(identifier)) {
+                redirectAttributes.addFlashAttribute("error", 
+                    "Trop de requêtes. Veuillez patienter quelques minutes avant de réessayer.");
+                return "redirect:/request-service";
+            }
+            
+            // Vérification spam
+            String fullContent = serviceRequest.getDescription() != null ? serviceRequest.getDescription() : "";
+            if (spamProtectionService.isSpam(fullContent, clientEmail)) {
+                redirectAttributes.addFlashAttribute("error", 
+                    "Votre demande n'a pas pu être envoyée. Veuillez vérifier le contenu.");
+                return "redirect:/request-service";
+            }
             // Créer un utilisateur client temporaire ou utiliser un existant
             User client = userRepository.findByEmail(clientEmail).orElse(null);
             
@@ -61,7 +96,7 @@ public class ServiceRequestController {
             serviceRequest.setCreatedAt(LocalDateTime.now());
             serviceRequest.setUpdatedAt(LocalDateTime.now());
             
-            ServiceRequest savedRequest = serviceRequestRepository.save(serviceRequest);
+            serviceRequestRepository.save(serviceRequest);
 
             // Créer une notification pour l'admin
             Notification notification = new Notification();
@@ -75,15 +110,33 @@ public class ServiceRequestController {
             notification.setCreatedAt(LocalDateTime.now());
             notificationRepository.save(notification);
 
+            // Réinitialiser le rate limiting après succès
+            rateLimitingService.reset(identifier);
+
             redirectAttributes.addFlashAttribute("success", 
-                "Votre demande a été envoyée avec succès ! Nous vous contacterons bientôt.");
+                "✅ Demande envoyée avec succès ! Nous avons bien reçu votre demande et nous vous contacterons dans les plus brefs délais.");
+            redirectAttributes.addFlashAttribute("redirectToHome", true);
             
-            return "redirect:/";
+            return "redirect:/request-service";
             
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", 
                 "Une erreur est survenue. Veuillez réessayer.");
             return "redirect:/request-service";
         }
+    }
+    
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 }

@@ -1,0 +1,255 @@
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Back Button & Header -->
+        <div class="mb-4">
+            <a th:href="@{/admin/employees/{id}/detail(id=${employee.id})}" class="btn btn-outline-secondary mb-3">
+                <i class="fas fa-arrow-left me-2"></i> Retour au détail
+            </a>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="fas fa-exclamation-triangle me-2" style="color: #e74c3c;"></i>
+                        <span th:text="${pageTitle}">Observations</span>
+                    </h2>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-user me-2"></i>
+                        <span th:text="${employee.fullName}">Nom Employé</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-exclamation-circle fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${observations != null ? observations.size() : 0}">0</h3>
+                                <p class="mb-0 opacity-75">Total Observations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${observations != null ? #lists.size(observations.?[status != null and status.name() == 'RESOLVED']) : 0}">0</h3>
+                                <p class="mb-0 opacity-75">Résolues</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-spinner fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${observations != null ? #lists.size(observations.?[status != null and status.name() == 'IN_PROGRESS']) : 0}">0</h3>
+                                <p class="mb-0 opacity-75">En Cours</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${observations != null ? #lists.size(observations.?[priority != null and priority.name() == 'CRITICAL']) : 0}">0</h3>
+                                <p class="mb-0 opacity-75">Critiques</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug info -->
+        <div th:if="${observations == null}" class="alert alert-warning">
+            <p>Observations: null</p>
+        </div>
+        <div th:if="${observations != null and observations.isEmpty()}" class="alert alert-info">
+            <p><i class="fas fa-inbox"></i> Aucune observation signalée pour cet employé.</p>
+        </div>
+
+        <!-- Observations List -->
+        <div th:if="${observations != null and !observations.isEmpty()}">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list-check me-2 text-primary"></i>
+                        Observations Signalées (<span th:text="${observations.size()}">0</span>)
+                    </h5>
+                </div>
+            </div>
+
+            <div th:each="obs : ${observations}" class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-2">
+                                <i class="fas fa-exclamation-triangle me-2" style="color: #667eea;"></i>
+                                <span th:text="${obs.title != null ? obs.title : 'Sans titre'}">Titre</span>
+                            </h5>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <span th:with="priorityClass=${obs.priority != null ? (obs.priority.name() == 'LOW' ? 'bg-success' : (obs.priority.name() == 'MEDIUM' ? 'bg-warning' : (obs.priority.name() == 'HIGH' ? 'bg-danger' : (obs.priority.name() == 'CRITICAL' ? 'bg-dark' : 'bg-secondary')))) : 'bg-secondary'}" 
+                                  th:classappend="${priorityClass}"
+                                  class="badge" 
+                                  th:text="${obs.priority != null ? obs.priority.label : 'Non défini'}">
+                                Priorité
+                            </span>
+                            <span th:with="statusClass=${obs.status != null ? (obs.status.name() == 'PENDING' ? 'bg-warning' : (obs.status.name() == 'IN_PROGRESS' ? 'bg-info' : (obs.status.name() == 'RESOLVED' ? 'bg-success' : 'bg-secondary'))) : 'bg-secondary'}" 
+                                  th:classappend="${statusClass}"
+                                  class="badge" 
+                                  th:text="${obs.status != null ? obs.status.label : 'En Attente'}">
+                                Statut
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3" th:if="${obs.createdAt != null or obs.resolvedAt != null}">
+                        <div class="d-flex gap-3 text-muted small mb-2">
+                            <span th:if="${obs.createdAt != null}">
+                                <i class="fas fa-calendar-day me-1"></i>
+                                <span th:text="${#temporals.format(obs.createdAt, 'dd/MM/yyyy HH:mm')}">Date</span>
+                            </span>
+                            <span th:if="${obs.resolvedAt != null}">
+                                <i class="fas fa-check-double me-1"></i>
+                                Résolue le: <span th:text="${#temporals.format(obs.resolvedAt, 'dd/MM/yyyy HH:mm')}">Date</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-light border-start border-primary border-4 mb-3">
+                        <strong class="d-block mb-2">
+                            <i class="fas fa-align-left me-2 text-primary"></i>Description
+                        </strong>
+                        <p class="mb-0" th:text="${obs.description != null ? obs.description : 'Aucune description'}">Description</p>
+                    </div>
+
+                    <div th:if="${obs.photoPath != null and !obs.photoPath.isEmpty() and !obs.photoPaths.isEmpty()}" class="mb-3">
+                        <strong class="d-block mb-3" style="color: #667eea;">
+                            <i class="fas fa-images me-2"></i>Images jointes (<span th:text="${obs.photoPaths.size()}">0</span>)
+                        </strong>
+                        <div class="row g-3">
+                            <div th:each="photoPath : ${obs.photoPaths}" 
+                                 th:if="${photoPath != null and !photoPath.isEmpty()}"
+                                 th:with="lastSlashIndex=${photoPath.lastIndexOf('/')}, filename=${lastSlashIndex >= 0 ? photoPath.substring(lastSlashIndex + 1) : photoPath}, imageUrl=${'/images/observations/' + filename}"
+                                 class="col-md-3 col-sm-4 col-6">
+                                <div class="card border shadow-sm h-100" style="overflow: hidden; transition: transform 0.3s;">
+                                    <div style="position: relative; padding-top: 100%; background: #f8f9fa; cursor: pointer;"
+                                         th:attr="onclick='window.open(\'' + ${imageUrl} + '\', \'_blank\')'">
+                                        <img th:src="@{${imageUrl}}" 
+                                             alt="Image observation" 
+                                             class="img-fluid"
+                                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
+                                             onerror="console.error('Erreur chargement image:', this.src); this.style.display='none'; this.parentElement.querySelector('.error-msg').style.display='block';">
+                                        <div style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; padding: 5px 8px; border-radius: 4px; font-size: 11px;">
+                                            <i class="fas fa-expand"></i>
+                                        </div>
+                                        <div class="error-msg" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #999; font-size: 12px;">
+                                            Image non disponible
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-2 text-center">
+                                        <a th:href="@{${imageUrl}}" 
+                                           th:attr="download=${filename}"
+                                           class="btn btn-sm btn-primary w-100">
+                                            <i class="fas fa-download me-1"></i>Télécharger
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${obs.adminNotes != null and !obs.adminNotes.isEmpty()}" class="alert alert-info border-start border-info border-4 mb-3">
+                        <strong class="d-block mb-2">
+                            <i class="fas fa-reply me-2"></i>Réponse de l'Administrateur
+                        </strong>
+                        <p class="mb-0" th:text="${obs.adminNotes}">Notes admin</p>
+                    </div>
+
+                    <form method="POST" th:action="@{/admin/observations/{id}/status(id=${obs.id})}" class="bg-light p-3 rounded">
+                        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-sync-alt me-2"></i>Statut
+                                </label>
+                                <select name="status" class="form-select" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option th:each="s : ${T(com.rapidclean.entity.WorkplaceObservation.Status).values()}" 
+                                            th:value="${s}" 
+                                            th:selected="${obs.status == s}"
+                                            th:text="${s.label}">Statut</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-comment me-2"></i>Réponse (optionnel)
+                                </label>
+                                <textarea name="adminNotes" 
+                                          class="form-control" 
+                                          rows="2" 
+                                          placeholder="Votre réponse à l'employé..."></textarea>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-paper-plane me-2"></i>Mettre à jour
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${observations == null or observations.isEmpty()}" class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-thumbs-up fa-4x text-muted mb-3" style="opacity: 0.3;"></i>
+                <p class="text-muted fs-5">Aucune observation signalée par cet employé</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,7 @@ package com.rapidclean.repository;
 
 import com.rapidclean.entity.ServiceRequest;
 import com.rapidclean.entity.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,10 +13,17 @@ import java.util.List;
 
 @Repository
 public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, Long> {
+    
+    @EntityGraph(attributePaths = {"user"})
+    List<ServiceRequest> findAll();
+    
+    @EntityGraph(attributePaths = {"user"})
     List<ServiceRequest> findByUser(User user);
+    
+    @EntityGraph(attributePaths = {"user"})
     List<ServiceRequest> findByStatus(ServiceRequest.Status status);
     
-    @Query("SELECT sr FROM ServiceRequest sr WHERE sr.serviceDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT sr FROM ServiceRequest sr JOIN FETCH sr.user WHERE sr.serviceDate BETWEEN :startDate AND :endDate")
     List<ServiceRequest> findByServiceDateBetween(@Param("startDate") LocalDateTime startDate, 
                                                   @Param("endDate") LocalDateTime endDate);
     

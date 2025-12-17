@@ -1,10 +1,6 @@
 package com.rapidclean.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,98 +11,130 @@ public class ContactMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank(message = "Le prénom est requis")
-    @Size(max = 50)
-    private String firstName;
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
     
-    @NotBlank(message = "Le nom est requis")
-    @Size(max = 50)
-    private String lastName;
-    
-    @Email(message = "Email invalide")
-    @NotBlank(message = "L'email est requis")
+    @Column(name = "email", nullable = false)
     private String email;
     
+    @Column(name = "phone")
     private String phone;
     
-    @NotBlank(message = "Le sujet est requis")
-    @Size(max = 100)
+    @Column(name = "subject", nullable = false)
     private String subject;
     
-    @NotBlank(message = "Le message est requis")
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "message", nullable = false, columnDefinition = "TEXT")
     private String message;
     
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private Status status = Status.NEW;
     
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+    
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    
+    @Column(name = "is_read", nullable = false)
     private boolean read = false;
     
-    private LocalDateTime createdAt;
-    
-    private LocalDateTime readAt;
-    
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
-    
-    // Constructors
+    // Constructeurs
     public ContactMessage() {}
     
-    public ContactMessage(String firstName, String lastName, String email, String phone, 
-                         String subject, String message) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public ContactMessage(String fullName, String email, String subject, String message) {
+        this.fullName = fullName;
         this.email = email;
-        this.phone = phone;
         this.subject = subject;
         this.message = message;
     }
     
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-    
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-    
-    public String getSubject() { return subject; }
-    public void setSubject(String subject) { this.subject = subject; }
-    
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-    
-    public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = status; }
-    
-    public boolean isRead() { return read; }
-    public void setRead(boolean read) { this.read = read; }
-    
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    
-    public LocalDateTime getReadAt() { return readAt; }
-    public void setReadAt(LocalDateTime readAt) { this.readAt = readAt; }
-    
-    public String getFullName() {
-        return firstName + " " + lastName;
+    // Getters et Setters
+    public Long getId() {
+        return id;
     }
     
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public String getFullName() {
+        return fullName;
+    }
+    
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public String getPhone() {
+        return phone;
+    }
+    
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
+    public String getSubject() {
+        return subject;
+    }
+    
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+    
+    public String getMessage() {
+        return message;
+    }
+    
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+    public Status getStatus() {
+        return status;
+    }
+    
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
+    public boolean isRead() {
+        return read;
+    }
+    
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+    
+    // Enum pour le statut
     public enum Status {
         NEW("Nouveau"),
         READ("Lu"),
-        REPLIED("Répondu"),
-        CLOSED("Fermé");
+        REPLIED("Répondu");
         
         private final String displayName;
         
@@ -117,5 +145,10 @@ public class ContactMessage {
         public String getDisplayName() {
             return displayName;
         }
+    }
+    
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

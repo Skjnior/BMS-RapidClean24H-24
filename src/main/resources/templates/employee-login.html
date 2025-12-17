@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Employé - BMS Clean Solutions</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="apple-touch-icon" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .login-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        .info-box {
+            background-color: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #333;
+        }
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>🔐 Connexion Employé</h1>
+            <p>Espace réservé aux employés</p>
+        </div>
+
+        <div th:if="${param.logout}" class="alert alert-success">
+            ✅ Déconnexion réussie. Vous pouvez maintenant vous reconnecter.
+        </div>
+
+        <div th:if="${error != null}" class="alert alert-error">
+            ❌ <span th:text="${error}">Email ou mot de passe incorrect. Veuillez réessayer.</span>
+        </div>
+        
+        <div th:if="${param.error}" class="alert alert-error">
+            ❌ Email ou mot de passe incorrect. Veuillez réessayer.
+        </div>
+
+        <div th:if="${param.first_login}" class="alert alert-info">
+            ℹ️ Bienvenue ! Connectez-vous pour modifier votre mot de passe.
+        </div>
+
+        <div class="info-box">
+            <strong>Première connexion ?</strong>
+            Vous avez reçu un email avec vos identifiants de connexion.
+        </div>
+
+        <form method="POST" th:action="@{/api/auth/employee-login}">
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="email" id="username" name="username" required placeholder="Entrez votre email" autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" required placeholder="Entrez votre mot de passe">
+            </div>
+
+            <button type="submit">Se connecter</button>
+        </form>
+
+        <div class="login-footer">
+            <a href="/">← Retour à l'accueil</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<div th:fragment="content">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body text-center p-5">
+                        <!-- Animation Error -->
+                        <div class="mb-4 error-animation">
+                            <i th:if="${status == null || status == 500}" 
+                               class="fas fa-exclamation-triangle fa-5x text-warning" 
+                               aria-hidden="true"></i>
+                            <i th:if="${status == 404}" 
+                               class="fas fa-search fa-5x text-info" 
+                               aria-hidden="true"></i>
+                            <i th:if="${status == 403}" 
+                               class="fas fa-lock fa-5x text-danger" 
+                               aria-hidden="true"></i>
+                        </div>
+                        
+                        <!-- Status Code -->
+                        <h1 class="display-1 fw-bold mb-3" 
+                            th:text="${status != null ? status : 'Erreur'}"
+                            style="color: var(--primary-color);">
+                            500
+                        </h1>
+                        
+                        <!-- Error Message -->
+                        <h2 class="h3 mb-4" th:text="${status == 404 ? 'Page Non Trouvée' : (status == 403 ? 'Accès Refusé' : 'Erreur Serveur')}">
+                            Erreur Serveur
+                        </h2>
+                        
+                        <p class="lead text-muted mb-5" 
+                           th:text="${error != null ? error : 'Une erreur inattendue s''est produite.'}">
+                            Une erreur inattendue s'est produite.
+                        </p>
+                        
+                        <!-- Specific Messages -->
+                        <div th:if="${status == 403}" class="alert alert-warning text-start mb-4" role="alert">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-lock fa-2x me-3 mt-1" aria-hidden="true"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-2">Accès refusé</h5>
+                                    <p class="mb-0">Vous n'avez pas les permissions nécessaires pour accéder à cette ressource. Veuillez vous connecter avec un compte approprié ou contacter l'administrateur.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${status == 404}" class="alert alert-info text-start mb-4" role="alert">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-search fa-2x me-3 mt-1" aria-hidden="true"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-2">Page non trouvée</h5>
+                                    <p class="mb-0">La page que vous recherchez n'existe pas ou a été déplacée. Vérifiez l'URL ou utilisez les liens ci-dessous pour naviguer.</p>
+                                    <small th:if="${path != null}" class="text-muted">Chemin recherché: <code th:text="${path}"></code></small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${status == 500}" class="alert alert-danger text-start mb-4" role="alert">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-server fa-2x me-3 mt-1" aria-hidden="true"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-2">Erreur serveur</h5>
+                                    <p class="mb-0">Une erreur interne s'est produite. Notre équipe a été notifiée et travaille à résoudre le problème. Veuillez réessayer plus tard.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="mt-5 d-flex flex-wrap justify-content-center gap-3">
+                            <a th:href="@{/}" 
+                               class="btn btn-primary btn-lg px-4" 
+                               aria-label="Retourner à la page d'accueil">
+                                <i class="fas fa-home me-2" aria-hidden="true"></i>Retour à l'accueil
+                            </a>
+                            <button type="button" 
+                                    class="btn btn-outline-secondary btn-lg px-4" 
+                                    onclick="window.history.back()"
+                                    aria-label="Retourner à la page précédente">
+                                <i class="fas fa-arrow-left me-2" aria-hidden="true"></i>Page précédente
+                            </button>
+                            <a th:href="@{/contact}" 
+                               class="btn btn-outline-primary btn-lg px-4" 
+                               aria-label="Nous contacter pour signaler un problème">
+                                <i class="fas fa-envelope me-2" aria-hidden="true"></i>Nous contacter
+                            </a>
+                        </div>
+                        
+                        <!-- Helpful Links -->
+                        <div class="mt-5 pt-4 border-top">
+                            <p class="text-muted mb-3">Pages utiles :</p>
+                            <div class="d-flex flex-wrap justify-content-center gap-3">
+                                <a th:href="@{/faq}" class="text-decoration-none">
+                                    <i class="fas fa-question-circle me-1"></i>FAQ
+                                </a>
+                                <a th:href="@{/services}" class="text-decoration-none">
+                                    <i class="fas fa-list me-1"></i>Nos Services
+                                </a>
+                                <a th:href="@{/about}" class="text-decoration-none">
+                                    <i class="fas fa-info-circle me-1"></i>À Propos
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+        
+        .error-animation {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border-left-width: 4px;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</div>
+</html>
+

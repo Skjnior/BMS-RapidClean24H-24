@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" th:replace="admin/layout :: layout(~{::content})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} ?: 'Profil Employé'"></title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <style>
+        .profile-container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .employee-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .employee-info-section {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-item {
+            margin: 10px 0;
+        }
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .info-value {
+            font-size: 18px;
+            color: #333;
+            font-weight: 500;
+        }
+        .section {
+            margin: 30px 0;
+        }
+        .section h3 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th {
+            background-color: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: bold;
+        }
+        .table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .table tr:hover {
+            background-color: #f8f9fa;
+        }
+        .action-link {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin: 5px 5px 5px 0;
+        }
+        .action-link:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            color: #007bff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container">
+            <a th:href="@{/admin/employees}" class="back-link">← Retour à la liste des employés</a>
+
+            <div class="profile-container">
+            <h1>👤 Profil de l'Employé</h1>
+
+            <div class="employee-header">
+                <div class="employee-info-section">
+                    <div class="info-item">
+                        <div class="info-label">Nom Complet</div>
+                        <div class="info-value" th:text="${employee.fullName}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value" th:text="${employee.email}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Téléphone</div>
+                        <div class="info-value" th:text="${employee.phone}"></div>
+                    </div>
+                </div>
+                <div class="employee-info-section">
+                    <div class="info-item">
+                        <div class="info-label">Statut</div>
+                        <div class="status-badge" th:classappend="${employee.enabled ? 'status-active' : 'status-inactive'}" 
+                             th:text="${employee.enabled ? 'Actif' : 'Inactif'}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Première Connexion</div>
+                        <div class="info-value" th:text="${employee.firstLogin ? '🔐 En Attente' : '✅ Complétée'}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Créé le</div>
+                        <div class="info-value" th:text="${#temporals.format(employee.createdAt, 'dd/MM/yyyy HH:mm')}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions rapides -->
+            <div style="margin: 20px 0; padding: 20px; background: #e7f3ff; border-radius: 4px;">
+                <a th:href="@{/admin/employees/{id}/time-tracking(id=${employee.id})}" class="action-link">📊 Pointages</a>
+                <a th:href="@{/admin/employees/{id}/absences(id=${employee.id})}" class="action-link">📅 Absences</a>
+                <a th:href="@{/admin/employees/{id}/observations(id=${employee.id})}" class="action-link">🔍 Observations</a>
+                <a th:href="@{/admin/employees/{id}/edit(id=${employee.id})}" class="action-link">✏️ Modifier</a>
+            </div>
+
+            <!-- Pointages récents -->
+            <div class="section">
+                <h3>⏰ Pointages Récents</h3>
+                <table class="table" th:if="${not timeTrackings.isEmpty()}">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Arrivée</th>
+                            <th>Départ</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="tracking : ${timeTrackings.stream().limit(10).toList()}">
+                            <td th:text="${tracking.trackingDate}"></td>
+                            <td th:text="${tracking.arrivalTime} ?: '-'"></td>
+                            <td th:text="${tracking.departureTime} ?: '-'"></td>
+                            <td th:text="${tracking.notes} ?: '-'"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:unless="${not timeTrackings.isEmpty()}" class="empty-message">
+                    Aucun pointage enregistré
+                </div>
+            </div>
+
+            <!-- Absences récentes -->
+            <div class="section">
+                <h3>📅 Absences Récentes</h3>
+                <table class="table" th:if="${not absences.isEmpty()}">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Motif</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="absence : ${absences.stream().limit(10).toList()}">
+                            <td th:text="${absence.absenceDate}"></td>
+                            <td>
+                                <span style="background-color: #e7f3ff; padding: 4px 8px; border-radius: 3px; color: #007bff;" 
+                                      th:text="${absence.type.label}"></span>
+                            </td>
+                            <td th:text="${absence.reason} ?: '-'"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:unless="${not absences.isEmpty()}" class="empty-message">
+                    Aucune absence déclarée
+                </div>
+            </div>
+
+            <!-- Observations récentes -->
+            <div class="section">
+                <h3>🔍 Observations Récentes</h3>
+                <div th:if="${not observations.isEmpty()}">
+                    <div th:each="obs : ${observations.stream().limit(5).toList()}" 
+                         style="background: #f8f9fa; padding: 15px; margin: 10px 0; border-left: 4px solid #ffc107; border-radius: 4px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <div style="font-weight: bold; color: #333;" th:text="${obs.title}"></div>
+                                <div style="font-size: 12px; color: #666; margin: 5px 0;">
+                                    Signalée le : <span th:text="${#temporals.format(obs.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                                </div>
+                                <div style="margin-top: 10px; color: #555;" th:text="${obs.description}"></div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="background-color: #fff3cd; color: #856404; padding: 4px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;" 
+                                      th:text="${obs.priority.label}"></span><br>
+                                <span style="background-color: #e7f3ff; color: #007bff; padding: 4px 8px; border-radius: 3px; font-size: 12px; margin-top: 5px; display: inline-block;" 
+                                      th:text="${obs.status.label}"></span>
+                            </div>
+                        </div>
+                        <div th:if="${obs.adminNotes}" style="margin-top: 10px; padding: 10px; background: #e8f4f8; border-radius: 3px;">
+                            <strong style="color: #007bff;">Réponse:</strong>
+                            <p style="margin: 5px 0; color: #333;" th:text="${obs.adminNotes}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div th:unless="${not observations.isEmpty()}" class="empty-message">
+                    Aucune observation signalée
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

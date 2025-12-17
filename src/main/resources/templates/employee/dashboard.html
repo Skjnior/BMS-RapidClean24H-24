@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Employé - BMS Clean Solutions</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="apple-touch-icon" th:href="@{/images/logo Rapidclean.png}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #95a5a6;
+            font-size: 16px;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            font-size: 28px;
+            color: #667eea;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Styles pour les boutons du contenu uniquement - exclut le navbar */
+        .card .btn,
+        .page-header .btn,
+        .container .btn:not(.employee-navbar .btn):not(.btn-logout) {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card .btn::before,
+        .page-header .btn::before,
+        .container .btn:not(.employee-navbar .btn):not(.btn-logout)::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s;
+        }
+
+        .card .btn:hover::before,
+        .page-header .btn:hover::before,
+        .container .btn:not(.employee-navbar .btn):not(.btn-logout):hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-info:hover {
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .time-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .time-item {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .time-item label {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .time-item .time {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+        }
+
+        .alert {
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transition: transform 0.5s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .stat-box:hover::before {
+            transform: rotate(45deg);
+        }
+
+        .stat-box .label {
+            font-size: 13px;
+            opacity: 0.95;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .stat-box .label i {
+            font-size: 16px;
+        }
+
+        .stat-box .value {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-box.stat-box-success {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+        }
+
+        .stat-box.stat-box-success:hover {
+            box-shadow: 0 10px 30px rgba(17, 153, 142, 0.5);
+        }
+
+        .stat-box.stat-box-warning {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .stat-box.stat-box-warning:hover {
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.5);
+        }
+
+        .stat-box.stat-box-info {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .stat-box.stat-box-info:hover {
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.5);
+        }
+
+        .list-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.6;
+            transition: transform 0.3s ease;
+        }
+
+        .empty-state:hover .empty-state-icon {
+            transform: scale(1.1);
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .absences-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .absences-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .absences-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .absences-list::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .absences-list::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        .absence-item {
+            padding: 15px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .absence-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .absence-item-content {
+            flex: 1;
+        }
+
+        .absence-item-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .absence-item-date {
+            font-size: 13px;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .absence-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .absence-badge.sick {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .absence-badge.paid {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .absence-badge.unpaid {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .absence-badge.holiday {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .absence-badge.special {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        @media (max-width: 991px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 15px;
+            }
+
+            .time-info {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .card h3 {
+                font-size: 20px;
+            }
+
+            .page-header {
+                padding: 20px;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .stat-box {
+                padding: 20px 15px;
+            }
+
+            .stat-box .value {
+                font-size: 36px;
+            }
+
+            .absence-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .absence-badge {
+                align-self: flex-end;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .page-header {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .page-header h1 {
+                font-size: 20px;
+            }
+
+            .page-header p {
+                font-size: 14px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .card h3 {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-box .value {
+                font-size: 32px;
+            }
+
+            .stat-box .label {
+                font-size: 11px;
+            }
+
+            .time-item {
+                padding: 15px;
+            }
+
+            .time-item .time {
+                font-size: 20px;
+            }
+
+            .absence-item-title {
+                font-size: 14px;
+            }
+
+            .absence-item-date {
+                font-size: 12px;
+            }
+
+            .empty-state {
+                padding: 30px 15px;
+            }
+
+            .empty-state-icon {
+                font-size: 48px;
+            }
+
+            .empty-state p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{employee/fragments/navbar :: navbar}"></div>
+
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-chart-pie" style="color: #667eea;"></i> <span th:text="${pageTitle}">Tableau de bord</span></h1>
+            <p><i class="fas fa-smile"></i> Bienvenue dans votre espace de gestion personnelle</p>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <div class="dashboard-container">
+            <!-- Pointage du jour -->
+            <div class="card">
+                <h3><i class="fas fa-clock card-icon"></i> Pointage du Jour</h3>
+                <div th:if="${todayTracking}">
+                    <div class="time-info">
+                        <div class="time-item">
+                            <label><i class="fas fa-sun" style="color: #f39c12;"></i> Heure d'arrivée</label>
+                            <div class="time" th:text="${todayTracking.arrivalTime} ?: '--:--'"></div>
+                        </div>
+                        <div class="time-item">
+                            <label><i class="fas fa-moon" style="color: #6c5ce7;"></i> Heure de départ</label>
+                            <div class="time" th:text="${todayTracking.departureTime} ?: '--:--'"></div>
+                        </div>
+                    </div>
+                </div>
+                <div th:unless="${todayTracking}" class="empty-state">
+                    <div class="empty-state-icon"><i class="fas fa-inbox" style="font-size: 48px; opacity: 0.5;"></i></div>
+                    <p><i class="fas fa-zzz"></i> Aucun pointage enregistré pour aujourd'hui</p>
+                </div>
+                <div class="btn-group">
+                    <form method="POST" th:action="@{/employee/time-tracking/arrival}" style="flex: 1;">
+                        <button type="submit" class="btn btn-success" style="width: 100%;"><i class="fas fa-arrow-right-to-bracket"></i> Arrivée</button>
+                    </form>
+                    <form method="POST" th:action="@{/employee/time-tracking/departure}" style="flex: 1;">
+                        <button type="submit" class="btn btn-info" style="width: 100%;"><i class="fas fa-arrow-right-from-bracket"></i> Départ</button>
+                    </form>
+                </div>
+                <a href="/employee/time-tracking" class="btn btn-primary" style="display: block; margin-top: 15px; text-align: center;"><i class="fas fa-history"></i> Voir l'historique</a>
+            </div>
+
+            <!-- Absences -->
+            <div class="card">
+                <h3><i class="fas fa-calendar-xmark card-icon"></i> Mes Absences</h3>
+                <div th:if="${monthlyAbsences == null or monthlyAbsences.isEmpty()}" class="empty-state">
+                    <div class="empty-state-icon"><i class="fas fa-check-circle" style="color: #27ae60;"></i></div>
+                    <p><i class="fas fa-clover"></i> Aucune absence déclarée ce mois</p>
+                </div>
+                <div th:unless="${monthlyAbsences == null or monthlyAbsences.isEmpty()}" class="absences-list">
+                    <div th:each="absence : ${monthlyAbsences}" class="absence-item">
+                        <div class="absence-item-content">
+                            <div class="absence-item-title">
+                                <i class="fas fa-calendar-day" style="color: #667eea;"></i>
+                                <span th:text="${absence.type.label}"></span>
+                            </div>
+                            <div class="absence-item-date">
+                                <i class="fas fa-clock"></i>
+                                <span th:text="${#temporals.format(absence.absenceDate, 'dd/MM/yyyy')}"></span>
+                            </div>
+                        </div>
+                        <span class="absence-badge" 
+                              th:classappend="${absence.type.name() == 'SICK_LEAVE' ? 'sick' : (absence.type.name() == 'PAID_LEAVE' ? 'paid' : (absence.type.name() == 'UNPAID_LEAVE' ? 'unpaid' : (absence.type.name() == 'HOLIDAY' ? 'holiday' : 'special')))}">
+                            <i class="fas fa-flag"></i>
+                            <span>Déclaré</span>
+                        </span>
+                    </div>
+                </div>
+                <a href="/employee/absences" class="btn btn-primary" style="display: block; margin-top: 20px; text-align: center;"><i class="fas fa-plus"></i> Déclarer une absence</a>
+            </div>
+
+            <!-- Observations -->
+            <div class="card">
+                <h3><i class="fas fa-magnifying-glass card-icon"></i> Mes Observations</h3>
+                <div th:if="${observations.isEmpty()}" class="empty-state">
+                    <div class="empty-state-icon"><i class="fas fa-smile-wink" style="font-size: 48px; color: #667eea; opacity: 0.6;"></i></div>
+                    <p><i class="fas fa-thumbs-up"></i> Aucune observation signalée</p>
+                </div>
+                <div th:unless="${observations.isEmpty()}">
+                    <div th:each="obs : ${observations}" class="list-item">
+                        <div>
+                            <div class="list-item-title"><i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i> <span th:text="${obs.title}"></span></div>
+                            <div style="font-size: 13px; color: #95a5a6;"><i class="fas fa-info-circle"></i> <span th:text="${obs.status.label}"></span></div>
+                        </div>
+                        <span class="badge badge-primary"><i class="fas fa-rocket"></i> <span th:text="${obs.priority.label}"></span></span>
+                    </div>
+                </div>
+                <a href="/employee/observations" class="btn btn-primary" style="display: block; margin-top: 15px; text-align: center;"><i class="fas fa-exclamation"></i> Signaler un problème</a>
+            </div>
+
+            <!-- Statistiques du mois -->
+            <div class="card">
+                <h3><i class="fas fa-chart-bar card-icon"></i> Statistiques du Mois</h3>
+                <p style="color: #7f8c8d; margin-bottom: 20px; font-size: 14px;">
+                    <i class="fas fa-info-circle"></i> Vue d'ensemble de votre activité mensuelle
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-box stat-box-success">
+                        <div class="label">
+                            <i class="fas fa-check-double"></i>
+                            <span>Pointages</span>
+                        </div>
+                        <div class="value" th:text="${monthlyTimeTracking.size()}">0</div>
+                    </div>
+                    <div class="stat-box stat-box-warning">
+                        <div class="label">
+                            <i class="fas fa-calendar-times"></i>
+                            <span>Absences</span>
+                        </div>
+                        <div class="value" th:text="${monthlyAbsences.size()}">0</div>
+                    </div>
+                    <div class="stat-box stat-box-info">
+                        <div class="label">
+                            <i class="fas fa-list-check"></i>
+                            <span>Observations</span>
+                        </div>
+                        <div class="value" th:text="${observations.size()}">0</div>
+                    </div>
+                </div>
+                <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #ecf0f1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <div style="font-size: 12px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;">
+                                <i class="fas fa-calendar-alt"></i> Période
+                            </div>
+                            <div style="font-size: 16px; font-weight: 600; color: #2c3e50;">
+                                <span th:text="${#temporals.format(monthStart, 'dd MMM')}"></span> - 
+                                <span th:text="${#temporals.format(today, 'dd MMM yyyy')}"></span>
+                            </div>
+                        </div>
+                        <div style="flex: 1; min-width: 150px; text-align: right;">
+                            <div style="font-size: 12px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;">
+                                <i class="fas fa-user"></i> Employé
+                            </div>
+                            <div style="font-size: 16px; font-weight: 600; color: #2c3e50;">
+                                <span th:text="${user.firstName + ' ' + user.lastName}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS for dropdown -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialiser les tooltips et dropdowns Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser les dropdowns
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,139 +1,539 @@
-<!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Gestion des Services - Admin BMS Rapid Clean</title>
-    <div th:replace="~{layout :: head}"></div>
-</head>
-<body>
-    <div th:replace="~{layout :: navbar}"></div>
-
-    <div class="container py-4">
-        <!-- Header -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2 class="mb-0">
-                        <i class="fas fa-tools me-2"></i>Gestion des Services
-                    </h2>
-                    <a href="/admin/services/new" class="btn btn-primary">
-                        <i class="fas fa-plus me-2"></i>Ajouter un Service
-                    </a>
-                </div>
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Header Actions -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">
+                    <i class="fas fa-broom me-2"></i>
+                    Gestion des Services
+                </h2>
+                <p class="text-muted mb-0">Gérez tous les services de nettoyage disponibles</p>
             </div>
-        </div>
-
-        <!-- Messages d'alerte -->
-        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            <span th:text="${success}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <a href="/admin/services/new" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-2"></i>
+                Ajouter un Service
+            </a>
         </div>
         
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>
-            <span th:text="${error}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-
-        <!-- Liste des services -->
-        <div class="row" th:if="${services != null and !services.empty}">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nom</th>
-                                        <th>Description</th>
-                                        <th>Prix</th>
-                                        <th>Statut</th>
-                                        <th>Créé le</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="service : ${services}">
-                                        <td th:text="${service.id}">1</td>
-                                        <td th:text="${service.name}">Nom du service</td>
-                                        <td>
-                                            <span th:text="${#strings.abbreviate(service.description, 50)}">Description...</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-success" th:text="${service.price} + '€'">150€</span>
-                                        </td>
-                                        <td>
-                                            <span th:if="${service.active}" class="badge bg-success">Actif</span>
-                                            <span th:unless="${service.active}" class="badge bg-secondary">Inactif</span>
-                                        </td>
-                                        <td th:text="${#temporals.format(service.createdAt, 'dd/MM/yyyy')}">01/01/2024</td>
-                                        <td>
-                                            <div class="btn-group" role="group">
-                                                <a th:href="@{/admin/services/{id}/edit(id=${service.id})}" 
-                                                   class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                        th:onclick="'deleteService(' + ${service.id} + ')'">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stat-card primary">
+                    <div class="stat-header">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <div>
+                            <div class="stat-number" th:text="${services.size()}">0</div>
+                            <div class="stat-label">Services Totaux</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <div class="stat-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <div class="stat-number" th:text="${#lists.size(services.?[active])}">0</div>
+                            <div class="stat-label">Services Actifs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="stat-card warning">
+                    <div class="stat-header">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-pause-circle"></i>
+                        </div>
+                        <div>
+                            <div class="stat-number" th:text="${#lists.size(services.?[!active])}">0</div>
+                            <div class="stat-label">Services Inactifs</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Message si aucun service -->
-        <div th:if="${services == null or services.empty}" class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body text-center py-5">
-                        <i class="fas fa-tools fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">Aucun service disponible</h5>
-                        <p class="text-muted">Commencez par ajouter votre premier service.</p>
-                        <a href="/admin/services/new" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Ajouter un Service
+        
+        <!-- Filters -->
+        <div class="card mb-4 border-0 shadow-sm animate-fade-in">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-filter me-2 text-primary"></i>
+                    Filtres de Recherche
+                </h5>
+                <button type="button" 
+                        class="btn btn-sm btn-outline-secondary" 
+                        id="resetFiltersServices"
+                        onclick="resetFiltersServices()"
+                        style="display: none; border-radius: 20px; padding: 5px 15px;">
+                    <i class="fas fa-redo me-1"></i>Réinitialiser
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-search me-1 text-primary"></i>
+                            Rechercher un service
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="searchServices" 
+                               placeholder="Nom, description..."
+                               style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                               onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                               onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-filter me-1 text-success"></i>
+                            Filtrer par Statut
+                        </label>
+                        <select class="form-select form-select-lg" 
+                                id="statusFilter"
+                                style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                                onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                                onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                            <option value="">Tous les statuts</option>
+                            <option value="active">Actifs</option>
+                            <option value="inactive">Inactifs</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-sort me-1 text-warning"></i>
+                            Trier par
+                        </label>
+                        <select class="form-select form-select-lg" 
+                                id="sortServices"
+                                style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                                onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                                onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                            <option value="name-asc">Nom (A-Z)</option>
+                            <option value="name-desc">Nom (Z-A)</option>
+                            <option value="price-asc">Prix (Croissant)</option>
+                            <option value="price-desc">Prix (Décroissant)</option>
+                            <option value="date-desc">Plus récents</option>
+                            <option value="date-asc">Plus anciens</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Active Filters Indicator -->
+                <div id="activeFiltersServices" class="mt-3" style="display: none;">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Filtres actifs: <span id="activeFiltersCountServices">0</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Services Table -->
+        <div class="card animate-fade-in">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list me-2"></i>
+                    Liste des Services
+                    <span class="badge bg-primary ms-2" id="servicesCount" th:text="${services.size()}">0</span>
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="servicesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom du Service</th>
+                                <th>Description</th>
+                                <th>Prix (€)</th>
+                                <th>Statut</th>
+                                <th>Date de Création</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="service : ${services}" 
+                                th:if="${!services.isEmpty()}"
+                                th:data-status="${service.active ? 'active' : 'inactive'}"
+                                th:data-price="${service.price}"
+                                th:data-name="${service.name}"
+                                th:data-date="${#temporals.format(service.createdAt, 'yyyy-MM-dd')}">
+                                <td th:text="${service.id}">#1</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="service-icon-small me-2" style="width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
+                                            <!-- Fast-Food -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Fast-Food')}" 
+                                               class="fas fa-hamburger" 
+                                               style="background: linear-gradient(135deg, #ff6b6b 0%, #ff9f40 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Salles -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Salles')}" 
+                                               class="fas fa-chair" 
+                                               style="background: linear-gradient(135deg, #4ecdc4 0%, #2ed573 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Sanitaires -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Sanitaires')}" 
+                                               class="fas fa-toilet" 
+                                               style="background: linear-gradient(135deg, #45b7d1 0%, #3498db 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Vitres -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Vitres')}" 
+                                               class="fas fa-window-maximize" 
+                                               style="background: linear-gradient(135deg, #96ceb4 0%, #74b9ff 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Cuisine -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Cuisine')}" 
+                                               class="fas fa-utensils" 
+                                               style="background: linear-gradient(135deg, #feca57 0%, #ff9f40 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Caisse & Drive -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Caisse') or #strings.containsIgnoreCase(service.name, 'Drive')}" 
+                                               class="fas fa-cash-register" 
+                                               style="background: linear-gradient(135deg, #ff9ff3 0%, #ec6f66 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Locaux Techniques -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Locaux Techniques') or #strings.containsIgnoreCase(service.name, 'Arrières')}" 
+                                               class="fas fa-cogs" 
+                                               style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Vestiaires & Douches -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Vestiaires') or #strings.containsIgnoreCase(service.name, 'Douches')}" 
+                                               class="fas fa-shower" 
+                                               style="background: linear-gradient(135deg, #74b9ff 0%, #3498db 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Extérieur -->
+                                            <i th:if="${#strings.containsIgnoreCase(service.name, 'Extérieur')}" 
+                                               class="fas fa-tree" 
+                                               style="background: linear-gradient(135deg, #55efc4 0%, #00b894 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                            <!-- Par défaut -->
+                                            <i th:unless="${#strings.containsIgnoreCase(service.name, 'Fast-Food') or #strings.containsIgnoreCase(service.name, 'Salles') or #strings.containsIgnoreCase(service.name, 'Sanitaires') or #strings.containsIgnoreCase(service.name, 'Vitres') or #strings.containsIgnoreCase(service.name, 'Cuisine') or #strings.containsIgnoreCase(service.name, 'Caisse') or #strings.containsIgnoreCase(service.name, 'Drive') or #strings.containsIgnoreCase(service.name, 'Locaux Techniques') or #strings.containsIgnoreCase(service.name, 'Arrières') or #strings.containsIgnoreCase(service.name, 'Vestiaires') or #strings.containsIgnoreCase(service.name, 'Douches') or #strings.containsIgnoreCase(service.name, 'Extérieur')}" 
+                                               class="fas fa-broom" 
+                                               style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center;"></i>
+                                        </div>
+                                        <strong th:text="${service.name}">Nom du service</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span th:text="${#strings.abbreviate(service.description, 50)}" class="text-muted">Description courte...</span>
+                                </td>
+                                <td>
+                                    <strong th:text="${service.price} + ' €'">0 €</strong>
+                                </td>
+                                <td>
+                                    <span class="badge" th:classappend="${service.active ? 'bg-success' : 'bg-secondary'}" th:text="${service.active ? 'Actif' : 'Inactif'}">
+                                        Actif
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        <span th:text="${#temporals.format(service.createdAt, 'dd/MM/yyyy')}">01/01/2024</span>
+                                    </small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a th:href="@{/admin/services/{id}/edit(id=${service.id})}" class="btn btn-sm btn-primary" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" th:data-bs-target="'#viewModal' + ${service.id}" title="Voir">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <!-- Formulaire de suppression inline -->
+                                        <form th:action="@{/admin/services/{id}/delete(id=${service.id})}" 
+                                              method="post" 
+                                              style="display: inline;" 
+                                              th:attr="data-service-name=${service.name}"
+                                              class="delete-service-form">
+                                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr th:if="${services.isEmpty()}">
+                                <td colspan="7" class="text-center py-5">
+                                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">Aucun service disponible</p>
+                                    <a href="/admin/services/new" class="btn btn-primary">
+                                        <i class="fas fa-plus-circle me-2"></i>
+                                        Créer le premier service
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View Modals -->
+        <div th:each="service : ${services}" class="modal fade" th:id="'viewModal' + ${service.id}" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header" style="background: linear-gradient(135deg, #2c5aa0 0%, #4a90e2 100%); color: white;">
+                        <h5 class="modal-title">
+                            <i class="fas fa-broom me-2"></i>
+                            Détails du Service
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center mb-4">
+                            <div class="service-icon-large mx-auto mb-3" style="width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                                <!-- Fast-Food -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Fast-Food')}" 
+                                   class="fas fa-hamburger fa-3x" 
+                                   style="background: linear-gradient(135deg, #ff6b6b 0%, #ff9f40 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Salles -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Salles')}" 
+                                   class="fas fa-chair fa-3x" 
+                                   style="background: linear-gradient(135deg, #4ecdc4 0%, #2ed573 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Sanitaires -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Sanitaires')}" 
+                                   class="fas fa-toilet fa-3x" 
+                                   style="background: linear-gradient(135deg, #45b7d1 0%, #3498db 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Vitres -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Vitres')}" 
+                                   class="fas fa-window-maximize fa-3x" 
+                                   style="background: linear-gradient(135deg, #96ceb4 0%, #74b9ff 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Cuisine -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Cuisine')}" 
+                                   class="fas fa-utensils fa-3x" 
+                                   style="background: linear-gradient(135deg, #feca57 0%, #ff9f40 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Caisse & Drive -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Caisse') or #strings.containsIgnoreCase(service.name, 'Drive')}" 
+                                   class="fas fa-cash-register fa-3x" 
+                                   style="background: linear-gradient(135deg, #ff9ff3 0%, #ec6f66 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Locaux Techniques -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Locaux Techniques') or #strings.containsIgnoreCase(service.name, 'Arrières')}" 
+                                   class="fas fa-cogs fa-3x" 
+                                   style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Vestiaires & Douches -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Vestiaires') or #strings.containsIgnoreCase(service.name, 'Douches')}" 
+                                   class="fas fa-shower fa-3x" 
+                                   style="background: linear-gradient(135deg, #74b9ff 0%, #3498db 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Extérieur -->
+                                <i th:if="${#strings.containsIgnoreCase(service.name, 'Extérieur')}" 
+                                   class="fas fa-tree fa-3x" 
+                                   style="background: linear-gradient(135deg, #55efc4 0%, #00b894 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                                <!-- Par défaut -->
+                                <i th:unless="${#strings.containsIgnoreCase(service.name, 'Fast-Food') or #strings.containsIgnoreCase(service.name, 'Salles') or #strings.containsIgnoreCase(service.name, 'Sanitaires') or #strings.containsIgnoreCase(service.name, 'Vitres') or #strings.containsIgnoreCase(service.name, 'Cuisine') or #strings.containsIgnoreCase(service.name, 'Caisse') or #strings.containsIgnoreCase(service.name, 'Drive') or #strings.containsIgnoreCase(service.name, 'Locaux Techniques') or #strings.containsIgnoreCase(service.name, 'Arrières') or #strings.containsIgnoreCase(service.name, 'Vestiaires') or #strings.containsIgnoreCase(service.name, 'Douches') or #strings.containsIgnoreCase(service.name, 'Extérieur')}" 
+                                   class="fas fa-broom fa-3x" 
+                                   style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center;"></i>
+                            </div>
+                            <h4 class="mb-0" th:text="${service.name}">Nom du Service</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="text-muted small">Prix</label>
+                                <p class="fw-bold text-primary" th:text="${service.price} + ' €'">0 €</p>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="text-muted small">Statut</label>
+                                <p>
+                                    <span class="badge" th:classappend="${service.active ? 'bg-success' : 'bg-secondary'}" th:text="${service.active ? 'Actif' : 'Inactif'}">
+                                        Actif
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="text-muted small">Description</label>
+                                <p th:text="${service.description}">Description complète...</p>
+                            </div>
+                            <div class="col-md-6 mb-3" th:if="${service.imageUrl}">
+                                <label class="text-muted small">Image URL</label>
+                                <p class="text-truncate">
+                                    <a th:href="${service.imageUrl}" target="_blank" th:text="${service.imageUrl}">URL</a>
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small">Date de Création</label>
+                                <p>
+                                    <i class="fas fa-calendar me-2"></i>
+                                    <span th:text="${#temporals.format(service.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a th:href="@{/admin/services/{id}/edit(id=${service.id})}" class="btn btn-primary">
+                            <i class="fas fa-edit me-2"></i>
+                            Modifier
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Modal de confirmation de suppression -->
-    <div class="modal fade" id="deleteModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmer la suppression</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Êtes-vous sûr de vouloir supprimer ce service ?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <form id="deleteForm" method="post" style="display: inline;">
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function deleteService(serviceId) {
-            document.getElementById('deleteForm').action = '/admin/services/' + serviceId + '/delete';
-            new bootstrap.Modal(document.getElementById('deleteModal')).show();
-        }
-    </script>
     
-    <div th:replace="~{layout :: footer}"></div>
-</body>
-</html>
+    <script>
+        // Ensure functions are available when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            'use strict';
+            
+            const searchInput = document.getElementById('searchServices');
+            const statusFilter = document.getElementById('statusFilter');
+            const sortSelect = document.getElementById('sortServices');
+            const servicesTable = document.getElementById('servicesTable');
+            const servicesCount = document.getElementById('servicesCount');
+            
+            // Function to filter and sort services
+            function filterAndSortServices() {
+                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+                const status = statusFilter ? statusFilter.value : '';
+                const sortBy = sortSelect ? sortSelect.value : 'name-asc';
+                
+                const rows = Array.from(servicesTable.querySelectorAll('tbody tr'));
+                let visibleCount = 0;
+                
+                // Filter rows
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const rowStatus = row.getAttribute('data-status') || '';
+                    
+                    // Check search term
+                    const matchesSearch = !searchTerm || text.includes(searchTerm);
+                    
+                    // Check status filter
+                    const matchesStatus = !status || 
+                        (status === 'active' && rowStatus === 'active') ||
+                        (status === 'inactive' && rowStatus === 'inactive');
+                    
+                    if (matchesSearch && matchesStatus) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                // Sort visible rows
+                const visibleRows = rows.filter(row => row.style.display !== 'none');
+                visibleRows.sort((a, b) => {
+                    switch(sortBy) {
+                        case 'name-asc':
+                            return (a.getAttribute('data-name') || '').localeCompare(b.getAttribute('data-name') || '');
+                        case 'name-desc':
+                            return (b.getAttribute('data-name') || '').localeCompare(a.getAttribute('data-name') || '');
+                        case 'price-asc':
+                            return parseFloat(a.getAttribute('data-price') || 0) - parseFloat(b.getAttribute('data-price') || 0);
+                        case 'price-desc':
+                            return parseFloat(b.getAttribute('data-price') || 0) - parseFloat(a.getAttribute('data-price') || 0);
+                        case 'date-desc':
+                            return (b.getAttribute('data-date') || '').localeCompare(a.getAttribute('data-date') || '');
+                        case 'date-asc':
+                            return (a.getAttribute('data-date') || '').localeCompare(b.getAttribute('data-date') || '');
+                        default:
+                            return 0;
+                    }
+                });
+                
+                // Reorder rows in DOM
+                const tbody = servicesTable.querySelector('tbody');
+                visibleRows.forEach(row => tbody.appendChild(row));
+                
+                // Update count
+                if (servicesCount) {
+                    servicesCount.textContent = visibleCount;
+                }
+                
+                // Update active filters indicator
+                updateActiveFiltersIndicator();
+            }
+            
+            // Function to update active filters indicator
+            function updateActiveFiltersIndicator() {
+                const searchTerm = searchInput ? searchInput.value.trim() : '';
+                const status = statusFilter ? statusFilter.value : '';
+                const sortBy = sortSelect ? sortSelect.value : 'name-asc';
+                
+                let activeCount = 0;
+                if (searchTerm) activeCount++;
+                if (status) activeCount++;
+                if (sortBy !== 'name-asc') activeCount++;
+                
+                const resetBtn = document.getElementById('resetFiltersServices');
+                const activeFiltersDiv = document.getElementById('activeFiltersServices');
+                const activeFiltersCount = document.getElementById('activeFiltersCountServices');
+                
+                if (activeCount > 0) {
+                    if (resetBtn) resetBtn.style.display = 'inline-block';
+                    if (activeFiltersDiv) activeFiltersDiv.style.display = 'block';
+                    if (activeFiltersCount) activeFiltersCount.textContent = activeCount;
+                } else {
+                    if (resetBtn) resetBtn.style.display = 'none';
+                    if (activeFiltersDiv) activeFiltersDiv.style.display = 'none';
+                }
+            }
+            
+            // Function to reset all filters
+            window.resetFiltersServices = function() {
+                if (searchInput) searchInput.value = '';
+                if (statusFilter) statusFilter.value = '';
+                if (sortSelect) sortSelect.value = 'name-asc';
+                filterAndSortServices();
+            }
+            
+            // Search functionality
+            if (searchInput) {
+                searchInput.addEventListener('keyup', filterAndSortServices);
+            }
+            
+            // Status filter
+            if (statusFilter) {
+                statusFilter.addEventListener('change', filterAndSortServices);
+            }
+            
+            // Sort functionality
+            if (sortSelect) {
+                sortSelect.addEventListener('change', filterAndSortServices);
+            }
+            
+            // Initial filter call to set correct count on page load
+            filterAndSortServices();
+            
+            // Update active filters indicator on any change
+            if (searchInput) searchInput.addEventListener('input', updateActiveFiltersIndicator);
+            if (statusFilter) statusFilter.addEventListener('change', updateActiveFiltersIndicator);
+            if (sortSelect) sortSelect.addEventListener('change', updateActiveFiltersIndicator);
+            
+            // Handle delete forms - intercept form submission
+            const deleteForms = document.querySelectorAll('.delete-service-form');
+            deleteForms.forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const serviceName = form.getAttribute('data-service-name') || 'ce service';
+                    const confirmMessage = 'Êtes-vous sûr de vouloir supprimer le service <strong>' + 
+                                          serviceName + '</strong> ? Cette action est irréversible et supprimera toutes les données associées.';
+                    
+                    const submitForm = function() {
+                        // Remove the event listener temporarily to avoid infinite loop
+                        const formClone = form.cloneNode(true);
+                        form.parentNode.replaceChild(formClone, form);
+                        formClone.submit();
+                    };
+                    
+                    // Use the same modal as in users page
+                    if (typeof window.showConfirmModal === 'function') {
+                        window.showConfirmModal(
+                            confirmMessage,
+                            submitForm
+                        );
+                    } else {
+                        // Fallback to native confirm if showConfirmModal is not available
+                        if (confirm('Êtes-vous sûr de vouloir supprimer le service "' + serviceName + '" ? Cette action est irréversible et supprimera toutes les données associées.')) {
+                            submitForm();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</div>

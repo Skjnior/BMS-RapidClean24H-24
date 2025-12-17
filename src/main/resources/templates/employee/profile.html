@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - BMS Clean Solutions</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
+    <link rel="apple-touch-icon" th:href="@{/images/logo Rapidclean.png}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 70px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        .page-header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-header h1 i {
+            color: #667eea;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        .card h2 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card h2 i {
+            color: #667eea;
+        }
+        .card h3 {
+            color: #667eea;
+            font-size: 20px;
+            margin: 30px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-group {
+            margin: 20px 0;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        label i {
+            color: #667eea;
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        /* Styles pour les boutons du contenu uniquement - exclut le navbar */
+        .card button:not(.employee-navbar button):not(.btn-logout),
+        .container button:not(.employee-navbar button):not(.btn-logout) {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .card button:not(.employee-navbar button):not(.btn-logout):hover,
+        .container button:not(.employee-navbar button):not(.btn-logout):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .card button:not(.employee-navbar button):not(.btn-logout) i,
+        .container button:not(.employee-navbar button):not(.btn-logout) i {
+            font-size: 18px;
+        }
+        .user-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        .info-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .info-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .info-label i {
+            color: #667eea;
+        }
+        .info-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .alert {
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+
+        @media (max-width: 991px) {
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            .page-header {
+                padding: 20px;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .card h2 {
+                font-size: 24px;
+            }
+
+            .card h3 {
+                font-size: 18px;
+            }
+
+            .user-info {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .info-item {
+                padding: 12px;
+            }
+
+            .info-value {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px 10px;
+            }
+
+            .page-header {
+                padding: 15px;
+            }
+
+            .page-header h1 {
+                font-size: 20px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .card h2 {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+
+            .card h3 {
+                font-size: 16px;
+                margin: 20px 0 15px 0;
+            }
+
+            .form-group {
+                margin: 15px 0;
+            }
+
+            label {
+                font-size: 14px;
+            }
+
+            input {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 14px;
+                width: 100%;
+            }
+
+            .user-info {
+                padding: 15px;
+                gap: 12px;
+            }
+
+            .info-item {
+                padding: 15px;
+            }
+
+            .info-label {
+                font-size: 11px;
+            }
+
+            .info-value {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{employee/fragments/navbar :: navbar}"></div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-user-circle"></i> <span th:text="${pageTitle}">Mon Profil</span></h1>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-id-card"></i> Mon Profil</h2>
+
+            <div class="user-info">
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-user"></i> Nom Complet</div>
+                    <div class="info-value" th:text="${user.fullName}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-envelope"></i> Email</div>
+                    <div class="info-value" th:text="${user.email}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-phone"></i> Téléphone</div>
+                    <div class="info-value" th:text="${user.phone}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-briefcase"></i> Rôle</div>
+                    <div class="info-value" th:text="${user.role.name()}"></div>
+                </div>
+            </div>
+
+            <h3><i class="fas fa-edit"></i> Modifier mes Informations</h3>
+            <form method="POST" th:action="@{/employee/profile}">
+                <div class="form-group">
+                    <label for="firstName"><i class="fas fa-signature"></i> Prénom:</label>
+                    <input type="text" id="firstName" name="firstName" th:value="${user.firstName}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName"><i class="fas fa-signature"></i> Nom:</label>
+                    <input type="text" id="lastName" name="lastName" th:value="${user.lastName}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone"><i class="fas fa-phone"></i> Téléphone:</label>
+                    <input type="tel" id="phone" name="phone" th:value="${user.phone}" required>
+                </div>
+
+                <button type="submit"><i class="fas fa-save"></i> Enregistrer les modifications</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS for dropdown -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+        });
+    </script>
+</body>
+</html>

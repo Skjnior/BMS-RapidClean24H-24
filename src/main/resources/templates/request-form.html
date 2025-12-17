@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Demande de Service - BMS Rapid Clean</title>
+    <title>Demande de Service - BMS Clean Solutions</title>
     <div th:replace="~{layout :: head}"></div>
 </head>
 <body>
@@ -21,42 +21,50 @@
                     </div>
                     <div class="card-body p-4">
                         <!-- Messages d'alerte -->
-                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px; border-left: 4px solid #28a745; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
                             <i class="fas fa-check-circle me-2"></i>
-                            <span th:text="${success}"></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <strong>Succès !</strong> <span th:text="${success}"></span>
+
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         
-                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px; border-left: 4px solid #dc3545; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
                             <i class="fas fa-exclamation-circle me-2"></i>
-                            <span th:text="${error}"></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <strong>Erreur !</strong> <span th:text="${error}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
 
                         <form th:action="@{/request-service}" th:object="${serviceRequest}" method="post">
+                            <!-- Honeypot field (anti-spam) -->
+                            <input type="text" name="website" autocomplete="off" tabindex="-1" style="position: absolute; left: -9999px;" aria-hidden="true">
+                            
+                            <!-- CSRF Token -->
+                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                            
                             <div class="row">
                                 <!-- Informations client -->
                                 <div class="col-md-6">
                                     <h5 class="text-primary mb-3">
-                                        <i class="fas fa-user me-2"></i>Vos Informations
+                                        <i class="fas fa-user me-2" aria-hidden="true"></i>Vos Informations
                                     </h5>
                                     
                                     <div class="mb-3">
-                                        <label for="clientName" class="form-label">Nom complet *</label>
+                                        <label for="clientName" class="form-label">Nom complet <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="clientName" name="clientName" 
-                                               placeholder="Jean Dupont" required>
+                                               placeholder="Jean Dupont" required aria-required="true" maxlength="100">
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label for="clientEmail" class="form-label">Email *</label>
+                                        <label for="clientEmail" class="form-label">Email <span class="text-danger">*</span></label>
                                         <input type="email" class="form-control" id="clientEmail" name="clientEmail" 
-                                               placeholder="jean.dupont@email.com" required>
+                                               placeholder="jean.dupont@email.com" required aria-required="true">
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label for="clientPhone" class="form-label">Téléphone *</label>
+                                        <label for="clientPhone" class="form-label">Téléphone <span class="text-danger">*</span></label>
                                         <input type="tel" class="form-control" id="clientPhone" name="clientPhone" 
-                                               placeholder="+33 6 12 34 56 78" required>
+                                               placeholder="+33 6 12 34 56 78" required aria-required="true" 
+                                               pattern="[\d\s\+\-\(\)]+">
                                     </div>
                                 </div>
                                 
@@ -67,8 +75,8 @@
                                     </h5>
                                     
                                     <div class="mb-3">
-                                        <label for="serviceType" class="form-label">Type de service *</label>
-                                        <select class="form-select" id="serviceType" name="serviceType" required>
+                                        <label for="serviceType" class="form-label">Type de service <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="serviceType" name="serviceType" required aria-required="true">
                                             <option value="">Sélectionnez un service</option>
                                             <option value="Nettoyage de bureaux">Nettoyage de bureaux</option>
                                             <option value="Nettoyage industriel">Nettoyage industriel</option>
@@ -82,38 +90,43 @@
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label for="address" class="form-label">Adresse d'intervention *</label>
+                                        <label for="address" class="form-label">Adresse d'intervention <span class="text-danger">*</span></label>
                                         <textarea class="form-control" id="address" name="address" rows="2" 
-                                                  placeholder="123 Rue de la Paix, 75001 Paris" required></textarea>
+                                                  placeholder="123 Rue de la Paix, 75001 Paris" required aria-required="true" 
+                                                  maxlength="500"></textarea>
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label for="serviceDate" class="form-label">Date souhaitée *</label>
-                                        <input type="datetime-local" class="form-control" id="serviceDate" name="serviceDate" required>
+                                        <label for="serviceDate" class="form-label">Date souhaitée <span class="text-danger">*</span></label>
+                                        <input type="datetime-local" class="form-control" id="serviceDate" name="serviceDate" 
+                                               required aria-required="true">
                                     </div>
                                     
                                     <div class="mb-3">
                                         <label for="price" class="form-label">Budget estimé (€)</label>
                                         <input type="number" class="form-control" id="price" name="price" 
-                                               placeholder="150" min="0" step="0.01">
+                                               placeholder="150" min="0" step="0.01" aria-describedby="priceHelp">
+                                        <small id="priceHelp" class="form-text text-muted">Optionnel</small>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- Description -->
                             <div class="mb-4">
-                                <label for="description" class="form-label">Description détaillée *</label>
+                                <label for="description" class="form-label">Description détaillée <span class="text-danger">*</span></label>
                                 <textarea class="form-control" id="description" name="description" rows="4" 
-                                          placeholder="Décrivez vos besoins en détail : superficie, type de sol, contraintes particulières, etc." required></textarea>
+                                          placeholder="Décrivez vos besoins en détail : superficie, type de sol, contraintes particulières, etc." 
+                                          required aria-required="true" maxlength="2000"></textarea>
+                                <small class="form-text text-muted">Maximum 2000 caractères</small>
                             </div>
                             
                             <!-- Boutons -->
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="/" class="btn btn-outline-secondary me-md-2">
-                                    <i class="fas fa-arrow-left me-2"></i>Retour
+                                <a href="/" class="btn btn-outline-secondary me-md-2" aria-label="Retourner à la page d'accueil">
+                                    <i class="fas fa-arrow-left me-2" aria-hidden="true"></i>Retour
                                 </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-paper-plane me-2"></i>Envoyer la demande
+                                <button type="submit" class="btn btn-primary" aria-label="Envoyer la demande de service">
+                                    <i class="fas fa-paper-plane me-2" aria-hidden="true"></i>Envoyer la demande
                                 </button>
                             </div>
                         </form>
@@ -153,6 +166,24 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Redirection automatique vers la page d'accueil après affichage du message de succès
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessage = document.querySelector('.alert-success');
+            const redirectToHome = /*[[${redirectToHome}]]*/ false;
+            
+            if (successMessage && redirectToHome) {
+                // Faire défiler vers le haut pour voir le message
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Rediriger vers la page d'accueil après 3 secondes
+                setTimeout(function() {
+                    window.location.href = '/';
+                }, 3000);
+            }
+        });
+    </script>
 
     <div th:replace="~{layout :: footer}"></div>
 </body>

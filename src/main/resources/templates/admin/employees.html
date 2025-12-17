@@ -1,0 +1,435 @@
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Breadcrumb -->
+        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb(null, null, null, 'Employés', 'fas fa-users-cog')}"></div>
+        
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">
+                    <i class="fas fa-users-cog me-2" style="color: #2c5aa0;"></i>
+                    Gestion des Employés
+                </h2>
+                <p class="text-muted mb-0">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Créez, modifiez et suivez les employés de votre organisation
+                </p>
+            </div>
+
+            <a th:href="@{/admin/employees/new}" class="btn btn-primary btn-lg shadow-sm">
+                <i class="fas fa-user-plus me-2"></i>
+                Ajouter un Employé
+            </a>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${employees.size()}">0</h3>
+                                <p class="mb-0 opacity-75">Employés Totaux</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-user-check fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${#lists.size(employees.?[enabled])}">0</h3>
+                                <p class="mb-0 opacity-75">Employés Actifs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${#lists.size(employees.?[firstLogin])}">0</h3>
+                                <p class="mb-0 opacity-75">Premières Connexions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters / Search -->
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-search me-2 text-primary"></i>Rechercher
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="searchEmployees" placeholder="Nom, email, téléphone...">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-toggle-on me-2 text-success"></i>Statut
+                        </label>
+                        <select class="form-select form-select-lg" id="statusFilter">
+                            <option value="">Tous les statuts</option>
+                            <option value="true">Actif</option>
+                            <option value="false">Inactif</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-key me-2 text-warning"></i>Première Connexion
+                        </label>
+                        <select class="form-select form-select-lg" id="firstLoginFilter">
+                            <option value="">Tous</option>
+                            <option value="true">En attente</option>
+                            <option value="false">Complétées</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employees Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2 text-primary"></i>
+                        Liste des Employés
+                        <span class="badge bg-primary ms-2" th:text="${employees.size()}">0</span>
+                    </h5>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="employeesTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th>Employé</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th style="width: 100px;">Statut</th>
+                                <th style="width: 130px;">1ère Connexion</th>
+                                <th style="width: 120px;">Date</th>
+                                <th style="width: 200px;" class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="employee : ${employees}" th:if="${!employees.isEmpty()}" 
+                                th:data-enabled="${employee.enabled}" 
+                                th:data-firstlogin="${employee.firstLogin}">
+                                <td>
+                                    <strong class="text-primary" th:text="'#' + ${employee.id}">#1</strong>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar me-3" 
+                                             style="width:45px;height:45px;border-radius:50%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                            <span th:text="${#strings.substring(employee.firstName,0,1) + #strings.substring(employee.lastName,0,1)}">AB</span>
+                                        </div>
+                                        <div>
+                                            <strong th:text="${employee.fullName}">Nom Complet</strong>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <i class="fas fa-envelope me-2 text-muted"></i>
+                                    <span th:text="${employee.email}">email@exemple.com</span>
+                                </td>
+                                <td>
+                                    <i class="fas fa-phone me-2 text-muted"></i>
+                                    <span th:text="${employee.phone}">+33 6 00 00 00 00</span>
+                                </td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${employee.enabled ? 'bg-success' : 'bg-secondary'}" 
+                                          th:text="${employee.enabled ? 'Actif' : 'Inactif'}">
+                                        Statut
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${employee.firstLogin ? 'bg-warning' : 'bg-success'}" 
+                                          th:text="${employee.firstLogin ? 'En Attente' : 'Complétée'}">
+                                        🔐
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar-alt me-1"></i>
+                                        <span th:text="${#temporals.format(employee.createdAt,'dd/MM/yyyy')}">01/01/2024</span>
+                                    </small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a th:href="@{/admin/employees/{id}/detail(id=${employee.id})}" 
+                                           class="btn btn-sm btn-success" 
+                                           title="Voir détail"
+                                           data-bs-toggle="tooltip">
+                                            <i class="fas fa-chart-line"></i>
+                                        </a>
+                                        <a th:href="@{/admin/employees/{id}/edit(id=${employee.id})}" 
+                                           class="btn btn-sm btn-primary" 
+                                           title="Modifier"
+                                           data-bs-toggle="tooltip">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-info" 
+                                                data-bs-toggle="modal" 
+                                                th:data-bs-target="'#viewEmployeeModal' + ${employee.id}" 
+                                                title="Voir détails">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-danger" 
+                                                onclick="confirmDeleteEmployee(this)" 
+                                                th:data-id="${employee.id}" 
+                                                th:data-name="${employee.fullName}"
+                                                title="Supprimer"
+                                                data-bs-toggle="tooltip">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${employees.isEmpty()}">
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="fas fa-users-slash fa-4x text-muted mb-3" style="opacity: 0.3;"></i>
+                                    <p class="text-muted fs-5">Aucun employé trouvé</p>
+                                    <a th:href="@{/admin/employees/new}" class="btn btn-primary mt-2">
+                                        <i class="fas fa-user-plus me-2"></i>Ajouter le premier employé
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Employee Modals -->
+        <div th:each="employee : ${employees}" class="modal fade" th:id="'viewEmployeeModal' + ${employee.id}" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header text-white" style="background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);">
+                        <h5 class="modal-title">
+                            <i class="fas fa-user-circle me-2"></i>
+                            Profil de <span th:text="${employee.fullName}">Employé</span>
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center mb-4">
+                            <div class="user-avatar mx-auto mb-3" 
+                                 style="width:100px;height:100px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:2.5rem;box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                                <span th:text="${#strings.substring(employee.firstName,0,1) + #strings.substring(employee.lastName,0,1)}">AB</span>
+                            </div>
+                            <h4 class="mt-3 mb-2" th:text="${employee.fullName}">Nom Complet</h4>
+                            <div>
+                                <span class="badge bg-success me-2" th:if="${employee.enabled}">
+                                    <i class="fas fa-check-circle me-1"></i>Actif
+                                </span>
+                                <span class="badge bg-secondary me-2" th:unless="${employee.enabled}">
+                                    <i class="fas fa-times-circle me-1"></i>Inactif
+                                </span>
+                                <span class="badge bg-warning" th:if="${employee.firstLogin}">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>En Attente
+                                </span>
+                                <span class="badge bg-success" th:unless="${employee.firstLogin}">
+                                    <i class="fas fa-check me-1"></i>Complétée
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small fw-bold">
+                                    <i class="fas fa-user me-2 text-primary"></i>Prénom
+                                </label>
+                                <p class="fw-bold mb-0" th:text="${employee.firstName}">Prénom</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small fw-bold">
+                                    <i class="fas fa-user me-2 text-primary"></i>Nom
+                                </label>
+                                <p class="fw-bold mb-0" th:text="${employee.lastName}">Nom</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small fw-bold">
+                                    <i class="fas fa-envelope me-2 text-info"></i>Email
+                                </label>
+                                <p class="mb-0">
+                                    <a th:href="'mailto:' + ${employee.email}" th:text="${employee.email}">email@exemple.com</a>
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small fw-bold">
+                                    <i class="fas fa-phone me-2 text-success"></i>Téléphone
+                                </label>
+                                <p class="mb-0">
+                                    <a th:href="'tel:' + ${employee.phone}" th:text="${employee.phone}">+33 6 00 00 00 00</a>
+                                </p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small fw-bold">
+                                    <i class="fas fa-calendar me-2 text-warning"></i>Date de création
+                                </label>
+                                <p class="mb-0" th:text="${#temporals.format(employee.createdAt,'dd/MM/yyyy HH:mm')}">01/01/2024</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-muted small fw-bold">
+                                    <i class="fas fa-hashtag me-2 text-danger"></i>ID
+                                </label>
+                                <p class="mb-0"><code th:text="${employee.id}">#1</code></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <a th:href="@{/admin/employees/{id}/detail(id=${employee.id})}" class="btn btn-success">
+                            <i class="fas fa-chart-line me-2"></i>Voir le Détail Complet
+                        </a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Fermer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Form (Hidden) -->
+        <form id="deleteEmployeeForm" method="post" th:action="@{/admin/employees/0/delete}" style="display: none;">
+            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+        </form>
+
+        <script>
+            // Initialize tooltips
+            document.addEventListener('DOMContentLoaded', function() {
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            });
+
+            // Combined filter function
+            function filterEmployees() {
+                const searchTerm = document.getElementById('searchEmployees')?.value.toLowerCase() || '';
+                const status = document.getElementById('statusFilter')?.value || '';
+                const firstLogin = document.getElementById('firstLoginFilter')?.value || '';
+                const rows = document.querySelectorAll('#employeesTable tbody tr');
+                let visibleCount = 0;
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const rowEnabled = row.getAttribute('data-enabled') || '';
+                    const rowFirstLogin = row.getAttribute('data-firstlogin') || '';
+                    
+                    const matchesSearch = !searchTerm || text.includes(searchTerm);
+                    const matchesStatus = !status || rowEnabled === status;
+                    const matchesFirstLogin = !firstLogin || rowFirstLogin === firstLogin;
+                    
+                    if (matchesSearch && matchesStatus && matchesFirstLogin) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                // Update count badge if exists
+                const countBadge = document.querySelector('.card-header .badge');
+                if (countBadge) {
+                    countBadge.textContent = visibleCount;
+                }
+            }
+
+            // Initialize filters when DOM is ready
+            document.addEventListener('DOMContentLoaded', function() {
+                // Search functionality
+                const searchInput = document.getElementById('searchEmployees');
+                if (searchInput) {
+                    searchInput.addEventListener('keyup', filterEmployees);
+                }
+
+                // Status filter
+                const statusFilter = document.getElementById('statusFilter');
+                if (statusFilter) {
+                    statusFilter.addEventListener('change', filterEmployees);
+                }
+
+                // First login filter
+                const firstLoginFilter = document.getElementById('firstLoginFilter');
+                if (firstLoginFilter) {
+                    firstLoginFilter.addEventListener('change', filterEmployees);
+                }
+            });
+
+            // Delete confirmation
+            function confirmDeleteEmployee(button) {
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const form = document.getElementById('deleteEmployeeForm');
+                
+                // Get CSRF token from meta tag
+                const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');
+                const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : null;
+                
+                // Get CSRF parameter name - for forms, use "_csrf" (not the header name)
+                // The meta tag _csrf_header contains the header name, but forms use parameter name
+                const csrfParamName = '_csrf'; // Standard parameter name for CookieCsrfTokenRepository
+                
+                // Set form action
+                form.action = '/admin/employees/' + id + '/delete';
+                
+                // Ensure CSRF token is in the form
+                if (csrfToken) {
+                    // Remove existing CSRF input if any
+                    const existingCsrf = form.querySelector('input[name*="csrf"]');
+                    if (existingCsrf) {
+                        existingCsrf.value = csrfToken;
+                        existingCsrf.name = csrfParamName;
+                    } else {
+                        // Add CSRF token input
+                        const csrfInput = document.createElement('input');
+                        csrfInput.type = 'hidden';
+                        csrfInput.name = csrfParamName;
+                        csrfInput.value = csrfToken;
+                        form.appendChild(csrfInput);
+                    }
+                } else {
+                    console.warn('CSRF token not found in meta tags');
+                }
+                
+                showConfirmModal(
+                    'Êtes-vous sûr de vouloir supprimer l\'employé <strong>' + name + '</strong> ? Cette action est irréversible et supprimera toutes les données associées.',
+                    function() {
+                        form.submit();
+                    }
+                );
+            }
+        </script>
+    </div>
+</div>

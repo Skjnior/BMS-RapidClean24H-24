@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content})}">
+<head>
+    <title>FAQ - Questions Fréquentes - BMS Clean Solutions</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Hero Section -->
+        <section class="py-5" style="background: var(--gradient-primary); color: white;">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-8 mx-auto">
+                        <h1 class="display-4 fw-bold mb-4">
+                            <i class="fas fa-question-circle me-3"></i>
+                            Questions Fréquentes
+                        </h1>
+                        <p class="lead">
+                            Trouvez rapidement les réponses à vos questions sur nos services de nettoyage professionnel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="accordion" id="faqAccordion" role="tablist" aria-label="FAQ">
+                            
+                            <!-- Question 1 -->
+                            <div class="accordion-item mb-3 border rounded shadow-sm">
+                                <h2 class="accordion-header" id="heading1">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse1" 
+                                            aria-expanded="false" aria-controls="collapse1"
+                                            aria-label="Quels services proposez-vous ?">
+                                        <i class="fas fa-broom me-3 text-primary"></i>
+                                        <strong>Quels services proposez-vous ?</strong>
+                                    </button>
+                                </h2>
+                                <div id="collapse1" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading1" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Nous proposons une gamme complète de services de nettoyage professionnel incluant :</p>
+                                        <ul>
+                                            <li>Nettoyage professionnel des fast-food</li>
+                                            <li>Nettoyage des salles</li>
+                                            <li>Entretien sanitaires</li>
+                                            <li>Nettoyage des vitres</li>
+                                            <li>Nettoyage de cuisine</li>
+                                            <li>Nettoyage extérieurs</li>
+                                            <li>Et bien plus encore...</li>
+                                        </ul>
+                                        <p class="mb-0">Tous nos services sont disponibles 24h/24 et 7j/7.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question 2 -->
+                            <div class="accordion-item mb-3 border rounded shadow-sm">
+                                <h2 class="accordion-header" id="heading2">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse2" 
+                                            aria-expanded="false" aria-controls="collapse2"
+                                            aria-label="Comment puis-je demander un service ?">
+                                        <i class="fas fa-calendar-plus me-3 text-success"></i>
+                                        <strong>Comment puis-je demander un service ?</strong>
+                                    </button>
+                                </h2>
+                                <div id="collapse2" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading2" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Vous pouvez demander un service de plusieurs façons :</p>
+                                        <ol>
+                                            <li>Remplissez le formulaire en ligne sur notre site</li>
+                                            <li>Contactez-nous par téléphone</li>
+                                            <li>Envoyez-nous un email via notre page de contact</li>
+                                        </ol>
+                                        <p class="mb-0">Après réception de votre demande, nous vous contacterons dans les plus brefs délais pour planifier l'intervention.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question 3 -->
+                            <div class="accordion-item mb-3 border rounded shadow-sm">
+                                <h2 class="accordion-header" id="heading3">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse3" 
+                                            aria-expanded="false" aria-controls="collapse3"
+                                            aria-label="Quels sont vos tarifs ?">
+                                        <i class="fas fa-euro-sign me-3 text-warning"></i>
+                                        <strong>Quels sont vos tarifs ?</strong>
+                                    </button>
+                                </h2>
+                                <div id="collapse3" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading3" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Nos tarifs varient selon le type de service, la taille des locaux et la fréquence des interventions.</p>
+                                        <p>Nous offrons :</p>
+                                        <ul>
+                                            <li>Devis gratuits et personnalisés</li>
+                                            <li>Tarifs compétitifs</li>
+                                            <li>Réductions pour les contrats réguliers</li>
+                                        </ul>
+                                        <p class="mb-0">Contactez-nous pour obtenir un devis gratuit adapté à vos besoins.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question 4 -->
+                            <div class="accordion-item mb-3 border rounded shadow-sm">
+                                <h2 class="accordion-header" id="heading4">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse4" 
+                                            aria-expanded="false" aria-controls="collapse4"
+                                            aria-label="Utilisez-vous des produits écologiques ?">
+                                        <i class="fas fa-leaf me-3 text-success"></i>
+                                        <strong>Utilisez-vous des produits écologiques ?</strong>
+                                    </button>
+                                </h2>
+                                <div id="collapse4" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading4" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Oui, nous sommes engagés pour l'environnement et utilisons principalement des produits écologiques et respectueux de l'environnement.</p>
+                                        <p class="mb-0">Tous nos produits sont certifiés et sûrs pour les personnes et l'environnement.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question 5 -->
+                            <div class="accordion-item mb-3 border rounded shadow-sm">
+                                <h2 class="accordion-header" id="heading5">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse5" 
+                                            aria-expanded="false" aria-controls="collapse5"
+                                            aria-label="Êtes-vous disponibles 24h/24 ?">
+                                        <i class="fas fa-clock me-3 text-info"></i>
+                                        <strong>Êtes-vous disponibles 24h/24 ?</strong>
+                                    </button>
+                                </h2>
+                                <div id="collapse5" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading5" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Oui, nous offrons des services de nettoyage disponibles 24 heures sur 24, 7 jours sur 7, y compris les weekends et jours fériés.</p>
+                                        <p class="mb-0">Notre équipe est toujours prête à répondre à vos besoins urgents.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question 6 -->
+                            <div class="accordion-item mb-3 border rounded shadow-sm">
+                                <h2 class="accordion-header" id="heading6">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse6" 
+                                            aria-expanded="false" aria-controls="collapse6"
+                                            aria-label="Vos employés sont-ils assurés ?">
+                                        <i class="fas fa-shield-alt me-3 text-primary"></i>
+                                        <strong>Vos employés sont-ils assurés ?</strong>
+                                    </button>
+                                </h2>
+                                <div id="collapse6" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading6" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Absolument ! Tous nos employés sont :</p>
+                                        <ul>
+                                            <li>Formés et certifiés</li>
+                                            <li>Assurés et couverts</li>
+                                            <li>Soumis à des vérifications de sécurité</li>
+                                        </ul>
+                                        <p class="mb-0">Nous sommes également assurés en responsabilité civile professionnelle.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question 7 -->
+                            <div class="accordion-item mb-3 border rounded shadow-sm">
+                                <h2 class="accordion-header" id="heading7">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse7" 
+                                            aria-expanded="false" aria-controls="collapse7"
+                                            aria-label="Que faire si je ne suis pas satisfait ?">
+                                        <i class="fas fa-star me-3 text-warning"></i>
+                                        <strong>Que faire si je ne suis pas satisfait ?</strong>
+                                    </button>
+                                </h2>
+                                <div id="collapse7" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading7" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Votre satisfaction est notre priorité. Si vous n'êtes pas satisfait du service :</p>
+                                        <ol>
+                                            <li>Contactez-nous immédiatement</li>
+                                            <li>Nous reviendrons corriger le problème gratuitement</li>
+                                            <li>Nous garantissons votre satisfaction à 100%</li>
+                                        </ol>
+                                        <p class="mb-0">Notre équipe est toujours prête à répondre à vos préoccupations.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question 8 -->
+                            <div class="accordion-item mb-3 border rounded shadow-sm">
+                                <h2 class="accordion-header" id="heading8">
+                                    <button class="accordion-button collapsed" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse8" 
+                                            aria-expanded="false" aria-controls="collapse8"
+                                            aria-label="Proposez-vous des contrats réguliers ?">
+                                        <i class="fas fa-calendar-check me-3 text-success"></i>
+                                        <strong>Proposez-vous des contrats réguliers ?</strong>
+                                    </button>
+                                </h2>
+                                <div id="collapse8" class="accordion-collapse collapse" 
+                                     aria-labelledby="heading8" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Oui, nous proposons des contrats de nettoyage réguliers (quotidien, hebdomadaire, mensuel) avec des avantages :</p>
+                                        <ul>
+                                            <li>Tarifs préférentiels</li>
+                                            <li>Planning personnalisé</li>
+                                            <li>Équipe dédiée</li>
+                                            <li>Suivi de qualité régulier</li>
+                                        </ul>
+                                        <p class="mb-0">Contactez-nous pour discuter de vos besoins spécifiques.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact CTA -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="display-6 fw-bold mb-3">Vous avez d'autres questions ?</h2>
+                        <p class="lead text-muted mb-4">
+                            Notre équipe est là pour vous aider. Contactez-nous dès aujourd'hui !
+                        </p>
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <a href="/contact" class="btn btn-primary btn-lg" aria-label="Nous contacter">
+                                <i class="fas fa-envelope me-2"></i>Nous Contacter
+                            </a>
+                            <a href="/request-service" class="btn btn-outline-primary btn-lg" aria-label="Demander un service">
+                                <i class="fas fa-calendar-plus me-2"></i>Demander un Service
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <style>
+        .accordion-button {
+            font-size: 1.1rem;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .accordion-button:focus {
+            box-shadow: 0 0 0 0.25rem rgba(44, 90, 160, 0.25);
+        }
+        
+        .accordion-body {
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        
+        .accordion-body ul, .accordion-body ol {
+            padding-left: 1.5rem;
+        }
+        
+        .accordion-body li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</body>
+</html>
+
+
+

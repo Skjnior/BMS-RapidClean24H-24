@@ -1,0 +1,149 @@
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Back Button & Header -->
+        <div class="mb-4">
+            <a th:href="@{/admin/employees/{id}/detail(id=${employee.id})}" class="btn btn-outline-secondary mb-3">
+                <i class="fas fa-arrow-left me-2"></i> Retour au détail
+            </a>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="fas fa-calendar-xmark me-2" style="color: #f39c12;"></i>
+                        <span th:text="${pageTitle}">Absences</span>
+                    </h2>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-user me-2"></i>
+                        <span th:text="${employee.fullName}">Nom Employé</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-chart-bar fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${absences.size()}">0</h3>
+                                <p class="mb-0 opacity-75">Total Absences</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-stethoscope fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${#lists.size(absences.?[type.name() == 'SICK_LEAVE'])}">0</h3>
+                                <p class="mb-0 opacity-75">Congés Maladie</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-plane fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="mb-0" th:text="${#lists.size(absences.?[type.name() == 'PAID_LEAVE'])}">0</h3>
+                                <p class="mb-0 opacity-75">Congés Payés</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Absences Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0">
+                    <i class="fas fa-list-check me-2 text-primary"></i>
+                    Historique des Absences
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" th:if="${!absences.isEmpty()}">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 150px;">
+                                    <i class="fas fa-calendar me-2 text-primary"></i>Date d'Absence
+                                </th>
+                                <th style="width: 150px;">
+                                    <i class="fas fa-tag me-2 text-primary"></i>Type
+                                </th>
+                                <th>
+                                    <i class="fas fa-align-left me-2 text-primary"></i>Motif / Justification
+                                </th>
+                                <th style="width: 180px;">
+                                    <i class="fas fa-clock me-2 text-primary"></i>Déclarée le
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="absence : ${absences}">
+                                <td>
+                                    <strong th:text="${#temporals.format(absence.absenceDate, 'dd/MM/yyyy')}">01/01/2024</strong>
+                                </td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${absence.type.name() == 'SICK_LEAVE' ? 'bg-danger' : (absence.type.name() == 'PAID_LEAVE' ? 'bg-info' : (absence.type.name() == 'HOLIDAY' ? 'bg-warning' : 'bg-secondary'))}"
+                                          th:text="${absence.type.label}">
+                                        Type
+                                    </span>
+                                </td>
+                                <td>
+                                    <span th:text="${absence.reason != null and !absence.reason.isEmpty() ? absence.reason : 'Pas de motif indiqué'}" 
+                                          class="text-muted">Motif</span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar-alt me-1"></i>
+                                        <span th:text="${#temporals.format(absence.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span>
+                                    </small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${absences.isEmpty()}" class="text-center py-5">
+                        <i class="fas fa-smile-wink fa-4x text-muted mb-3" style="opacity: 0.3;"></i>
+                        <p class="text-muted fs-5">Aucune absence déclarée par cet employé</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

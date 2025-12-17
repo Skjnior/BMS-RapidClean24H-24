@@ -1,0 +1,295 @@
+<div th:fragment="user-menu" class="user-menu-dropdown dropdown">
+    <div class="user-menu-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="userMenuDropdown" style="cursor: pointer; text-decoration: none; color: white;">
+        <div class="user-avatar-small">
+            <i class="fas fa-user-tie"></i>
+        </div>
+        <div class="user-info-small d-none d-lg-block">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.2;" th:text="${currentUser != null ? currentUser.fullName : 'Employé'}">Employé</div>
+            <div style="font-size: 11px; opacity: 0.8; line-height: 1.2;" th:text="${currentUser != null ? currentUser.role.name() : 'EMPLOYEE'}">EMPLOYEE</div>
+        </div>
+        <i class="fas fa-chevron-down ms-2 d-none d-lg-inline" style="font-size: 0.8rem; opacity: 0.8;"></i>
+    </div>
+    <ul class="dropdown-menu dropdown-menu-end shadow-lg user-menu-dropdown-menu" aria-labelledby="userMenuDropdown" style="margin-top: 10px !important; border-radius: 10px; border: none; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); padding: 10px; min-width: 250px;">
+        <li>
+            <div class="px-3 py-2 border-bottom">
+                <h6 class="mb-0" style="font-size: 14px; font-weight: 600; color: #2c3e50;" th:text="${currentUser != null ? currentUser.fullName : 'Employé'}">Employé</h6>
+                <small class="text-muted" style="font-size: 12px;" th:text="${currentUser != null ? currentUser.email : ''}">email@example.com</small>
+            </div>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" href="/employee/profile" style="padding: 10px 15px; border-radius: 8px; margin: 2px 0; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #2c3e50;">
+                <i class="fas fa-user" style="width: 20px; text-align: center; color: #667eea;"></i> 
+                <span>Mon Profil</span>
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="/employee/dashboard" style="padding: 10px 15px; border-radius: 8px; margin: 2px 0; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #2c3e50;">
+                <i class="fas fa-tachometer-alt" style="width: 20px; text-align: center; color: #667eea;"></i> 
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                <button type="submit" class="dropdown-item text-danger" style="padding: 10px 15px; border-radius: 8px; margin: 2px 0; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; background: none; border: none; width: 100%; text-align: left; cursor: pointer; color: #dc3545 !important; font-weight: 500;">
+                    <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> 
+                    <span>Déconnexion</span>
+                </button>
+            </form>
+        </li>
+    </ul>
+</div>
+
+<style>
+    .user-menu-dropdown {
+        position: relative;
+        margin-left: auto;
+    }
+    
+    .user-menu-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        border: none;
+        outline: none;
+    }
+    
+    .user-menu-toggle:hover,
+    .user-menu-toggle:focus,
+    .user-menu-toggle.show {
+        background: rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+    }
+    
+    .user-menu-toggle::after {
+        display: none;
+    }
+    
+    .user-avatar-small {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+    
+    .user-info-small {
+        color: white;
+        text-align: left;
+        line-height: 1.2;
+        min-width: 0;
+    }
+    
+    .user-menu-dropdown .dropdown-menu {
+        margin-top: 10px !important;
+        border-radius: 12px;
+        border: 2px solid rgba(102, 126, 234, 0.2) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
+        padding: 15px;
+        min-width: 280px;
+        background: white !important;
+        z-index: 1050 !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+    
+    .user-menu-dropdown .dropdown-item {
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin: 2px 0;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: #2c3e50;
+    }
+    
+    .user-menu-dropdown .dropdown-item:hover {
+        background: #f8f9fa !important;
+        transform: translateX(5px);
+        color: #2c3e50 !important;
+    }
+    
+    .user-menu-dropdown .dropdown-item i {
+        width: 20px;
+        text-align: center;
+        color: #667eea;
+    }
+    
+    .user-menu-dropdown .dropdown-item.text-danger {
+        color: #dc3545 !important;
+    }
+    
+    .user-menu-dropdown .dropdown-item.text-danger:hover {
+        background: #f8d7da !important;
+        color: #721c24 !important;
+    }
+    
+    @media (max-width: 991px) {
+        .user-info-small {
+            display: none !important;
+        }
+        
+        .user-menu-toggle i.fa-chevron-down {
+            display: none !important;
+        }
+
+        .user-menu-dropdown {
+            margin-left: auto;
+        }
+
+        .user-menu-toggle {
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .user-menu-toggle:hover,
+        .user-menu-toggle:focus,
+        .user-menu-toggle.show {
+            background: rgba(255, 255, 255, 0.25) !important;
+        }
+
+        .user-avatar-small {
+            width: 42px;
+            height: 42px;
+            font-size: 17px;
+            background: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .user-menu-dropdown .dropdown-menu {
+            min-width: 320px !important;
+            padding: 20px !important;
+            border-width: 3px !important;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3) !important;
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        .user-menu-dropdown .dropdown-item {
+            padding: 14px 18px !important;
+            font-size: 15px !important;
+        }
+
+        .user-menu-dropdown .dropdown-item i {
+            font-size: 18px !important;
+            width: 24px !important;
+        }
+
+        .user-menu-dropdown .px-3.py-2 {
+            padding: 15px 20px !important;
+        }
+
+        .user-menu-dropdown .px-3.py-2 h6 {
+            font-size: 16px !important;
+            font-weight: 700 !important;
+        }
+
+        .user-menu-dropdown .px-3.py-2 small {
+            font-size: 13px !important;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .user-menu-dropdown {
+            margin-left: auto;
+            margin-top: 0;
+        }
+
+        .user-menu-toggle {
+            padding: 12px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .user-menu-toggle:hover,
+        .user-menu-toggle:focus,
+        .user-menu-toggle.show {
+            background: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .user-avatar-small {
+            width: 48px;
+            height: 48px;
+            font-size: 20px;
+            background: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-menu-dropdown .dropdown-menu {
+            min-width: calc(100vw - 40px) !important;
+            max-width: 380px !important;
+            right: 0 !important;
+            left: auto !important;
+            transform: none !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding: 25px !important;
+            border-width: 3px !important;
+            border-color: #667eea !important;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4) !important;
+            margin-top: 15px !important;
+        }
+
+        .user-menu-dropdown .dropdown-item {
+            padding: 16px 20px !important;
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            margin: 4px 0 !important;
+        }
+
+        .user-menu-dropdown .dropdown-item i {
+            font-size: 20px !important;
+            width: 26px !important;
+        }
+
+        .user-menu-dropdown .px-3.py-2 {
+            padding: 18px 20px !important;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+            border-radius: 10px;
+            margin-bottom: 10px !important;
+        }
+
+        .user-menu-dropdown .px-3.py-2 h6 {
+            font-size: 18px !important;
+            font-weight: 700 !important;
+            color: #2c3e50 !important;
+            margin-bottom: 5px !important;
+        }
+
+        .user-menu-dropdown .px-3.py-2 small {
+            font-size: 14px !important;
+            color: #667eea !important;
+            font-weight: 500 !important;
+        }
+
+        .user-menu-dropdown .dropdown-divider {
+            margin: 12px 0 !important;
+            border-color: #e9ecef !important;
+            border-width: 2px !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .navbar nav .nav-text {
+            display: none;
+        }
+        
+        .navbar nav a {
+            padding: 8px;
+        }
+    }
+</style>
+

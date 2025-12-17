@@ -14,6 +14,6 @@ public class AdminAuthController {
         if (error != null) {
             model.addAttribute("error", "Email ou mot de passe incorrect");
         }
-        return "admin/login-simple";
+        return "admin/login";
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,11 +23,8 @@ public class HomeController {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    @Autowired
-    private ContactMessageRepository contactMessageRepository;
-
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, @RequestParam(required = false) Boolean passwordChanged) {
         List<Service> services = serviceRepository.findByActiveTrue();
         List<Review> reviews = reviewRepository.findByApprovedTrueOrderByCreatedAtDesc();
         
@@ -60,9 +58,29 @@ public class HomeController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("contactMessage", new ContactMessage());
         model.addAttribute("review", new Review());
+        
+        // Gérer le message de succès après changement de mot de passe
+        if (passwordChanged != null && passwordChanged) {
+            model.addAttribute("success", "✅ Mot de passe modifié avec succès ! Veuillez vous reconnecter avec votre nouveau mot de passe.");
+        }
+        
         return "landing";
     }
-
-
-
+    
+    @GetMapping("/privacy-policy")
+    public String privacyPolicy(Model model) {
+        model.addAttribute("title", "Politique de Confidentialité - BMS RapidClean");
+        return "privacy-policy";
+    }
+    
+    @GetMapping("/faq")
+    public String faq(Model model) {
+        model.addAttribute("title", "FAQ - Questions Fréquentes - BMS RapidClean");
+        return "faq";
+    }
+    
+    @GetMapping("/error")
+    public String error(Model model) {
+        return "error";
+    }
 }

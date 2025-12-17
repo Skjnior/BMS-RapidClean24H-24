@@ -1,4 +1,4 @@
-// BMS Rapid Clean - Main JavaScript
+// BMS Clean Solutions - Main JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all components

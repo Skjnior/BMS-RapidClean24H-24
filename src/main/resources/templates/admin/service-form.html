@@ -1,113 +1,376 @@
-<!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title th:text="${service.id != null ? 'Modifier le Service' : 'Nouveau Service'} - Admin BMS Rapid Clean</title>
-    <div th:replace="~{layout :: head}"></div>
-</head>
-<body>
-    <div th:replace="~{layout :: navbar}"></div>
-
-    <div class="container py-4">
-        <!-- Header -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/services">Services</a></li>
-                        <li class="breadcrumb-item active" th:text="${service.id != null ? 'Modifier' : 'Nouveau'}">Nouveau</li>
-                    </ol>
-                </nav>
-                <h2 class="mb-0">
-                    <i class="fas fa-tools me-2"></i>
-                    <span th:text="${service.id != null ? 'Modifier le Service' : 'Nouveau Service'}">Nouveau Service</span>
-                </h2>
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Breadcrumb -->
+        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb('Services', '/admin/services', 'fas fa-broom', (service.id != null ? 'Modifier le Service' : 'Créer un Service'), 'fas fa-edit')}"></div>
+        
+        <!-- Page Header with Gradient -->
+        <div class="mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <a th:href="@{/admin/services}" class="btn btn-outline-secondary btn-sm" style="border-radius: 25px; padding: 8px 20px;">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Retour
+                </a>
+            </div>
+            
+            <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; overflow: hidden;">
+                <div class="card-body text-white p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="me-4" style="width: 70px; height: 70px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-broom fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h2 class="mb-1 text-white fw-bold">
+                                <span th:text="${service.id != null ? 'Modifier le Service' : 'Créer un Nouveau Service'}">Nouveau Service</span>
+                            </h2>
+                            <p class="mb-0 opacity-90" th:text="${service.id != null ? 'Modifiez les informations du service' : 'Ajoutez un nouveau service de nettoyage'}">Description</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Messages d'alerte -->
-        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            <span th:text="${success}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
         
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>
-            <span th:text="${error}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-
-        <!-- Formulaire -->
-        <div class="row justify-content-center">
+        <!-- Form Card -->
+        <div class="row">
             <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-body">
+                <div class="card animate-fade-in border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                    <div class="card-header border-0" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px;">
+                        <h3 class="card-title mb-0 fw-bold" style="color: #2c5aa0;">
+                            <i class="fas fa-edit me-2" style="color: #667eea;"></i>
+                            Informations du Service
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
                         <form th:action="${service.id != null ? '/admin/services/' + service.id + '/update' : '/admin/services'}" 
-                              th:object="${service}" method="post">
+                              th:object="${service}" 
+                              method="post"
+                              enctype="multipart/form-data">
                             
-                            <!-- Nom du service -->
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Nom du service *</label>
-                                <input type="text" class="form-control" id="name" name="name" 
-                                       th:field="*{name}" placeholder="Ex: Nettoyage de bureaux" required>
+                            <input type="hidden" th:field="*{id}" th:if="${service.id != null}"/>
+                            
+                            <!-- Nom du Service -->
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-bold" style="color: #2c5aa0;">
+                                    <i class="fas fa-tag me-2" style="color: #667eea;"></i>
+                                    Nom du Service <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control form-control-lg" 
+                                       id="name" 
+                                       th:field="*{name}" 
+                                       placeholder="Ex: Nettoyage professionnel des fast-food"
+                                       required
+                                       style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;">
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1 text-muted"></i>
+                                    Donnez un nom clair et descriptif au service
+                                </div>
                             </div>
                             
                             <!-- Description -->
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description *</label>
-                                <textarea class="form-control" id="description" name="description" rows="4" 
+                            <div class="mb-4">
+                                <label for="description" class="form-label fw-bold" style="color: #2c5aa0;">
+                                    <i class="fas fa-align-left me-2" style="color: #667eea;"></i>
+                                    Description <span class="text-danger">*</span>
+                                </label>
+                                <textarea class="form-control" 
+                                          id="description" 
                                           th:field="*{description}" 
-                                          placeholder="Décrivez le service en détail..." required></textarea>
+                                          rows="6" 
+                                          placeholder="Décrivez en détail ce service..."
+                                          required
+                                          style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease; resize: vertical;"></textarea>
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1 text-muted"></i>
+                                    Décrivez les détails et avantages du service
+                                </div>
                             </div>
                             
                             <!-- Prix -->
-                            <div class="mb-3">
-                                <label for="price" class="form-label">Prix (€) *</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="price" name="price" 
-                                           th:field="*{price}" placeholder="150" min="0" step="0.01" required>
-                                    <span class="input-group-text">€</span>
+                            <div class="mb-4">
+                                <label for="price" class="form-label fw-bold" style="color: #2c5aa0;">
+                                    <i class="fas fa-euro-sign me-2" style="color: #667eea;"></i>
+                                    Prix (€) <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="price" 
+                                           th:field="*{price}" 
+                                           step="0.01" 
+                                           min="0"
+                                           placeholder="0.00"
+                                           required
+                                           style="border-radius: 10px 0 0 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;">
+                                    <span class="input-group-text" style="border-radius: 0 10px 10px 0; border: 2px solid #e9ecef; border-left: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600;">€</span>
+                                </div>
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1 text-muted"></i>
+                                    Prix du service en euros
                                 </div>
                             </div>
                             
-                            <!-- URL de l'image -->
-                            <div class="mb-3">
-                                <label for="imageUrl" class="form-label">URL de l'image</label>
-                                <input type="url" class="form-control" id="imageUrl" name="imageUrl" 
-                                       th:field="*{imageUrl}" placeholder="https://example.com/image.jpg">
-                                <div class="form-text">Laissez vide si pas d'image</div>
+                            <!-- Image Upload -->
+                            <div class="mb-4">
+                                <label for="imageFile" class="form-label fw-bold" style="color: #2c5aa0;">
+                                    <i class="fas fa-image me-2" style="color: #667eea;"></i>
+                                    Image du Service
+                                </label>
+                                <div class="border rounded p-3" style="border: 2px dashed #e9ecef; border-radius: 10px; background: #f8f9fa; transition: all 0.3s ease;" 
+                                     onmouseover="this.style.borderColor='#667eea'; this.style.background='#f0f4ff';" 
+                                     onmouseout="this.style.borderColor='#e9ecef'; this.style.background='#f8f9fa';">
+                                    <input type="file" 
+                                           class="form-control" 
+                                           id="imageFile" 
+                                           name="imageFile"
+                                           accept="image/*"
+                                           style="border: none; background: transparent;">
+                                </div>
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1 text-muted"></i>
+                                    Téléchargez une image pour représenter le service (optionnel, formats: JPG, PNG, GIF)
+                                </div>
+                                <div th:if="${service.imageUrl != null && !service.imageUrl.isEmpty()}" class="mt-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-image me-2 text-primary"></i>
+                                        <small class="fw-bold text-muted">Image actuelle:</small>
+                                    </div>
+                                    <div class="border rounded p-2" style="display: inline-block; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                        <img th:src="@{'/images/services/' + ${service.imageUrl}}" 
+                                             alt="Image du service" 
+                                             class="img-thumbnail" 
+                                             style="max-width: 250px; max-height: 250px; border-radius: 8px; border: none;"
+                                             onerror="this.style.display='none'">
+                                    </div>
+                                    <input type="hidden" th:field="*{imageUrl}" id="imageUrl">
+                                </div>
+                                <div id="imagePreview" class="mt-3" style="display: none;">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-eye me-2 text-success"></i>
+                                        <small class="fw-bold text-success">Aperçu de la nouvelle image:</small>
+                                    </div>
+                                </div>
                             </div>
                             
-                            <!-- Statut -->
-                            <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="active" name="active" 
-                                           th:checked="*{active}">
-                                    <label class="form-check-label" for="active">
-                                        Service actif
+                            <!-- Statut Actif -->
+                            <div class="mb-4 p-3 rounded" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #667eea;">
+                                <div class="form-check form-switch form-switch-lg">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           id="active" 
+                                           th:field="*{active}"
+                                           th:checked="${service.active == null || service.active}"
+                                           style="width: 3rem; height: 1.5rem; cursor: pointer;">
+                                    <label class="form-check-label fw-bold ms-3" for="active" style="color: #2c5aa0; cursor: pointer;">
+                                        <i class="fas fa-toggle-on me-2" style="color: #667eea;"></i>
+                                        Service Actif
                                     </label>
                                 </div>
-                                <div class="form-text">Un service inactif ne sera pas affiché sur le site public</div>
+                                <div class="form-text ms-5 mt-1">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Les services actifs sont visibles sur le site
+                                </div>
                             </div>
                             
-                            <!-- Boutons -->
-                            <div class="d-flex justify-content-between">
-                                <a href="/admin/services" class="btn btn-outline-secondary">
-                                    <i class="fas fa-arrow-left me-2"></i>Retour
-                                </a>
-                                <button type="submit" class="btn btn-primary">
+                            <hr class="my-4" style="border-top: 2px solid #e9ecef;">
+                            
+                            <!-- Actions -->
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-lg" 
+                                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 25px; padding: 12px 30px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease;"
+                                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)';"
+                                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';">
                                     <i class="fas fa-save me-2"></i>
-                                    <span th:text="${service.id != null ? 'Mettre à jour' : 'Créer'}">Créer</span>
+                                    <span th:text="${service.id != null ? 'Mettre à Jour' : 'Créer le Service'}">Enregistrer</span>
                                 </button>
+                                <a th:href="@{/admin/services}" class="btn btn-lg btn-outline-secondary" 
+                                   style="border-radius: 25px; padding: 12px 30px; font-weight: 600; border: 2px solid #e9ecef; transition: all 0.3s ease;"
+                                   onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea';"
+                                   onmouseout="this.style.borderColor='#e9ecef'; this.style.color='#6c757d';">
+                                    <i class="fas fa-times me-2"></i>
+                                    Annuler
+                                </a>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Info Sidebar -->
+            <div class="col-lg-4">
+                <div class="card animate-fade-in border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                    <div class="card-header border-0" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px;">
+                        <h3 class="card-title mb-0 fw-bold" style="color: #2c5aa0;">
+                            <i class="fas fa-info-circle me-2" style="color: #667eea;"></i>
+                            Aide & Conseils
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <h6 class="fw-bold mb-3" style="color: #2c5aa0;">
+                                <i class="fas fa-lightbulb me-2" style="color: #ffc107;"></i>Conseils
+                            </h6>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <span class="small">Utilisez un nom clair et descriptif</span>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <span class="small">La description doit expliquer ce qui est inclus</span>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <span class="small">Le prix doit être compétitif</span>
+                                </li>
+                                <li class="mb-0 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <span class="small">Ajoutez une image de qualité</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <hr style="border-top: 2px solid #e9ecef;">
+                        
+                        <div>
+                            <h6 class="fw-bold mb-3" style="color: #2c5aa0;">
+                                <i class="fas fa-check-circle me-2" style="color: #28a745;"></i>Bonnes Pratiques
+                            </h6>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-star text-warning me-2 mt-1"></i>
+                                    <span class="small">Mettez à jour régulièrement</span>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-star text-warning me-2 mt-1"></i>
+                                    <span class="small">Soyez précis sur les prestations</span>
+                                </li>
+                                <li class="mb-0 d-flex align-items-start">
+                                    <i class="fas fa-star text-warning me-2 mt-1"></i>
+                                    <span class="small">Indiquez la durée estimée</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preview Card -->
+                <div class="card animate-fade-in mt-3 border-0 shadow-sm" th:if="${service.id != null}" style="border-radius: 15px; overflow: hidden;">
+                    <div class="card-header border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px;">
+                        <h3 class="card-title mb-0 text-white fw-bold">
+                            <i class="fas fa-clock me-2"></i>
+                            Informations
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3 p-3 rounded" style="background: #f8f9fa;">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-hashtag me-2" style="color: #667eea;"></i>
+                                <strong style="color: #2c5aa0;">ID:</strong>
+                            </div>
+                            <span class="badge bg-primary" style="font-size: 1rem; padding: 8px 15px;" th:text="'#' + ${service.id}">#1</span>
+                        </div>
+                        <div class="p-3 rounded" th:if="${service.createdAt != null}" style="background: #f8f9fa;">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-calendar me-2" style="color: #667eea;"></i>
+                                <strong style="color: #2c5aa0;">Créé le:</strong>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock me-2 text-muted"></i>
+                                <span class="small" th:text="${#temporals.format(service.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div th:replace="~{layout :: footer}"></div>
-</body>
-</html>
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            const forms = document.querySelectorAll('form');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+        
+        // Image preview
+        const imageFileInput = document.getElementById('imageFile');
+        if (imageFileInput) {
+            imageFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Créer ou mettre à jour la prévisualisation
+                        let previewContainer = document.getElementById('imagePreview');
+                        if (!previewContainer) {
+                            previewContainer = document.createElement('div');
+                            previewContainer.id = 'imagePreview';
+                            previewContainer.className = 'mt-3';
+                            imageFileInput.closest('.mb-4').appendChild(previewContainer);
+                        }
+                        
+                        previewContainer.innerHTML = `
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-eye me-2 text-success"></i>
+                                <small class="fw-bold text-success">Aperçu de la nouvelle image:</small>
+                            </div>
+                            <div class="border rounded p-2" style="display: inline-block; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                <img src="${e.target.result}" 
+                                     alt="Aperçu" 
+                                     class="img-thumbnail" 
+                                     style="max-width: 250px; max-height: 250px; border-radius: 8px; border: none; display: block;">
+                            </div>
+                        `;
+                        previewContainer.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Add focus effects to form inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = '#667eea';
+                    this.style.boxShadow = '0 0 0 0.2rem rgba(102, 126, 234, 0.25)';
+                });
+                input.addEventListener('blur', function() {
+                    this.style.borderColor = '#e9ecef';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+    
+    <style>
+        .form-control:focus {
+            border-color: #667eea !important;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+        }
+        
+        .form-switch .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+        }
+    </style>
+</div>

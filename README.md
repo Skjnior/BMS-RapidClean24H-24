@@ -1,7 +1,7 @@
-# BMS Rapid Clean - Service de Nettoyage 24h/24
+# BMS Clean Solutions - Service de Nettoyage 24h/24
 
 ## Description
-BMS Rapid Clean est une application web moderne développée avec Spring Boot pour gérer les services de nettoyage professionnel disponibles 24h/24. L'application offre une interface élégante et moderne avec des fonctionnalités complètes pour les administrateurs et les clients.
+BMS Clean Solutions est une application web moderne développée avec Spring Boot pour gérer les services de nettoyage professionnel disponibles 24h/24. L'application offre une interface élégante et moderne avec des fonctionnalités complètes pour les administrateurs et les clients.
 
 ## Fonctionnalités
 

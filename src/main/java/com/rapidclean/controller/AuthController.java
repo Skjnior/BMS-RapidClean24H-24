@@ -1,9 +1,8 @@
 package com.rapidclean.controller;
 
-import com.rapidclean.entity.User;
-import com.rapidclean.repository.UserRepository;
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
+import com.rapidclean.entity.User;
+import com.rapidclean.repository.UserRepository;
 
 @Controller
 public class AuthController {
@@ -20,7 +20,11 @@ public class AuthController {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private com.rapidclean.security.SecurityConfig securityConfig;
+    
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder() {
+        return securityConfig.passwordEncoder();
+    }
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error, Model model) {
@@ -44,7 +48,7 @@ public class AuthController {
                 return "redirect:/register";
             }
 
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPassword(passwordEncoder().encode(user.getPassword()));
             user.setRole(User.Role.CLIENT);
             userRepository.save(user);
 

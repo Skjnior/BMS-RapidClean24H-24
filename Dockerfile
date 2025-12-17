@@ -1,8 +1,8 @@
-# BMS Rapid Clean - Dockerfile
+# BMS Clean Solutions - Dockerfile
 FROM openjdk:17-jdk-slim
 
 # Informations sur l'image
-LABEL maintainer="BMS Rapid Clean <info@bmsrapidclean.com>"
+LABEL maintainer="BMS Clean Solutions <info@bmsrapidclean.com>"
 LABEL description="Service de nettoyage professionnel 24h/24"
 LABEL version="1.0.0"
 

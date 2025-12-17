@@ -1,177 +1,718 @@
-<!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
-<head>
-    <title>Messages - BMS Rapid Clean Admin</title>
-</head>
-<body>
+<div th:replace="~{admin/layout :: layout(~{::content})}">
     <div th:fragment="content">
-        <div class="container py-4">
-            <!-- Header -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-md-8">
-                                    <h2 class="card-title mb-2">
-                                        <i class="fas fa-envelope me-2"></i>
-                                        Gestion des Messages
-                                    </h2>
-                                    <p class="card-text mb-0">
-                                        Gérez tous les messages de contact reçus.
-                                    </p>
-                                </div>
-                                <div class="col-md-4 text-md-end">
-                                    <div class="admin-badge">
-                                        <i class="fas fa-bell me-2"></i>
-                                        <span th:text="${unreadCount}">0</span> non lus
-                                    </div>
-                                </div>
-                            </div>
+        <!-- Breadcrumb -->
+        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb(null, null, null, 'Messages', 'fas fa-envelope')}"></div>
+        
+        <!-- Page Header -->
+        <div class="mb-4">
+            <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; overflow: hidden;">
+                <div class="card-body text-white p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="me-4" style="width: 70px; height: 70px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-envelope fa-2x"></i>
                         </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- New Messages -->
-            <div class="row mb-4" th:if="${newMessages != null and !newMessages.empty}">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header bg-warning text-dark">
-                            <h5 class="mb-0">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                Nouveaux Messages
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Nom</th>
-                                            <th>Email</th>
-                                            <th>Sujet</th>
-                                            <th>Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="message : ${newMessages}">
-                                            <td th:text="${message.fullName}">Nom</td>
-                                            <td th:text="${message.email}">Email</td>
-                                            <td th:text="${message.subject}">Sujet</td>
-                                            <td th:text="${#temporals.format(message.createdAt, 'dd/MM/yyyy HH:mm')}">Date</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary" 
-                                                        th:onclick="'viewMessage(' + ${message.id} + ')'">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <form th:action="@{/admin/messages/{id}/read(id=${message.id})}" 
-                                                      method="post" style="display: inline;">
-                                                    <button type="submit" class="btn btn-sm btn-success">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- All Messages -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-list me-2"></i>Tous les Messages
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Nom</th>
-                                            <th>Email</th>
-                                            <th>Sujet</th>
-                                            <th>Statut</th>
-                                            <th>Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="message : ${allMessages}">
-                                            <td th:text="${message.fullName}">Nom</td>
-                                            <td th:text="${message.email}">Email</td>
-                                            <td th:text="${message.subject}">Sujet</td>
-                                            <td>
-                                                <span class="badge" 
-                                                      th:classappend="${message.status.name() == 'NEW'} ? 'bg-warning' : 
-                                                                     ${message.status.name() == 'READ'} ? 'bg-info' :
-                                                                     ${message.status.name() == 'REPLIED'} ? 'bg-success' : 'bg-secondary'"
-                                                      th:text="${message.status.displayName}">Statut</span>
-                                            </td>
-                                            <td th:text="${#temporals.format(message.createdAt, 'dd/MM/yyyy HH:mm')}">Date</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary" 
-                                                        th:onclick="'viewMessage(' + ${message.id} + ')'">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <form th:action="@{/admin/messages/{id}/read(id=${message.id})}" 
-                                                      method="post" style="display: inline;">
-                                                    <button type="submit" class="btn btn-sm btn-success">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
-                                                </form>
-                                                <form th:action="@{/admin/messages/{id}/reply(id=${message.id})}" 
-                                                      method="post" style="display: inline;">
-                                                    <button type="submit" class="btn btn-sm btn-info">
-                                                        <i class="fas fa-reply"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="flex-grow-1">
+                            <h2 class="mb-1 text-white fw-bold" style="font-size: 1.8rem;">
+                                Gestion des Messages
+                            </h2>
+                            <p class="mb-0 opacity-90">Consultez et gérez les messages de contact des clients</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4 g-3">
+            <div class="col-md-3">
+                <div class="stat-card-modern stat-card-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); transition: all 0.3s ease; border: none;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="stat-label-modern" style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px;">Messages Totaux</div>
+                            <div class="stat-number-modern" style="color: white; font-size: 2.5rem; font-weight: 700; line-height: 1;" th:text="${messages.size()}">0</div>
+                        </div>
+                        <div class="stat-icon-modern" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-envelope fa-2x" style="color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card-modern stat-card-danger" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3); transition: all 0.3s ease; border: none;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="stat-label-modern" style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px;">Non Lus</div>
+                            <div class="stat-number-modern" style="color: white; font-size: 2.5rem; font-weight: 700; line-height: 1;" th:text="${unreadMessages}">0</div>
+                        </div>
+                        <div class="stat-icon-modern" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-envelope-open fa-2x" style="color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card-modern stat-card-success" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; padding: 25px; box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3); transition: all 0.3s ease; border: none;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="stat-label-modern" style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px;">Lus</div>
+                            <div class="stat-number-modern" style="color: white; font-size: 2.5rem; font-weight: 700; line-height: 1;" th:text="${messages.size() - unreadMessages}">0</div>
+                        </div>
+                        <div class="stat-icon-modern" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-check-circle fa-2x" style="color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card-modern stat-card-warning" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 15px; padding: 25px; box-shadow: 0 8px 20px rgba(250, 112, 154, 0.3); transition: all 0.3s ease; border: none;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="stat-label-modern" style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px;">Nouveaux</div>
+                            <div class="stat-number-modern" style="color: white; font-size: 2.5rem; font-weight: 700; line-height: 1;" th:text="${#lists.size(messages.?[status.name() == 'NEW'])}">0</div>
+                        </div>
+                        <div class="stat-icon-modern" style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-clock fa-2x" style="color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="card mb-4 border-0 shadow-lg animate-fade-in" style="border-radius: 15px; overflow: hidden; background: #fff;">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 2px solid #dee2e6; padding: 20px;">
+                <h5 class="mb-0 fw-bold" style="color: #495057; font-size: 1.1rem;">
+                    <i class="fas fa-filter me-2" style="color: #667eea;"></i>
+                    Filtres de Recherche
+                </h5>
+                <button type="button" 
+                        class="btn btn-sm btn-outline-secondary" 
+                        id="resetFiltersMessages"
+                        onclick="resetFiltersMessages()"
+                        style="display: none; border-radius: 25px; padding: 8px 20px; border: 2px solid #6c757d; font-weight: 500; transition: all 0.3s ease;">
+                    <i class="fas fa-redo me-1"></i>Réinitialiser
+                </button>
+            </div>
+            <div class="card-body" style="padding: 25px; background: #fff;">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-search me-1 text-primary"></i>
+                            Rechercher un message
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="searchMessages" 
+                               placeholder="Nom, email, sujet..."
+                               style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                               onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                               onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-filter me-1 text-success"></i>
+                            Filtrer par Statut
+                        </label>
+                        <select class="form-select form-select-lg" 
+                                id="statusFilter"
+                                style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                                onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                                onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                            <option value="">Tous les statuts</option>
+                            <option value="NEW">Nouveau</option>
+                            <option value="READ">Lu</option>
+                            <option value="REPLIED">Répondu</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-sort me-1 text-warning"></i>
+                            Trier par
+                        </label>
+                        <select class="form-select form-select-lg" 
+                                id="sortMessages"
+                                style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
+                                onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
+                                onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
+                            <option value="date-desc">Plus récents</option>
+                            <option value="date-asc">Plus anciens</option>
+                            <option value="unread">Non lus d'abord</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Active Filters Indicator -->
+                <div id="activeFiltersMessages" class="mt-3" style="display: none;">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Filtres actifs: <span id="activeFiltersCountMessages">0</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Messages List -->
+        <div class="card animate-fade-in shadow-lg" style="border: none; border-radius: 15px; overflow: hidden; background: #fff;">
+            <div class="card-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 25px;">
+                <h3 class="card-title mb-0 text-white" style="font-size: 1.4rem; font-weight: 700; display: flex; align-items: center;">
+                    <i class="fas fa-inbox me-3" style="font-size: 1.5rem;"></i>
+                    Boîte de Réception
+                    <span class="badge ms-3" style="background: rgba(255,255,255,0.25); color: white; padding: 8px 15px; border-radius: 20px; font-size: 1rem; font-weight: 600; backdrop-filter: blur(10px);" id="messagesCount" th:text="${messages.size()}">0</span>
+                </h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="messagesTable">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                                <th style="width: 60px; padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">
+                                    <i class="fas fa-user text-primary"></i>
+                                </th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Expéditeur</th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Sujet</th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Message</th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Statut</th>
+                                <th style="padding: 15px; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #495057;">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="messagesList">
+                            <tr th:each="message : ${messages}" 
+                                class="message-row"
+                                th:classappend="${!message.read} ? 'unread' : ''"
+                                th:data-status="${message.status.name()}"
+                                style="transition: all 0.2s ease; cursor: pointer;"
+                                data-bs-toggle="modal" 
+                                th:data-bs-target="'#messageModal' + ${message.id}">
+                                
+                                <!-- Icon Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <div style="position: relative; display: inline-block;">
+                                        <div class="message-icon-table" 
+                                             style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: white; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <span th:if="${!message.read}" 
+                                              style="position: absolute; top: -3px; right: -3px; width: 12px; height: 12px; background: #dc3545; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
+                                    </div>
+                                </td>
+                                
+                                <!-- Sender Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <div>
+                                        <h6 class="mb-1" 
+                                            th:classappend="${!message.read} ? 'fw-bold' : ''"
+                                            th:text="${message.fullName}"
+                                            th:style="${!message.read} ? 'color: #667eea;' : 'color: #495057;'"
+                                            style="font-size: 0.95rem; margin: 0;">
+                                            Nom de l'expéditeur
+                                        </h6>
+                                        <small class="text-muted d-block" style="font-size: 0.85rem;">
+                                            <i class="fas fa-envelope me-1"></i>
+                                            <span th:text="${message.email}">email@exemple.com</span>
+                                        </small>
+                                        <small class="text-muted d-block" th:if="${message.phone != null && !#strings.isEmpty(message.phone)}" style="font-size: 0.85rem;">
+                                            <i class="fas fa-phone me-1"></i>
+                                            <span th:text="${message.phone}">Téléphone</span>
+                                        </small>
+                                    </div>
+                                </td>
+                                
+                                <!-- Subject Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <h6 class="mb-0" 
+                                        th:classappend="${!message.read} ? 'fw-bold' : ''"
+                                        th:text="${message.subject}"
+                                        th:style="${!message.read} ? 'color: #667eea;' : 'color: #495057;'"
+                                        style="font-size: 0.95rem; margin: 0; line-height: 1.4;">
+                                        <i class="fas fa-comment-dots me-2" style="color: #667eea; font-size: 0.85rem;"></i>
+                                        <span>Sujet du message</span>
+                                    </h6>
+                                </td>
+                                
+                                <!-- Message Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <p class="mb-0 text-muted" 
+                                       th:text="${#strings.abbreviate(message.message, 100)}"
+                                       style="font-size: 0.9rem; margin: 0; line-height: 1.4;">
+                                        Aperçu du message...
+                                    </p>
+                                </td>
+                                
+                                <!-- Status Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <div class="d-flex flex-column gap-2">
+                                        <span class="status-badge-table" 
+                                              th:classappend="${message.status.name() == 'NEW' ? 'status-new' : message.status.name() == 'READ' ? 'status-read' : 'status-replied'}" 
+                                              th:text="${message.status.displayName}"
+                                              style="font-size: 0.8rem; padding: 4px 10px; border-radius: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; width: fit-content;">
+                                            Statut
+                                        </span>
+                                        <span class="unread-badge-table" th:if="${!message.read}" 
+                                              style="font-size: 0.75rem; padding: 4px 10px; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; border-radius: 12px; font-weight: 600; display: inline-block; width: fit-content;">
+                                            <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>Non lu
+                                        </span>
+                                    </div>
+                                </td>
+                                
+                                <!-- Date Column -->
+                                <td style="padding: 15px; vertical-align: middle;">
+                                    <small class="text-muted" style="font-size: 0.85rem; white-space: nowrap;">
+                                        <i class="fas fa-clock me-1"></i>
+                                        <span th:text="${#temporals.format(message.createdAt, 'dd/MM/yyyy')}">01/01/2024</span>
+                                        <br>
+                                        <span th:text="${#temporals.format(message.createdAt, 'HH:mm')}" style="font-size: 0.8rem;">10:00</span>
+                                    </small>
+                                </td>
+                            </tr>
+                            
+                            <tr th:if="${messages.isEmpty()}">
+                                <td colspan="6" class="text-center py-5" style="padding: 80px 20px;">
+                                    <div style="width: 120px; height: 120px; margin: 0 auto 25px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-inbox fa-4x" style="color: #667eea; opacity: 0.5;"></i>
+                                    </div>
+                                    <p class="text-muted fs-5 fw-semibold" style="color: #6c757d;">Aucun message</p>
+                                    <p class="text-muted small">Les messages de contact apparaîtront ici</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Message Modals -->
+        <div th:each="message : ${messages}" class="modal fade" th:id="'messageModal' + ${message.id}" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 20px;">
+                        <h5 class="modal-title fw-bold" id="messageModalLabel" style="font-size: 1.2rem;">
+                            <i class="fas fa-envelope-open me-2"></i>
+                            Message de <span th:text="${message.fullName}">Nom</span>
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Message Header -->
+                        <div class="d-flex align-items-center mb-4 p-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%); border-radius: 15px; border-left: 4px solid #667eea; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <div class="message-avatar me-4" style="width: 70px; height: 70px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.8rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="mb-2 fw-bold" th:text="${message.fullName}">Nom</h5>
+                                <div class="mb-2">
+                                    <i class="fas fa-envelope me-2 text-muted"></i>
+                                    <a th:href="'mailto:' + ${message.email}" th:text="${message.email}" class="text-decoration-none">email@exemple.com</a>
+                                </div>
+                                <div th:if="${message.phone != null && !#strings.isEmpty(message.phone)}">
+                                    <i class="fas fa-phone me-2 text-muted"></i>
+                                    <a th:href="'tel:' + ${message.phone}" th:text="${message.phone}" class="text-decoration-none">Téléphone</a>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge mb-2 d-block" th:classappend="${message.status.name() == 'NEW' ? 'bg-warning' : message.status.name() == 'READ' ? 'bg-info' : 'bg-success'}" th:text="${message.status.displayName}">
+                                    Statut
+                                </span>
+                                <span class="badge bg-danger" th:if="${!message.read}">
+                                    <i class="fas fa-circle"></i> Non lu
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Message Subject -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary mb-3" style="font-size: 1rem;">
+                                <i class="fas fa-tag me-2"></i>Sujet
+                            </label>
+                            <div class="p-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%); border-left: 4px solid #667eea; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                                <h6 class="mb-0 fw-semibold" style="color: #495057; font-size: 1.1rem;" th:text="${message.subject}">Sujet du message</h6>
+                            </div>
+                        </div>
+                        
+                        <!-- Message Content -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary mb-3" style="font-size: 1rem;">
+                                <i class="fas fa-comment-dots me-2"></i>Message
+                            </label>
+                            <div class="p-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%); border-left: 4px solid #667eea; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); white-space: pre-wrap; min-height: 150px; line-height: 1.8; color: #495057;" th:text="${message.message}">
+                                Contenu du message...
+                            </div>
+                        </div>
+                        
+                        <!-- Message Info -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded">
+                                    <label class="text-muted small d-block mb-1">
+                                        <i class="fas fa-calendar me-1"></i>Date de réception
+                                    </label>
+                                    <strong th:text="${#temporals.format(message.createdAt, 'dd/MM/yyyy à HH:mm')}">01/01/2024 à 10:00</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6" th:if="${message.updatedAt != null}">
+                                <div class="p-3 bg-light rounded">
+                                    <label class="text-muted small d-block mb-1">
+                                        <i class="fas fa-clock me-1"></i>Dernière mise à jour
+                                    </label>
+                                    <strong th:text="${#temporals.format(message.updatedAt, 'dd/MM/yyyy à HH:mm')}">01/01/2024 à 10:00</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light" style="border-top: 1px solid #e9ecef; padding: 20px;">
+                        <div class="d-flex gap-2 w-100 justify-content-end">
+                            <form th:action="@{/admin/messages/{id}/mark-read(id=${message.id})}" method="post" style="display: inline;" th:if="${!message.read}">
+                                <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                                <button type="submit" class="btn btn-success" style="border-radius: 20px; padding: 8px 20px;">
+                                    <i class="fas fa-check me-2"></i>
+                                    Marquer comme lu
+                                </button>
+                            </form>
+                            
+                            <form th:action="@{/admin/messages/{id}/delete(id=${message.id})}" method="post" style="display: inline;" onsubmit="event.preventDefault(); const form = this; showConfirmModal('Êtes-vous sûr de vouloir supprimer ce message ? Cette action est irréversible.', function() { form.submit(); }); return false;">
+                                <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                                <button type="submit" class="btn btn-danger" style="border-radius: 20px; padding: 8px 20px;">
+                                    <i class="fas fa-trash me-2"></i>
+                                    Supprimer
+                                </button>
+                            </form>
+                            
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 20px; padding: 8px 20px;">
+                                <i class="fas fa-times me-2"></i>Fermer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
     
-    <!-- Message Modal -->
-    <div class="modal fade" id="messageModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Détails du Message</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="messageContent">
-                    <!-- Content will be loaded here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <style>
+        /* Styles pour le tableau de messages */
+        #messagesTable {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        #messagesTable thead th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .message-row {
+            transition: all 0.2s ease;
+        }
+        
+        .message-row:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%) !important;
+            transform: scale(1.005);
+        }
+        
+        .message-row.unread {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, #fff 3%);
+            border-left: 4px solid #667eea;
+        }
+        
+        .message-icon-table {
+            transition: all 0.3s ease;
+        }
+        
+        .message-row:hover .message-icon-table {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4) !important;
+        }
+        
+        .status-badge-table.status-new {
+            background: linear-gradient(135deg, #ffd93d 0%, #f6c23e 100%);
+            color: #333;
+        }
+        
+        .status-badge-table.status-read {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+        }
+        
+        .status-badge-table.status-replied {
+            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+            color: white;
+        }
+        
+        .stat-card-modern:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.85rem;
+            }
+            
+            #messagesTable th,
+            #messagesTable td {
+                padding: 10px 8px;
+            }
+            
+            .message-icon-table {
+                width: 35px !important;
+                height: 35px !important;
+                font-size: 1rem !important;
+            }
+        }
+    </style>
     
     <script>
-        function viewMessage(messageId) {
-            // Implementation for viewing message details
-            // This would typically make an AJAX call to get message details
-            document.getElementById('messageContent').innerHTML = 
-                '<p>Chargement des détails du message #' + messageId + '...</p>';
-            new bootstrap.Modal(document.getElementById('messageModal')).show();
+        // Combined filter function
+        function filterMessages() {
+            const searchTerm = document.getElementById('searchMessages')?.value.toLowerCase() || '';
+            const status = document.getElementById('statusFilter')?.value || '';
+            const sortBy = document.getElementById('sortMessages')?.value || 'date-desc';
+            const rows = document.querySelectorAll('.message-row');
+            let visibleCount = 0;
+            
+            // Filter rows
+            rows.forEach(row => {
+                // Skip the empty row (it doesn't have data attributes)
+                if (!row.hasAttribute('data-status')) {
+                    return;
+                }
+                
+                const text = row.textContent.toLowerCase();
+                const itemStatus = row.getAttribute('data-status') || '';
+                
+                const matchesSearch = !searchTerm || text.includes(searchTerm);
+                const matchesStatus = !status || itemStatus === status;
+                
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Update count
+            const countBadge = document.getElementById('messagesCount');
+            if (countBadge) {
+                countBadge.textContent = visibleCount;
+            }
+            
+            // Update active filters indicator
+            updateActiveFiltersIndicatorMessages();
         }
+        
+        // Function to update active filters indicator
+        function updateActiveFiltersIndicatorMessages() {
+            const searchInput = document.getElementById('searchMessages');
+            const statusFilter = document.getElementById('statusFilter');
+            const sortSelect = document.getElementById('sortMessages');
+            
+            const searchTerm = searchInput ? searchInput.value.trim() : '';
+            const status = statusFilter ? statusFilter.value : '';
+            const sortBy = sortSelect ? sortSelect.value : 'date-desc';
+            
+            let activeCount = 0;
+            if (searchTerm) activeCount++;
+            if (status) activeCount++;
+            if (sortBy !== 'date-desc') activeCount++;
+            
+            const resetBtn = document.getElementById('resetFiltersMessages');
+            const activeFiltersDiv = document.getElementById('activeFiltersMessages');
+            const activeFiltersCount = document.getElementById('activeFiltersCountMessages');
+            
+            if (activeCount > 0) {
+                if (resetBtn) resetBtn.style.display = 'inline-block';
+                if (activeFiltersDiv) activeFiltersDiv.style.display = 'block';
+                if (activeFiltersCount) activeFiltersCount.textContent = activeCount;
+            } else {
+                if (resetBtn) resetBtn.style.display = 'none';
+                if (activeFiltersDiv) activeFiltersDiv.style.display = 'none';
+            }
+        }
+        
+        // Function to reset all filters
+        window.resetFiltersMessages = function() {
+            const searchInput = document.getElementById('searchMessages');
+            const statusFilter = document.getElementById('statusFilter');
+            const sortSelect = document.getElementById('sortMessages');
+            
+            if (searchInput) searchInput.value = '';
+            if (statusFilter) statusFilter.value = '';
+            if (sortSelect) sortSelect.value = 'date-desc';
+            filterMessages();
+        }
+        
+        // Initialize filters when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search functionality
+            const searchInput = document.getElementById('searchMessages');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', filterMessages);
+            }
+            
+            // Status filter
+            const statusFilter = document.getElementById('statusFilter');
+            if (statusFilter) {
+                statusFilter.addEventListener('change', filterMessages);
+            }
+            
+            // Sort functionality
+            const sortSelect = document.getElementById('sortMessages');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', filterMessages);
+            }
+            
+            // Update active filters indicator on any change
+            if (searchInput) searchInput.addEventListener('input', updateActiveFiltersIndicatorMessages);
+            if (statusFilter) statusFilter.addEventListener('change', updateActiveFiltersIndicatorMessages);
+            if (sortSelect) sortSelect.addEventListener('change', updateActiveFiltersIndicatorMessages);
+            
+            // Initial filter call to set correct count on page load
+            filterMessages();
+        });
+        
+        // Auto-mark as read when modal opens
+        function setupAutoMarkAsRead() {
+            // Wait for Bootstrap to be available
+            if (typeof bootstrap === 'undefined') {
+                setTimeout(setupAutoMarkAsRead, 100);
+                return;
+            }
+            
+            // Find all message modals
+            const modals = document.querySelectorAll('[id^="messageModal"]');
+            
+            modals.forEach(modal => {
+                // Remove any existing listeners to avoid duplicates
+                const modalElement = bootstrap.Modal.getInstance(modal);
+                if (modalElement) {
+                    modal.removeEventListener('shown.bs.modal', handleModalOpen);
+                }
+                
+                // Add event listener for when modal is shown
+                modal.addEventListener('shown.bs.modal', handleModalOpen);
+            });
+        }
+        
+        function handleModalOpen(event) {
+            const modal = event.currentTarget;
+            const messageId = modal.id.replace('messageModal', '');
+            const messageItem = document.querySelector(`tr[data-bs-target="#messageModal${messageId}"]`);
+            
+            // Check if message is unread
+            if (messageItem && messageItem.classList.contains('unread')) {
+                // Get CSRF token
+                const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');
+                const csrfHeaderMeta = document.querySelector('meta[name="_csrf_header"]');
+                
+                if (!csrfTokenMeta || !csrfHeaderMeta) {
+                    console.warn('CSRF token not found');
+                    return;
+                }
+                
+                const csrfToken = csrfTokenMeta.getAttribute('content');
+                const csrfHeader = csrfHeaderMeta.getAttribute('content');
+                
+                // Prepare headers with CSRF token
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                };
+                if (csrfToken && csrfHeader) {
+                    headers[csrfHeader] = csrfToken;
+                }
+                
+                // Mark as read via AJAX
+                fetch(`/admin/messages/${messageId}/mark-read-ajax`, {
+                    method: 'POST',
+                    headers: headers,
+                    credentials: 'same-origin',
+                    body: JSON.stringify({})
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Remove unread class from message row
+                        messageItem.classList.remove('unread');
+                        
+                        // Remove unread badge from table row
+                        const unreadBadges = messageItem.querySelectorAll('.unread-badge-table');
+                        unreadBadges.forEach(badge => badge.remove());
+                        
+                        // Update font weight in title
+                        const titleElements = messageItem.querySelectorAll('h6');
+                        titleElements.forEach(el => {
+                            el.classList.remove('fw-bold');
+                            el.style.color = '#495057';
+                        });
+                        
+                        // Update status badge in table
+                        const statusBadges = messageItem.querySelectorAll('.status-badge-table');
+                        statusBadges.forEach(badge => {
+                            if (badge.textContent.trim() === 'Nouveau') {
+                                badge.textContent = 'Lu';
+                                badge.className = 'status-badge-table status-read';
+                            }
+                        });
+                        
+                        // Remove unread badge from modal
+                        const modalUnreadBadges = modal.querySelectorAll('.badge.bg-danger');
+                        modalUnreadBadges.forEach(badge => badge.remove());
+                        
+                        // Update status badge in modal
+                        const modalStatusBadges = modal.querySelectorAll('.badge');
+                        modalStatusBadges.forEach(badge => {
+                            if (badge.textContent.trim() === 'Nouveau') {
+                                badge.textContent = 'Lu';
+                                badge.className = 'badge bg-info';
+                            }
+                        });
+                        
+                        // Hide mark as read button in modal
+                        const markReadForm = modal.querySelector('form[action*="mark-read"]');
+                        if (markReadForm) {
+                            markReadForm.style.display = 'none';
+                        }
+                        
+                        // Update unread count in stats
+                        const unreadCountElement = document.querySelector('.stat-card.danger .stat-number');
+                        if (unreadCountElement) {
+                            const currentCount = parseInt(unreadCountElement.textContent) || 0;
+                            if (currentCount > 0) {
+                                unreadCountElement.textContent = currentCount - 1;
+                            }
+                        }
+                        
+                        // Update read count in stats
+                        const readCountElement = document.querySelector('.stat-card.success .stat-number');
+                        if (readCountElement) {
+                            const currentCount = parseInt(readCountElement.textContent) || 0;
+                            readCountElement.textContent = currentCount + 1;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors du marquage du message comme lu:', error);
+                });
+            }
+        }
+        
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupAutoMarkAsRead);
+        } else {
+            setupAutoMarkAsRead();
+        }
+        
     </script>
-</body>
-</html>
+</div>

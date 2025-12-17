@@ -1,0 +1,136 @@
+<div th:replace="~{admin/layout :: layout(~{::content})}">
+    <div th:fragment="content">
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">
+                    <i class="fas fa-database me-2 text-primary"></i>
+                    <span th:text="${pageTitle}">Gestion des Backups</span>
+                </h2>
+                <p class="text-muted mb-0" th:text="${pageDescription}">Gérer les backups de la base de données</p>
+            </div>
+            <form method="post" th:action="@{/admin/backup/create}">
+                <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Créer un Backup
+                </button>
+            </form>
+        </div>
+
+        <!-- Info Card -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="mb-3">
+                            <i class="fas fa-info-circle me-2 text-info"></i>Informations
+                        </h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-clock me-2 text-muted"></i>
+                                <strong>Backup automatique :</strong> Tous les jours à 2h du matin
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-trash-alt me-2 text-muted"></i>
+                                <strong>Rétention :</strong> 30 jours (les anciens backups sont automatiquement supprimés)
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-folder me-2 text-muted"></i>
+                                <strong>Emplacement :</strong> <code>./backups/</code>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="mb-3">
+                            <i class="fas fa-shield-alt me-2 text-success"></i>Recommandations
+                        </h5>
+                        <div class="alert alert-info mb-0">
+                            <small>
+                                <i class="fas fa-lightbulb me-2"></i>
+                                <strong>Conseil :</strong> Il est recommandé de copier régulièrement les backups 
+                                vers un emplacement externe pour une meilleure sécurité.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backups List -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Backups Disponibles
+                </h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${backups != null and !backups.isEmpty()}" class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">
+                                    <i class="fas fa-hashtag text-muted"></i>
+                                </th>
+                                <th>
+                                    <i class="fas fa-file me-2 text-primary"></i>Nom du Fichier
+                                </th>
+                                <th style="width: 150px;">
+                                    <i class="fas fa-download me-2 text-success"></i>Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="backup, iterStat : ${backups}">
+                                <td th:text="${iterStat.count}">1</td>
+                                <td>
+                                    <code th:text="${backup}">backup_file.sql</code>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary download-backup-btn" 
+                                            th:attr="data-backup=${backup}">
+                                        <i class="fas fa-download me-1"></i>Télécharger
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${backups == null or backups.isEmpty()}" class="text-center py-5">
+                    <i class="fas fa-inbox fa-4x text-muted mb-3" style="opacity: 0.3;"></i>
+                    <p class="text-muted fs-5">Aucun backup disponible</p>
+                    <small class="text-muted">Les backups apparaîtront ici une fois créés.</small>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Gestion du téléchargement des backups
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.download-backup-btn').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        const filename = this.getAttribute('data-backup');
+                        downloadBackup(filename);
+                    });
+                });
+            });
+            
+            function downloadBackup(filename) {
+                // Rediriger vers l'endpoint de téléchargement
+                window.location.href = '/admin/backup/download?filename=' + encodeURIComponent(filename);
+            }
+        </script>
+    </div>
+</div>
+
