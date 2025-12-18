@@ -82,7 +82,7 @@ public class ContactController {
             rateLimitingService.reset(identifier);
             
             redirectAttributes.addFlashAttribute("success", 
-                "✅ Message envoyé avec succès ! Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.");
+                "Message envoyé avec succès ! Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Erreur lors de l'envoi du message");
         }

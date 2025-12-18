@@ -470,17 +470,7 @@ public String dashboard(Principal principal, Model model) {
 
     @PostMapping("/users")
     public String saveUser(User user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
-        // Pour la création d'un nouvel utilisateur, ignorer l'erreur de validation du mot de passe
-        // car il sera généré automatiquement si vide
         boolean isNewUser = user.getId() == null;
-        String temporaryPassword = null;
-        if (isNewUser) {
-            // Si aucun mot de passe n'est fourni, générer un temporaire pour la validation
-            if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
-                temporaryPassword = generateRandomPassword(10);
-                user.setPassword(temporaryPassword);
-            }
-        }
         
         // Valider manuellement les champs nécessaires
         if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
@@ -498,15 +488,19 @@ public String dashboard(Principal principal, Model model) {
             bindingResult.rejectValue("phone", "NotBlank", "Le téléphone est requis");
         }
         
+        // Valider le mot de passe pour les nouveaux utilisateurs
+        if (isNewUser) {
+            if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+                bindingResult.rejectValue("password", "NotBlank", "Le mot de passe est requis pour créer un nouvel utilisateur");
+            }
+        }
+        
         // Vérifier si l'email existe déjà
         if (isNewUser && userRepository.existsByEmail(user.getEmail())) {
             bindingResult.rejectValue("email", "error.user", "Cet email est déjà utilisé");
         }
 
         if (bindingResult.hasErrors()) {
-            if (isNewUser) {
-                user.setPassword(null); // Réinitialiser pour éviter l'affichage
-            }
             model.addAttribute("roles", User.Role.values());
             model.addAttribute("pageTitle", "Créer un Utilisateur");
             model.addAttribute("pageDescription", "Créer un nouvel utilisateur");
@@ -514,18 +508,10 @@ public String dashboard(Principal principal, Model model) {
         }
 
         try {
-            // Générer un mot de passe aléatoire si c'est un nouvel utilisateur et qu'aucun mot de passe n'est fourni
-            String generatedPassword = null;
             if (isNewUser) {
-                if (user.getPassword() == null || user.getPassword().trim().isEmpty() || user.getPassword().equals(temporaryPassword)) {
-                    // Générer un nouveau mot de passe aléatoire (différent du temporaire utilisé pour la validation)
-                    generatedPassword = generateRandomPassword(10);
-                    user.setPassword(passwordEncoder.encode(generatedPassword));
-                    user.setFirstLogin(true);
-                } else {
-                    // Encode password fourni par l'utilisateur
-                    user.setPassword(passwordEncoder.encode(user.getPassword()));
-                }
+                // Encoder le mot de passe fourni par l'admin
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setFirstLogin(true);
             } else {
                 // Pour la modification, encoder le mot de passe seulement s'il est fourni
                 if (user.getPassword() != null && !user.getPassword().trim().isEmpty()) {
@@ -538,12 +524,7 @@ public String dashboard(Principal principal, Model model) {
             }
             userRepository.save(user);
             
-            if (generatedPassword != null) {
-                redirectAttributes.addFlashAttribute("success", 
-                    "Utilisateur créé avec succès. Identifiants par défaut - Email: " + user.getEmail() + " / Mot de passe: " + generatedPassword);
-            } else {
-                redirectAttributes.addFlashAttribute("success", "Utilisateur créé avec succès");
-            }
+            redirectAttributes.addFlashAttribute("success", "Utilisateur créé avec succès");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la création de l'utilisateur: " + e.getMessage());
         }

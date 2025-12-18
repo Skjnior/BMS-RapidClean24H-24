@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${pageTitle} ?: 'Employé'">Employé</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
-    <link rel="shortcut icon" type="image/png" th:href="@{/images/logo Rapidclean.png}">
-    <link rel="apple-touch-icon" th:href="@{/images/logo Rapidclean.png}">
-    <link rel="stylesheet" th:href="@{/css/admin.css}" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
 <div th:replace="~{admin/layout :: layout(~{::content})}">
-    <div th:fragment="content">
+    <div th:fragment="content" th:with="pageTitleText=${user != null and user.id != null ? 'Modifier l''Employé' : 'Créer un Employé'}">
         <!-- Breadcrumb -->
-        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb('Employés', '/admin/employees', 'fas fa-users-cog', (employee.id == null ? 'Créer un Employé' : 'Modifier l''Employé'), 'fas fa-user-edit')}"></div>
-    <style>
+        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb('Employés', '/admin/employees', 'fas fa-users-cog', ${pageTitleText}, 'fas fa-user-edit')}"></div>
+        
+        <style>
         .form-card {
             border: none;
             border-radius: 15px;
@@ -83,13 +70,7 @@
         .input-group .form-control:not(:first-child) {
             border-left: none;
         }
-    </style>
-</head>
-<body>
-<div th:replace="~{admin/layout :: layout(~{::content})}">
-    <div th:fragment="content">
-        <!-- Breadcrumb -->
-        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb('Employés', '/admin/employees', 'fas fa-users-cog', (employee.id == null ? 'Créer un Employé' : 'Modifier l''Employé'), 'fas fa-user-edit')}"></div>
+        </style>
         
         <!-- Flash Messages -->
         <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -114,11 +95,11 @@
         <div class="mb-4">
             <h2 class="mb-1">
                 <i class="fas fa-user-tie me-2" style="color: #667eea;"></i>
-                <span th:text="${user.id == null ? 'Créer un Employé' : 'Modifier l''Employé'}">Employé</span>
+                <span th:text="${user == null or user.id == null ? 'Créer un Employé' : 'Modifier l''Employé'}">Employé</span>
             </h2>
             <p class="text-muted mb-0">
                 <i class="fas fa-info-circle me-1"></i>
-                <span th:text="${user.id == null ? 'Ajoutez un nouvel employé à votre organisation' : 'Modifiez les informations de l''employé'}">Formulaire employé</span>
+                <span th:text="${user == null or user.id == null ? 'Ajoutez un nouvel employé à votre organisation' : 'Modifiez les informations de l''employé'}">Formulaire employé</span>
             </p>
         </div>
 
@@ -131,7 +112,7 @@
                 </h5>
             </div>
             <div class="card-body p-4">
-                <form th:action="${user.id == null ? '/admin/employees' : #strings.concat('/admin/employees/', user.id, '/update')}"
+                <form th:action="${user == null or user.id == null ? '/admin/employees' : #strings.concat('/admin/employees/', user.id, '/update')}"
                       th:object="${user}" method="post">
 
                     <!-- Validation Errors -->
@@ -243,8 +224,8 @@
                                     <i class="fas fa-toggle-on me-1 text-success"></i>Statut
                                 </label>
                                 <select th:field="*{enabled}" class="form-select">
-                                    <option th:value="true" th:selected="${user.enabled}">Actif</option>
-                                    <option th:value="false" th:selected="${!user.enabled}">Inactif</option>
+                                    <option th:value="true" th:selected="${user != null and user.enabled}">Actif</option>
+                                    <option th:value="false" th:selected="${user == null or !user.enabled}">Inactif</option>
                                 </select>
                                 <div class="help-note">
                                     <i class="fas fa-info-circle me-1"></i>
@@ -253,7 +234,7 @@
                             </div>
 
                             <!-- Champ mot de passe obligatoire pour les nouveaux employés -->
-                            <div class="col-md-12" th:if="${user.id == null}">
+                            <div class="col-md-12" th:if="${user == null or user.id == null}">
                                 <label class="form-label">
                                     <i class="fas fa-key me-1 text-warning"></i>Mot de passe <span class="text-danger">*</span>
                                 </label>
@@ -281,7 +262,7 @@
                     <div class="d-flex gap-2 mt-4 pt-3 border-top">
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="fas fa-save me-2"></i>
-                            <span th:text="${user.id == null ? 'Créer l''Employé' : 'Mettre à Jour'}">Enregistrer</span>
+                            <span th:text="${user == null or user.id == null ? 'Créer l''Employé' : 'Mettre à Jour'}">Enregistrer</span>
                         </button>
                         <a th:href="@{/admin/employees}" class="btn btn-secondary btn-lg">
                             <i class="fas fa-times me-2"></i>
@@ -334,6 +315,5 @@
         });
     });
 </script>
-
-</body>
-</html>
+    </div>
+</div>

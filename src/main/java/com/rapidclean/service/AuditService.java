@@ -372,7 +372,7 @@ public class AuditService {
         ));
         
         // Statistiques quotidiennes
-        stats.put("dailyStats", auditLogRepository.findDailyStatistics(30, 0));
+        stats.put("dailyStats", auditLogRepository.findDailyStatistics(30, 30, 0));
         
         return stats;
     }

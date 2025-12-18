@@ -114,7 +114,7 @@ public class ServiceRequestController {
             rateLimitingService.reset(identifier);
 
             redirectAttributes.addFlashAttribute("success", 
-                "✅ Demande envoyée avec succès ! Nous avons bien reçu votre demande et nous vous contacterons dans les plus brefs délais.");
+                "Demande envoyée avec succès ! Nous avons bien reçu votre demande et nous vous contacterons dans les plus brefs délais.");
             redirectAttributes.addFlashAttribute("redirectToHome", true);
             
             return "redirect:/request-service";

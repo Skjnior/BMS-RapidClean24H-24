@@ -1,147 +1,40 @@
 <div th:replace="~{admin/layout :: layout(~{::content})}">
     <div th:fragment="content">
-        <!-- Page Header -->
+    <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="mb-1">
-                    <i class="fas fa-shield-alt me-2" style="color: #2c5aa0;"></i>
-                    <span th:text="${pageTitle}">Journal d'Audit</span>
-                </h2>
-                <p class="text-muted mb-0">
-                    <i class="fas fa-info-circle me-1"></i>
-                    <span th:text="${pageDescription}">Suivi complet de toutes les activités du système</span>
-                </p>
-                <div class="alert alert-info mt-3 mb-0" style="font-size: 0.9rem;">
-                    <i class="fas fa-cookie-bite me-2"></i>
-                    <strong>Note sur les cookies et l'audit :</strong> Ce système enregistre automatiquement toutes les activités 
-                    (adresses IP, pays, navigateurs, actions) pour la sécurité et la conformité. 
-                    Les utilisateurs sont informés de l'utilisation des cookies via notre 
-                    <a href="/privacy-policy" target="_blank">politique de confidentialité</a>.
-                </div>
-            </div>
-            <div class="d-flex gap-2 flex-wrap">
-                <div class="btn-group" role="group">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-download me-2"></i>Exporter CSV
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
-                        <li><a class="dropdown-item" href="#" onclick="exportLogs(event); return false;">
-                            <i class="fas fa-list me-2"></i>Exporter avec filtres actuels
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" onclick="exportByPeriod('today'); return false;">
-                            <i class="fas fa-calendar-day me-2"></i>Aujourd'hui
-                        </a></li>
-                        <li><a class="dropdown-item" href="#" onclick="exportByPeriod('week'); return false;">
-                            <i class="fas fa-calendar-week me-2"></i>7 derniers jours
-                        </a></li>
-                        <li><a class="dropdown-item" href="#" onclick="exportByPeriod('month'); return false;">
-                            <i class="fas fa-calendar-alt me-2"></i>30 derniers jours
-                        </a></li>
-                        <li><a class="dropdown-item" href="#" onclick="exportByPeriod('year'); return false;">
-                            <i class="fas fa-calendar me-2"></i>12 derniers mois
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" onclick="showCustomExportModal(); return false;">
-                            <i class="fas fa-calendar-range me-2"></i>Période personnalisée
-                        </a></li>
-                    </ul>
-                </div>
-                <div class="btn-group" role="group">
-                    <button class="btn btn-outline-danger dropdown-toggle" type="button" id="cleanupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-broom me-2"></i>Nettoyer
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="cleanupDropdown">
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#cleanupModal">
-                            <i class="fas fa-calendar-minus me-2"></i>Nettoyer par nombre de jours
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#" onclick="cleanupByPeriod('today'); return false;">
-                            <i class="fas fa-calendar-day me-2"></i>Supprimer aujourd'hui
-                        </a></li>
-                        <li><a class="dropdown-item text-danger" href="#" onclick="cleanupByPeriod('week'); return false;">
-                            <i class="fas fa-calendar-week me-2"></i>Supprimer les 7 derniers jours
-                        </a></li>
-                        <li><a class="dropdown-item text-danger" href="#" onclick="cleanupByPeriod('month'); return false;">
-                            <i class="fas fa-calendar-alt me-2"></i>Supprimer les 30 derniers jours
-                        </a></li>
-                        <li><a class="dropdown-item text-danger" href="#" onclick="cleanupByPeriod('year'); return false;">
-                            <i class="fas fa-calendar me-2"></i>Supprimer les 12 derniers mois
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#" onclick="showCustomCleanupModal(); return false;">
-                            <i class="fas fa-calendar-range me-2"></i>Période personnalisée
-                        </a></li>
-                    </ul>
-                </div>
+                <h1 class="h3 mb-1" th:text="${pageTitle}">Logs d'Audit</h1>
+                <p class="text-muted mb-0" th:text="${pageDescription}">Consultation des logs d'audit du système</p>
             </div>
         </div>
 
         <!-- Statistics Cards -->
-        <div class="row mb-4" th:if="${statistics}">
-            <div class="col-md-3 mb-3">
-                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <div class="card-body text-white">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3">
-                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-list-alt fa-2x"></i>
-                                </div>
-                            </div>
+        <div class="row mb-4" th:if="${stats != null}">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h3 class="mb-0" th:text="${statistics.totalLogs}">0</h3>
-                                <p class="mb-0 opacity-75">Total Logs</p>
+                                <p class="text-muted mb-1">Total Logs</p>
+                                <h3 class="mb-0" th:text="${stats.totalLogs}">0</h3>
+                            </div>
+                            <div class="text-primary">
+                                <i class="fas fa-list fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-                    <div class="card-body text-white">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3">
-                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-clock fa-2x"></i>
-                                </div>
-                            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h3 class="mb-0" th:text="${statistics.recentLogs24h}">0</h3>
-                                <p class="mb-0 opacity-75">Dernières 24h</p>
+                                <p class="text-muted mb-1">Dernières 24h</p>
+                                <h3 class="mb-0" th:text="${stats.recentLogs24h}">0</h3>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <div class="card-body text-white">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3">
-                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-globe fa-2x"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <h3 class="mb-0" th:text="${#lists.size(statistics.topCountries)}">0</h3>
-                                <p class="mb-0 opacity-75">Pays Actifs</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                    <div class="card-body text-white">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3">
-                                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-users fa-2x"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <h3 class="mb-0" th:text="${#lists.size(statistics.topUsers)}">0</h3>
-                                <p class="mb-0 opacity-75">Utilisateurs Actifs</p>
+                            <div class="text-info">
+                                <i class="fas fa-clock fa-2x"></i>
                             </div>
                         </div>
                     </div>
@@ -149,274 +42,47 @@
             </div>
         </div>
 
-        <!-- Active Users List -->
-        <div class="card mb-4 border-0 shadow-sm" th:if="${activeUsersWithStats != null and !activeUsersWithStats.isEmpty()}">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="fas fa-users me-2 text-primary"></i>
-                    Utilisateurs Actifs
-                    <span class="badge bg-primary ms-2" th:text="${#lists.size(activeUsersWithStats)}">0</span>
-                </h5>
-                <small class="text-muted">
-                    <i class="fas fa-info-circle me-1"></i>
-                    Classés par nombre d'activités
-                </small>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width: 50px;">
-                                    <i class="fas fa-hashtag me-2 text-primary"></i>#
-                                </th>
-                                <th>
-                                    <i class="fas fa-user me-2 text-info"></i>Utilisateur
-                                </th>
-                                <th style="width: 120px;">
-                                    <i class="fas fa-tag me-2 text-warning"></i>Rôle
-                                </th>
-                                <th style="width: 150px;">
-                                    <i class="fas fa-chart-line me-2 text-success"></i>Total Logs
-                                </th>
-                                <th style="width: 180px;">
-                                    <i class="fas fa-clock me-2 text-danger"></i>Dernière Activité
-                                </th>
-                                <th style="width: 150px;">
-                                    <i class="fas fa-tasks me-2 text-info"></i>Dernière Action
-                                </th>
-                                <th style="width: 120px;">
-                                    <i class="fas fa-network-wired me-2 text-secondary"></i>Dernière IP
-                                </th>
-                                <th style="width: 100px;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="userStat, iterStat : ${activeUsersWithStats}" style="transition: all 0.3s ease;">
-                                <td>
-                                    <span class="badge bg-light text-dark" th:text="${iterStat.count}">1</span>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="user-avatar me-3" 
-                                             style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.15); flex-shrink: 0;"
-                                             th:if="${userStat.user != null}">
-                                            <span th:text="${#strings.substring(userStat.user.firstName,0,1) + #strings.substring(userStat.user.lastName,0,1)}">AB</span>
-                                        </div>
-                                        <div style="min-width: 0;">
-                                            <strong class="d-block" th:text="${userStat.fullName != null ? userStat.fullName : userStat.email}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Nom</strong>
-                                            <small class="text-muted d-block" th:text="${userStat.email}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">email</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge" 
-                                          th:if="${userStat.role != null}"
-                                          th:classappend="${userStat.role.name() == 'ADMIN' ? 'bg-danger' : (userStat.role.name() == 'EMPLOYEE' ? 'bg-warning' : 'bg-info')}"
-                                          th:text="${userStat.role.name()}">ROLE</span>
-                                    <span th:unless="${userStat.role != null}" class="text-muted">-</span>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div style="width: 30px; height: 30px; background: rgba(102, 126, 234, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
-                                            <i class="fas fa-list-alt text-primary"></i>
-                                        </div>
-                                        <strong th:text="${userStat.logCount}">0</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div th:if="${userStat.lastActivity != null}">
-                                        <small class="d-block fw-bold" th:text="${#temporals.format(userStat.lastActivity, 'dd/MM/yyyy')}">Date</small>
-                                        <small class="text-muted" th:text="${#temporals.format(userStat.lastActivity, 'HH:mm')}">Heure</small>
-                                    </div>
-                                    <span th:unless="${userStat.lastActivity != null}" class="text-muted">-</span>
-                                </td>
-                                <td>
-                                    <span class="badge" 
-                                          th:if="${userStat.lastAction != null}"
-                                          th:classappend="${userStat.lastAction == 'LOGIN' ? 'bg-success' : (userStat.lastAction == 'LOGOUT' ? 'bg-danger' : (userStat.lastAction.contains('CREATE') ? 'bg-primary' : (userStat.lastAction.contains('DELETE') ? 'bg-danger' : 'bg-secondary')))}"
-                                          th:text="${userStat.lastAction}">ACTION</span>
-                                    <span th:unless="${userStat.lastAction != null}" class="text-muted">-</span>
-                                </td>
-                                <td>
-                                    <code class="small bg-light px-2 py-1 rounded" th:if="${userStat.lastIp != null}" th:text="${userStat.lastIp}">IP</code>
-                                    <span th:unless="${userStat.lastIp != null}" class="text-muted">-</span>
-                                </td>
-                                <td>
-                                    <a th:href="@{/admin/audit(userId=${userStat.userId})}" 
-                                       class="btn btn-sm btn-outline-primary" 
-                                       title="Filtrer les logs de cet utilisateur"
-                                       style="white-space: nowrap;">
-                                        <i class="fas fa-filter"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Empty State for Active Users -->
-        <div class="card mb-4 border-0 shadow-sm" th:if="${activeUsersWithStats == null or activeUsersWithStats.isEmpty()}">
-            <div class="card-body text-center py-5">
-                <i class="fas fa-users fa-4x text-muted mb-3" style="opacity: 0.3;"></i>
-                <p class="text-muted fs-5">Aucun utilisateur actif trouvé</p>
-                <small class="text-muted">Les utilisateurs apparaîtront ici une fois qu'ils auront effectué des actions sur le site.</small>
-            </div>
-        </div>
-
-        <!-- Filters Card -->
+        <!-- Filters -->
         <div class="card mb-4 border-0 shadow-sm">
             <div class="card-header bg-white">
                 <h5 class="mb-0">
                     <i class="fas fa-filter me-2 text-primary"></i>
-                    Filtres de Recherche
+                    Filtres
                 </h5>
             </div>
             <div class="card-body">
-                <form method="get" action="/admin/audit" id="filterForm">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-user me-2 text-info"></i>Utilisateur
-                            </label>
-                            <select class="form-select form-select-lg" 
-                                    name="userId" 
-                                    th:value="${filterUserId}"
-                                    style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
-                                    onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
-                                    onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
-                                <option value="">Tous les utilisateurs</option>
-                                <option th:each="user : ${allUsers}" 
-                                        th:value="${user.id}" 
-                                        th:text="${user.fullName + ' (' + user.email + ')'}"
-                                        th:selected="${filterUserId != null and filterUserId == user.id}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-tasks me-2 text-success"></i>Action
-                            </label>
-                            <select class="form-select form-select-lg" 
-                                    name="action" 
-                                    th:value="${filterAction}"
-                                    style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
-                                    onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
-                                    onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
-                                <option value="">Toutes les actions</option>
-                                <option th:each="act : ${availableActions}" 
-                                        th:value="${act}" 
-                                        th:text="${act}"
-                                        th:selected="${filterAction != null and filterAction == act}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-tag me-2 text-warning"></i>Type d'Action
-                            </label>
-                            <select class="form-select form-select-lg" 
-                                    name="actionType" 
-                                    th:value="${filterActionType}"
-                                    style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
-                                    onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
-                                    onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
-                                <option value="">Tous les types</option>
-                                <option th:each="type : ${availableActionTypes}" 
-                                        th:value="${type}" 
-                                        th:text="${type}"
-                                        th:selected="${filterActionType != null and filterActionType == type}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-folder me-2 text-danger"></i>Type de Ressource
-                            </label>
-                            <select class="form-select form-select-lg" 
-                                    name="resourceType" 
-                                    th:value="${filterResourceType}"
-                                    style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
-                                    onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
-                                    onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
-                                <option value="">Toutes les ressources</option>
-                                <option th:each="res : ${availableResourceTypes}" 
-                                        th:value="${res}" 
-                                        th:text="${res}"
-                                        th:selected="${filterResourceType != null and filterResourceType == res}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-network-wired me-2 text-primary"></i>Adresse IP
-                            </label>
-                            <input type="text" 
-                                   class="form-control form-control-lg" 
-                                   name="ipAddress" 
-                                   th:value="${filterIpAddress}" 
-                                   placeholder="Ex: 192.168.1.1"
-                                   style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
-                                   onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
-                                   onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-flag me-2 text-info"></i>Code Pays
-                            </label>
-                            <input type="text" 
-                                   class="form-control form-control-lg" 
-                                   name="countryCode" 
-                                   th:value="${filterCountryCode}" 
-                                   placeholder="Ex: FR, US"
-                                   style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
-                                   onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
-                                   onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-calendar-alt me-2 text-success"></i>Date Début
-                            </label>
-                            <input type="datetime-local" 
-                                   class="form-control form-control-lg" 
-                                   name="startDate" 
-                                   th:value="${filterStartDate != null ? #strings.concat(#temporals.format(filterStartDate, 'yyyy-MM-dd'), 'T', #temporals.format(filterStartDate, 'HH:mm')) : ''}"
-                                   style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
-                                   onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
-                                   onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-calendar-check me-2 text-danger"></i>Date Fin
-                            </label>
-                            <input type="datetime-local" 
-                                   class="form-control form-control-lg" 
-                                   name="endDate" 
-                                   th:value="${filterEndDate != null ? #strings.concat(#temporals.format(filterEndDate, 'yyyy-MM-dd'), 'T', #temporals.format(filterEndDate, 'HH:mm')) : ''}"
-                                   style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;"
-                                   onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)';"
-                                   onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none';">
-                        </div>
+                <form method="get" action="/admin/audit" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Utilisateur</label>
+                        <select name="userId" class="form-select">
+                            <option value="">Tous</option>
+                            <option th:each="user : ${users}"
+                                    th:value="${user.id}"
+                                    th:text="${user.fullName}"
+                                    th:selected="${filterUserId != null and filterUserId == user.id}">
+                                Utilisateur
+                            </option>
+                        </select>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <button type="submit" 
-                                    class="btn btn-lg" 
-                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 25px; padding: 12px 30px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease;"
-                                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)';"
-                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';">
-                                <i class="fas fa-search me-2"></i>Rechercher
-                            </button>
-                            <a th:href="@{/admin/audit}" 
-                               class="btn btn-lg btn-outline-secondary"
-                               style="border-radius: 25px; padding: 12px 30px; font-weight: 600; border: 2px solid #e9ecef; transition: all 0.3s ease; margin-left: 10px;"
-                               onmouseover="this.style.borderColor='#667eea'; this.style.color='#667eea';"
-                               onmouseout="this.style.borderColor='#e9ecef'; this.style.color='#6c757d';">
-                                <i class="fas fa-redo me-2"></i>Réinitialiser
-                            </a>
-                        </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Action</label>
+                        <input type="text" name="action" class="form-control" th:value="${filterAction}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date début</label>
+                        <input type="date" name="startDate" class="form-control" th:value="${filterStartDate}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date fin</label>
+                        <input type="date" name="endDate" class="form-control" th:value="${filterEndDate}">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>Filtrer
+                        </button>
+                        <a href="/admin/audit" class="btn btn-secondary">
+                            <i class="fas fa-redo me-2"></i>Réinitialiser
+                        </a>
                     </div>
                 </form>
             </div>
@@ -426,800 +92,218 @@
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
                 <h5 class="mb-0">
-                    <i class="fas fa-list-check me-2 text-primary"></i>
+                    <i class="fas fa-table me-2"></i>
                     Logs d'Audit
-                    <span class="badge bg-primary ms-2" th:text="${auditLogs != null ? auditLogs.totalElements : 0}">0</span>
                 </h5>
             </div>
-            <div class="card-body p-0">
-                <div class="table-responsive" th:if="${auditLogs != null and auditLogs.totalElements > 0}">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width: 150px;">
-                                    <i class="fas fa-calendar me-2 text-primary"></i>Date/Heure
-                                </th>
-                                <th style="width: 150px;">
-                                    <i class="fas fa-user me-2 text-info"></i>Utilisateur
-                                </th>
-                                <th style="width: 120px;">
-                                    <i class="fas fa-tasks me-2 text-success"></i>Action
-                                </th>
-                                <th style="width: 100px;">
-                                    <i class="fas fa-tag me-2 text-warning"></i>Type
-                                </th>
-                                <th>
-                                    <i class="fas fa-link me-2 text-primary"></i>URL
-                                </th>
-                                <th style="width: 120px;">
-                                    <i class="fas fa-network-wired me-2 text-danger"></i>IP
-                                </th>
-                                <th style="width: 100px;">
-                                    <i class="fas fa-globe me-2 text-info"></i>Pays
-                                </th>
-                                <th style="width: 100px;">
-                                    <i class="fas fa-clock me-2 text-secondary"></i>Temps
-                                </th>
-                                <th style="width: 80px;">Actions</th>
-                            </tr>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Utilisateur</th>
+                            <th>Action</th>
+                            <th>IP</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="log : ${auditLogs.content}">
-                                <td>
-                                    <small class="text-muted d-block" 
-                                           th:text="${#temporals.format(log.timestamp, 'dd/MM/yyyy')}">Date</small>
-                                    <small class="text-muted" 
-                                           th:text="${#temporals.format(log.timestamp, 'HH:mm:ss')}">Heure</small>
-                                </td>
-                                <td>
-                                    <div th:if="${log.user != null}">
-                                        <strong th:text="${log.user.fullName}">Nom</strong>
-                                        <br>
-                                        <small class="text-muted" th:text="${log.user.email}">Email</small>
-                                        <br>
-                                        <span class="badge" 
-                                              th:classappend="${log.user.role.name() == 'ADMIN' ? 'bg-danger' : (log.user.role.name() == 'EMPLOYEE' ? 'bg-warning' : 'bg-info')}"
-                                              th:text="${log.user.role.name()}">ROLE</span>
-                                    </div>
-                                    <span th:unless="${log.user != null}" class="text-muted">Anonyme</span>
-                                </td>
-                                <td>
-                                    <span class="badge" 
-                                          th:classappend="${log.action == 'LOGIN' ? 'bg-success' : (log.action == 'LOGOUT' ? 'bg-danger' : (log.action.contains('CREATE') ? 'bg-primary' : (log.action.contains('DELETE') ? 'bg-danger' : 'bg-secondary')))}"
-                                          th:text="${log.action}">ACTION</span>
-                                </td>
-                                <td>
-                                    <small class="text-muted" th:text="${log.actionType}">TYPE</small>
-                                </td>
-                                <td>
-                                    <small class="text-truncate d-block" style="max-width: 200px;" 
-                                           th:text="${log.requestUrl}">URL</small>
-                                    <small class="text-muted" th:text="${log.requestMethod}">METHOD</small>
-                                </td>
-                                <td>
-                                    <code class="small" th:text="${log.ipAddress}">IP</code>
-                                </td>
-                                <td>
-                                    <div th:if="${log.country != null}">
-                                        <i class="fas fa-flag me-1"></i>
-                                        <span th:text="${log.country}">Pays</span>
-                                        <br>
-                                        <small class="text-muted" th:text="${log.countryCode}">CODE</small>
-                                    </div>
-                                    <span th:unless="${log.country != null}" class="text-muted">-</span>
-                                </td>
-                                <td>
-                                    <small th:if="${log.responseTimeMs != null}" 
-                                           th:text="${log.responseTimeMs + ' ms'}">Temps</small>
-                                    <span th:unless="${log.responseTimeMs != null}" class="text-muted">-</span>
-                                </td>
-                                <td>
-                                    <a th:href="@{/admin/audit/{id}(id=${log.id})}" 
-                                       class="btn btn-sm btn-outline-primary" 
-                                       title="Voir les détails">
+                        <tr th:if="${auditLogs == null or auditLogs.isEmpty()}">
+                            <td colspan="6" class="text-center text-muted">
+                                Aucun log d'audit trouvé
+                            </td>
+                        </tr>
+                        <tr th:each="log : ${auditLogs?.content}">
+                            <td th:text="${log.id}">1</td>
+                            <td>
+                                <span th:if="${log.user != null}" th:text="${log.user.fullName}">Utilisateur</span>
+                                <span th:if="${log.user == null}" class="text-muted">Anonyme</span>
+                            </td>
+                            <td th:text="${log.action}">Action</td>
+                            <td th:text="${log.ipAddress}">IP</td>
+                            <td th:text="${#temporals.format(log.timestamp, 'dd/MM/yyyy HH:mm')}">Date</td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a th:href="@{/admin/audit/{id}(id=${log.id})}" class="btn btn-sm btn-primary" title="Voir les détails">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                </td>
-                            </tr>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-danger" 
+                                            onclick="confirmDeleteAuditLog(this)" 
+                                            th:data-id="${log.id}" 
+                                            th:data-action="${log.action}"
+                                            title="Supprimer ce log"
+                                            data-bs-toggle="tooltip">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
-                <div th:if="${auditLogs == null or auditLogs.totalElements == 0}" class="text-center py-5">
-                    <i class="fas fa-inbox fa-4x text-muted mb-3" style="opacity: 0.3;"></i>
-                    <p class="text-muted fs-5">Aucun log d'audit trouvé</p>
-                    <small class="text-muted">Les logs apparaîtront ici une fois que des activités seront enregistrées.</small>
-                </div>
-            </div>
-            <!-- Pagination -->
-            <div class="card-footer bg-white" th:if="${auditLogs != null and auditLogs.totalPages > 1}">
-                <nav>
-                    <ul class="pagination justify-content-center mb-0">
-                        <li class="page-item" th:classappend="${auditLogs.first} ? 'disabled'">
-                            <a class="page-link" th:href="@{/admin/audit(page=${auditLogs.number - 1}, userId=${filterUserId}, action=${filterAction}, actionType=${filterActionType}, resourceType=${filterResourceType}, ipAddress=${filterIpAddress}, countryCode=${filterCountryCode}, startDate=${filterStartDate}, endDate=${filterEndDate})}">
-                                <i class="fas fa-chevron-left"></i>
+
+                <!-- Pagination -->
+                <nav th:if="${totalPages != null and totalPages > 1}">
+                    <ul class="pagination justify-content-center">
+                        <!-- Bouton Précédent -->
+                        <li class="page-item" th:classappend="${currentPage == null or currentPage == 0} ? 'disabled' : ''">
+                            <a class="page-link"
+                               th:href="${currentPage != null and currentPage > 0} ? @{/admin/audit(page=${currentPage - 1}, size=${pageSize}, userId=${filterUserId}, action=${filterAction}, actionType=${filterActionType}, resourceType=${filterResourceType}, ipAddress=${filterIpAddress}, countryCode=${filterCountryCode}, startDate=${filterStartDate}, endDate=${filterEndDate})} : '#'"
+                               th:classappend="${currentPage == null or currentPage == 0} ? 'disabled' : ''">
+                                <i class="fas fa-chevron-left"></i> Précédent
                             </a>
                         </li>
-                        <li class="page-item" th:each="i : ${#numbers.sequence(0, auditLogs.totalPages - 1)}"
-                            th:classappend="${i == auditLogs.number} ? 'active'">
-                            <a class="page-link" th:href="@{/admin/audit(page=${i}, userId=${filterUserId}, action=${filterAction}, actionType=${filterActionType}, resourceType=${filterResourceType}, ipAddress=${filterIpAddress}, countryCode=${filterCountryCode}, startDate=${filterStartDate}, endDate=${filterEndDate})}"
-                               th:text="${i + 1}">1</a>
+                        
+                        <!-- Première page -->
+                        <li class="page-item" 
+                            th:if="${currentPage != null and totalPages != null and currentPage > 2}"
+                            th:classappend="${currentPage == 0} ? 'active' : ''">
+                            <a class="page-link"
+                               th:href="@{/admin/audit(page=0, size=${pageSize}, userId=${filterUserId}, action=${filterAction}, actionType=${filterActionType}, resourceType=${filterResourceType}, ipAddress=${filterIpAddress}, countryCode=${filterCountryCode}, startDate=${filterStartDate}, endDate=${filterEndDate})}">1</a>
                         </li>
-                        <li class="page-item" th:classappend="${auditLogs.last} ? 'disabled'">
-                            <a class="page-link" th:href="@{/admin/audit(page=${auditLogs.number + 1}, userId=${filterUserId}, action=${filterAction}, actionType=${filterActionType}, resourceType=${filterResourceType}, ipAddress=${filterIpAddress}, countryCode=${filterCountryCode}, startDate=${filterStartDate}, endDate=${filterEndDate})}">
-                                <i class="fas fa-chevron-right"></i>
+                        <li class="page-item disabled" th:if="${currentPage != null and totalPages != null and currentPage > 3}">
+                            <span class="page-link">...</span>
+                        </li>
+                        
+                        <!-- Pages autour de la page courante -->
+                        <li th:if="${totalPages != null and totalPages > 0}"
+                            th:each="pageNum : ${#numbers.sequence(
+                                (currentPage != null and (currentPage - 2) >= 0) ? (currentPage - 2) : 0,
+                                (currentPage != null and totalPages != null and (currentPage + 2) < totalPages) ? (currentPage + 2) : ((totalPages != null and totalPages > 0) ? (totalPages - 1) : 0)
+                            )}"
+                            class="page-item"
+                            th:classappend="${pageNum == currentPage} ? 'active' : ''">
+                            <a class="page-link"
+                               th:href="@{/admin/audit(page=${pageNum}, size=${pageSize}, userId=${filterUserId}, action=${filterAction}, actionType=${filterActionType}, resourceType=${filterResourceType}, ipAddress=${filterIpAddress}, countryCode=${filterCountryCode}, startDate=${filterStartDate}, endDate=${filterEndDate})}"
+                               th:text="${pageNum + 1}">1</a>
+                        </li>
+                        
+                        <!-- Ellipse avant dernière page -->
+                        <li class="page-item disabled" th:if="${currentPage != null and totalPages != null and currentPage < totalPages - 4}">
+                            <span class="page-link">...</span>
+                        </li>
+                        
+                        <!-- Dernière page -->
+                        <li class="page-item"
+                            th:if="${currentPage != null and totalPages != null and currentPage < totalPages - 3}"
+                            th:classappend="${currentPage == totalPages - 1} ? 'active' : ''">
+                            <a class="page-link"
+                               th:href="@{/admin/audit(page=${totalPages - 1}, size=${pageSize}, userId=${filterUserId}, action=${filterAction}, actionType=${filterActionType}, resourceType=${filterResourceType}, ipAddress=${filterIpAddress}, countryCode=${filterCountryCode}, startDate=${filterStartDate}, endDate=${filterEndDate})}"
+                               th:text="${totalPages}">1</a>
+                        </li>
+                        
+                        <!-- Bouton Suivant -->
+                        <li class="page-item" th:classappend="${currentPage != null and totalPages != null and currentPage >= totalPages - 1} ? 'disabled' : ''">
+                            <a class="page-link"
+                               th:href="${currentPage != null and totalPages != null and currentPage < totalPages - 1} ? @{/admin/audit(page=${currentPage + 1}, size=${pageSize}, userId=${filterUserId}, action=${filterAction}, actionType=${filterActionType}, resourceType=${filterResourceType}, ipAddress=${filterIpAddress}, countryCode=${filterCountryCode}, startDate=${filterStartDate}, endDate=${filterEndDate})} : '#'"
+                               th:classappend="${currentPage != null and totalPages != null and currentPage >= totalPages - 1} ? 'disabled' : ''">
+                                Suivant <i class="fas fa-chevron-right"></i>
                             </a>
                         </li>
                     </ul>
+                    
+                    <!-- Information sur la pagination -->
+                    <div class="text-center mt-2 text-muted">
+                        <small>
+                            Page <span th:text="${(currentPage != null ? currentPage : 0) + 1}">1</span> sur 
+                            <span th:text="${totalPages != null ? totalPages : 1}">1</span> 
+                            (<span th:text="${totalItems != null ? totalItems : 0}">0</span> résultat(s))
+                        </small>
+                    </div>
                 </nav>
             </div>
         </div>
+    </div>
 
-        <!-- Cleanup Modal (by days) -->
-        <div class="modal fade" id="cleanupModal" tabindex="-1" aria-labelledby="cleanupModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg" style="border-radius: 15px; overflow: hidden;">
-                    <!-- Modal Header avec gradient moderne -->
-                    <div class="modal-header border-0 text-white" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); padding: 25px 30px;">
-                        <div class="d-flex align-items-center">
-                            <div class="warning-icon-wrapper me-3" style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem;"></i>
-                            </div>
-                            <div>
-                                <h5 class="modal-title fw-bold mb-0" style="font-size: 1.3rem;" id="cleanupModalLabel">
-                                    Nettoyer les Anciens Logs
-                                </h5>
-                                <small class="opacity-75">Suppression définitive des logs</small>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="opacity: 0.9;"></button>
-                    </div>
-                    
-                    <form method="post" th:action="@{/admin/audit/cleanup}" id="cleanupForm">
-                        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
-                        <div class="modal-body p-4" style="background: #f8f9fa;">
-                            <!-- Warning Alert Stylisé -->
-                            <div class="warning-card mb-4" style="background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); border-left: 4px solid #ffc107; border-radius: 10px; padding: 20px;">
-                                <div class="d-flex align-items-start">
-                                    <div class="warning-icon me-3" style="width: 40px; height: 40px; background: #ffc107; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h6 class="fw-bold mb-2" style="color: #856404;">⚠️ Action Irréversible</h6>
-                                        <p class="mb-0" style="color: #856404; line-height: 1.6;">
-                                            Tous les logs plus anciens que la période spécifiée seront <strong>définitivement supprimés</strong>. Cette action ne peut pas être annulée.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Input Section -->
-                            <div class="input-card mb-4" style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                                <label class="form-label fw-bold mb-3" style="color: #2c3e50; font-size: 1rem;">
-                                    <div class="d-flex align-items-center">
-                                        <div class="input-icon me-2" style="width: 35px; height: 35px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
-                                            <i class="fas fa-calendar-days"></i>
-                                        </div>
-                                        Conserver les logs des derniers jours
-                                    </div>
-                                </label>
-                                <input type="number" 
-                                       class="form-control form-control-lg" 
-                                       name="daysToKeep" 
-                                       id="daysToKeep" 
-                                       value="90" 
-                                       min="1" 
-                                       max="3650" 
-                                       required
-                                       style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; font-size: 1.1rem; font-weight: 600;"
-                                       onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)'"
-                                       onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none'">
-                                <div class="preview-box mt-3 p-3" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 8px; border-left: 3px solid #2196f3;">
-                                    <small class="text-muted d-block mb-1">
-                                        <i class="fas fa-info-circle me-1"></i>Résultat :
-                                    </small>
-                                    <strong style="color: #1976d2;">
-                                        Les logs de plus de <span id="daysPreview" style="color: #dc3545; font-size: 1.1rem;">90</span> jours seront supprimés.
-                                    </strong>
-                                </div>
-                            </div>
-                            
-                            <!-- Info Card -->
-                            <div class="info-card" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #2196f3; border-radius: 10px; padding: 15px;">
-                                <div class="d-flex align-items-start">
-                                    <i class="fas fa-lightbulb me-2" style="color: #2196f3; margin-top: 3px;"></i>
-                                    <div>
-                                        <strong style="color: #1976d2;">💡 Conseil :</strong>
-                                        <p class="mb-0" style="color: #1565c0; line-height: 1.6;">
-                                            Il est recommandé de conserver au moins <strong>30 jours</strong> de logs pour des raisons de sécurité et de conformité.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="modal-footer border-0" style="background: #f8f9fa; padding: 20px 30px;">
-                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" style="border-radius: 8px; font-weight: 600;">
-                                <i class="fas fa-times me-2"></i>Annuler
-                            </button>
-                            <button type="submit" class="btn btn-danger px-4" id="cleanupSubmitBtn" style="border-radius: 8px; font-weight: 600; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border: none; box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);">
-                                <i class="fas fa-broom me-2"></i>Nettoyer les Logs
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Confirmation Modal pour Cleanup -->
-        <div class="modal fade" id="confirmCleanupModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg" style="border-radius: 15px; overflow: hidden;">
-                    <div class="modal-body text-center p-5">
-                        <div class="confirm-icon mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);">
-                            <i class="fas fa-exclamation-triangle text-white" style="font-size: 2.5rem;"></i>
-                        </div>
-                        <h4 class="fw-bold mb-3" style="color: #2c3e50;">Confirmer la Suppression</h4>
-                        <p class="mb-4" style="color: #6c757d; font-size: 1.1rem; line-height: 1.6;" id="confirmCleanupMessage">
-                            Êtes-vous sûr de vouloir supprimer tous les logs ?
-                        </p>
-                        <div class="d-flex gap-3 justify-content-center">
-                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" style="border-radius: 8px; font-weight: 600;">
-                                <i class="fas fa-times me-2"></i>Annuler
-                            </button>
-                            <button type="button" class="btn btn-danger px-4" id="confirmCleanupBtn" style="border-radius: 8px; font-weight: 600; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border: none;">
-                                <i class="fas fa-check me-2"></i>Confirmer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <script>
-            // Mise à jour du preview des jours
-            document.getElementById('daysToKeep').addEventListener('input', function() {
-                document.getElementById('daysPreview').textContent = this.value || '90';
+    <!-- Delete Form (Hidden) -->
+    <form id="deleteAuditLogForm" method="post" th:action="@{/admin/audit/0/delete}" style="display: none;">
+        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
+    </form>
+
+    <script>
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
             });
-            
-            // Confirmation avant nettoyage avec modal personnalisé
-            document.getElementById('cleanupForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const daysToKeep = document.getElementById('daysToKeep').value;
-                const form = this;
-                
-                // Afficher le modal de confirmation
-                document.getElementById('confirmCleanupMessage').textContent = 
-                    `Êtes-vous sûr de vouloir supprimer tous les logs de plus de ${daysToKeep} jours ?\n\nCette action est irréversible et ne peut pas être annulée !`;
-                
-                const confirmModal = new bootstrap.Modal(document.getElementById('confirmCleanupModal'));
-                confirmModal.show();
-                
-                // Confirmer la suppression
-                document.getElementById('confirmCleanupBtn').onclick = function() {
-                    confirmModal.hide();
-                    
-                    // Désactiver le bouton pendant le traitement
-                    const submitBtn = document.getElementById('cleanupSubmitBtn');
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Nettoyage en cours...';
-                    
-                    // Soumettre le formulaire
-                    form.submit();
-                };
-            });
-        </script>
+        });
 
-        <!-- Custom Cleanup Modal (by date range) -->
-        <div class="modal fade" id="customCleanupModal" tabindex="-1" aria-labelledby="customCleanupModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0 shadow-lg" style="border-radius: 15px; overflow: hidden;">
-                    <!-- Modal Header avec gradient moderne -->
-                    <div class="modal-header border-0 text-white" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); padding: 25px 30px;">
-                        <div class="d-flex align-items-center">
-                            <div class="warning-icon-wrapper me-3" style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-calendar-range" style="font-size: 1.5rem;"></i>
-                            </div>
-                            <div>
-                                <h5 class="modal-title fw-bold mb-0" style="font-size: 1.3rem;" id="customCleanupModalLabel">
-                                    Nettoyer par Période Personnalisée
-                                </h5>
-                                <small class="opacity-75">Suppression définitive par période</small>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="opacity: 0.9;"></button>
-                    </div>
-                    
-                    <form method="post" th:action="@{/admin/audit/cleanup-by-period}" id="customCleanupForm">
-                        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" th:if="${_csrf != null}">
-                        <div class="modal-body p-4" style="background: #f8f9fa;">
-                            <!-- Warning Alert Stylisé -->
-                            <div class="warning-card mb-4" style="background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); border-left: 4px solid #ffc107; border-radius: 10px; padding: 20px;">
-                                <div class="d-flex align-items-start">
-                                    <div class="warning-icon me-3" style="width: 40px; height: 40px; background: #ffc107; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h6 class="fw-bold mb-2" style="color: #856404;">⚠️ Action Irréversible</h6>
-                                        <p class="mb-0" style="color: #856404; line-height: 1.6;">
-                                            Tous les logs dans la période spécifiée seront <strong>définitivement supprimés</strong>. Cette action ne peut pas être annulée.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Date Inputs Section -->
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-6">
-                                    <div class="input-card" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                                        <label class="form-label fw-bold mb-3" style="color: #2c3e50;">
-                                            <div class="d-flex align-items-center">
-                                                <div class="input-icon me-2" style="width: 35px; height: 35px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
-                                                    <i class="fas fa-calendar-alt"></i>
-                                                </div>
-                                                Date de Début
-                                            </div>
-                                        </label>
-                                        <input type="date" 
-                                               class="form-control form-control-lg" 
-                                               name="startDate" 
-                                               id="customCleanupStartDate" 
-                                               required
-                                               style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; font-size: 1rem; font-weight: 600;"
-                                               onfocus="this.style.borderColor='#28a745'; this.style.boxShadow='0 0 0 0.2rem rgba(40, 167, 69, 0.25)'"
-                                               onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none'">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="input-card" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                                        <label class="form-label fw-bold mb-3" style="color: #2c3e50;">
-                                            <div class="d-flex align-items-center">
-                                                <div class="input-icon me-2" style="width: 35px; height: 35px; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
-                                                    <i class="fas fa-calendar-check"></i>
-                                                </div>
-                                                Date de Fin
-                                            </div>
-                                        </label>
-                                        <input type="date" 
-                                               class="form-control form-control-lg" 
-                                               name="endDate" 
-                                               id="customCleanupEndDate" 
-                                               required
-                                               style="border-radius: 10px; border: 2px solid #e9ecef; padding: 12px 15px; font-size: 1rem; font-weight: 600;"
-                                               onfocus="this.style.borderColor='#dc3545'; this.style.boxShadow='0 0 0 0.2rem rgba(220, 53, 69, 0.25)'"
-                                               onblur="this.style.borderColor='#e9ecef'; this.style.boxShadow='none'">
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Preview Section -->
-                            <div class="preview-box mb-4 p-3" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 10px; border-left: 3px solid #2196f3;">
-                                <div class="d-flex align-items-start">
-                                    <i class="fas fa-info-circle me-2 mt-1" style="color: #2196f3;"></i>
-                                    <div>
-                                        <strong style="color: #1976d2;">📅 Période sélectionnée :</strong>
-                                        <p class="mb-0 mt-2" style="color: #1565c0; line-height: 1.6;">
-                                            Tous les logs entre le <strong id="previewStartDate" style="color: #28a745;">--</strong> et le <strong id="previewEndDate" style="color: #dc3545;">--</strong> (inclus) seront supprimés.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Info Card -->
-                            <div class="info-card" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #2196f3; border-radius: 10px; padding: 15px;">
-                                <div class="d-flex align-items-start">
-                                    <i class="fas fa-lightbulb me-2" style="color: #2196f3; margin-top: 3px;"></i>
-                                    <div>
-                                        <strong style="color: #1976d2;">💡 Note :</strong>
-                                        <p class="mb-0" style="color: #1565c0; line-height: 1.6;">
-                                            Les dates de début et de fin sont incluses dans la période de suppression.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="modal-footer border-0" style="background: #f8f9fa; padding: 20px 30px;">
-                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" style="border-radius: 8px; font-weight: 600;">
-                                <i class="fas fa-times me-2"></i>Annuler
-                            </button>
-                            <button type="submit" class="btn btn-danger px-4" id="customCleanupSubmitBtn" style="border-radius: 8px; font-weight: 600; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border: none; box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);">
-                                <i class="fas fa-broom me-2"></i>Supprimer les Logs
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Confirmation Modal pour Custom Cleanup -->
-        <div class="modal fade" id="confirmCustomCleanupModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg" style="border-radius: 15px; overflow: hidden;">
-                    <div class="modal-body text-center p-5">
-                        <div class="confirm-icon mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);">
-                            <i class="fas fa-exclamation-triangle text-white" style="font-size: 2.5rem;"></i>
-                        </div>
-                        <h4 class="fw-bold mb-3" style="color: #2c3e50;">Confirmer la Suppression</h4>
-                        <p class="mb-4" style="color: #6c757d; font-size: 1.1rem; line-height: 1.6;" id="confirmCustomCleanupMessage">
-                            Êtes-vous sûr de vouloir supprimer tous les logs ?
-                        </p>
-                        <div class="d-flex gap-3 justify-content-center">
-                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" style="border-radius: 8px; font-weight: 600;">
-                                <i class="fas fa-times me-2"></i>Annuler
-                            </button>
-                            <button type="button" class="btn btn-danger px-4" id="confirmCustomCleanupBtn" style="border-radius: 8px; font-weight: 600; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border: none;">
-                                <i class="fas fa-check me-2"></i>Confirmer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <script>
-            // Mise à jour du preview des dates
-            const startDateInput = document.getElementById('customCleanupStartDate');
-            const endDateInput = document.getElementById('customCleanupEndDate');
+        // Delete confirmation - make it globally accessible
+        window.confirmDeleteAuditLog = function(button) {
+            const id = button.getAttribute('data-id');
+            const action = button.getAttribute('data-action') || 'ce log';
+            const form = document.getElementById('deleteAuditLogForm');
             
-            function updateDatePreview() {
-                const startDate = startDateInput.value;
-                const endDate = endDateInput.value;
-                
-                if (startDate && endDate) {
-                    const startFormatted = new Date(startDate).toLocaleDateString('fr-FR');
-                    const endFormatted = new Date(endDate).toLocaleDateString('fr-FR');
-                    document.getElementById('previewStartDate').textContent = startFormatted;
-                    document.getElementById('previewEndDate').textContent = endFormatted;
-                }
-            }
+            // Get CSRF token from meta tag
+            const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');
+            const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : null;
             
-            if (startDateInput) {
-                startDateInput.addEventListener('change', updateDatePreview);
-            }
-            if (endDateInput) {
-                endDateInput.addEventListener('change', updateDatePreview);
-            }
+            // Get CSRF parameter name - for forms, use "_csrf" (not the header name)
+            const csrfParamName = '_csrf'; // Standard parameter name for CookieCsrfTokenRepository
             
-            // Confirmation avant nettoyage personnalisé avec modal
-            document.getElementById('customCleanupForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const startDate = document.getElementById('customCleanupStartDate').value;
-                const endDate = document.getElementById('customCleanupEndDate').value;
-                const form = this;
-                
-                if (!startDate || !endDate) {
-                    alert('Veuillez sélectionner les deux dates.');
-                    return;
-                }
-                
-                const startFormatted = new Date(startDate).toLocaleDateString('fr-FR');
-                const endFormatted = new Date(endDate).toLocaleDateString('fr-FR');
-                
-                // Afficher le modal de confirmation
-                document.getElementById('confirmCustomCleanupMessage').textContent = 
-                    `Êtes-vous sûr de vouloir supprimer tous les logs du ${startFormatted} au ${endFormatted} ?\n\nCette action est irréversible et ne peut pas être annulée !`;
-                
-                const confirmModal = new bootstrap.Modal(document.getElementById('confirmCustomCleanupModal'));
-                confirmModal.show();
-                
-                // Confirmer la suppression
-                document.getElementById('confirmCustomCleanupBtn').onclick = function() {
-                    confirmModal.hide();
-                    
-                    // Désactiver le bouton pendant le traitement
-                    const submitBtn = document.getElementById('customCleanupSubmitBtn');
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Suppression en cours...';
-                    
-                    // Soumettre le formulaire
-                    form.submit();
-                };
-            });
-        </script>
-
-        <!-- Custom Export Modal -->
-        <div class="modal fade" id="customExportModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title">
-                            <i class="fas fa-calendar-range me-2"></i>Exporter par Période Personnalisée
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <form id="customExportForm">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">
-                                    <i class="fas fa-calendar-alt me-2 text-success"></i>Date de Début
-                                </label>
-                                <input type="date" class="form-control" name="startDate" id="customExportStartDate" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">
-                                    <i class="fas fa-calendar-check me-2 text-danger"></i>Date de Fin
-                                </label>
-                                <input type="date" class="form-control" name="endDate" id="customExportEndDate" required>
-                            </div>
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                <strong>Note :</strong> Tous les logs entre ces deux dates (inclus) seront exportés en CSV.
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-2"></i>Annuler
-                            </button>
-                            <button type="submit" class="btn btn-primary" id="customExportSubmitBtn">
-                                <i class="fas fa-download me-2"></i>Exporter CSV
-                            </button>
-                        </div>
-                    </form>
-                    <script>
-                        // Gestion de l'export personnalisé
-                        document.getElementById('customExportForm').addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            const startDate = document.getElementById('customExportStartDate').value;
-                            const endDate = document.getElementById('customExportEndDate').value;
-                            
-                            if (!startDate || !endDate) {
-                                alert('Veuillez sélectionner une date de début et une date de fin.');
-                                return;
-                            }
-                            
-                            const params = new URLSearchParams();
-                            params.append('startDateStr', startDate + 'T00:00:00');
-                            params.append('endDateStr', endDate + 'T23:59:59');
-                            params.append('format', 'csv');
-                            
-                            const submitBtn = document.getElementById('customExportSubmitBtn');
-                            submitBtn.disabled = true;
-                            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Export en cours...';
-                            
-                            window.location.href = '/admin/audit/export?' + params.toString();
-                            
-                            setTimeout(() => {
-                                submitBtn.disabled = false;
-                                submitBtn.innerHTML = '<i class="fas fa-download me-2"></i>Exporter CSV';
-                                bootstrap.Modal.getInstance(document.getElementById('customExportModal')).hide();
-                            }, 2000);
-                        });
-                    </script>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            function exportLogs(event) {
-                if (event) {
-                    event.preventDefault();
-                }
-                
-                // Récupérer tous les paramètres de filtre depuis l'URL ou le formulaire
-                const urlParams = new URLSearchParams(window.location.search);
-                const form = document.getElementById('filterForm');
-                
-                // Construire les paramètres d'export
-                const params = new URLSearchParams();
-                
-                // Fonction helper pour récupérer une valeur
-                function getValue(paramName) {
-                    const urlValue = urlParams.get(paramName);
-                    if (urlValue) return urlValue;
-                    const formInput = form ? form.querySelector('[name="' + paramName + '"]') : null;
-                    return formInput ? formInput.value : '';
-                }
-                
-                // Récupérer les valeurs
-                const userId = getValue('userId');
-                const action = getValue('action');
-                const actionType = getValue('actionType');
-                const resourceType = getValue('resourceType');
-                const ipAddress = getValue('ipAddress');
-                const countryCode = getValue('countryCode');
-                let startDate = getValue('startDate');
-                let endDate = getValue('endDate');
-                
-                // Convertir les dates au format attendu (datetime-local -> ISO)
-                if (startDate && startDate.includes('T')) {
-                    // Format déjà correct ou à convertir
-                    if (!startDate.includes(':')) {
-                        startDate += 'T00:00:00';
-                    } else if (startDate.split(':').length === 2) {
-                        startDate += ':00';
-                    }
-                }
-                
-                if (endDate && endDate.includes('T')) {
-                    if (!endDate.includes(':')) {
-                        endDate += 'T23:59:59';
-                    } else if (endDate.split(':').length === 2) {
-                        endDate += ':59';
-                    }
-                }
-                
-                // Ajouter les paramètres non vides
-                if (userId) params.append('userId', userId);
-                if (action) params.append('action', action);
-                if (actionType) params.append('actionType', actionType);
-                if (resourceType) params.append('resourceType', resourceType);
-                if (ipAddress) params.append('ipAddress', ipAddress);
-                if (countryCode) params.append('countryCode', countryCode);
-                if (startDate) params.append('startDateStr', startDate);
-                if (endDate) params.append('endDateStr', endDate);
-                
-                params.append('format', 'csv');
-                
-                // Afficher un message de chargement
-                const exportBtn = event && event.target ? event.target.closest('button') : document.querySelector('button[onclick*="exportLogs"]');
-                if (exportBtn) {
-                    const originalText = exportBtn.innerHTML;
-                    exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Export en cours...';
-                    exportBtn.disabled = true;
-                    
-                    // Lancer le téléchargement
-                    window.location.href = '/admin/audit/export?' + params.toString();
-                    
-                    // Réinitialiser le bouton après 3 secondes
-                    setTimeout(() => {
-                        exportBtn.innerHTML = originalText;
-                        exportBtn.disabled = false;
-                    }, 3000);
+            // Set form action
+            form.action = '/admin/audit/delete';
+            
+            // Ensure CSRF token is in the form
+            if (csrfToken) {
+                // Remove existing CSRF input if any
+                const existingCsrf = form.querySelector('input[name*="csrf"]');
+                if (existingCsrf) {
+                    existingCsrf.value = csrfToken;
+                    existingCsrf.name = csrfParamName;
                 } else {
-                    // Si le bouton n'est pas trouvé, lancer directement
-                    window.location.href = '/admin/audit/export?' + params.toString();
-                }
-            }
-            
-            // Export par période prédéfinie
-            function exportByPeriod(period) {
-                const now = new Date();
-                let startDate, endDate;
-                
-                switch(period) {
-                    case 'today':
-                        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                        endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-                        break;
-                    case 'week':
-                        startDate = new Date(now);
-                        startDate.setDate(now.getDate() - 7);
-                        endDate = new Date(now);
-                        break;
-                    case 'month':
-                        startDate = new Date(now);
-                        startDate.setDate(now.getDate() - 30);
-                        endDate = new Date(now);
-                        break;
-                    case 'year':
-                        startDate = new Date(now);
-                        startDate.setMonth(now.getMonth() - 12);
-                        endDate = new Date(now);
-                        break;
-                    default:
-                        return;
-                }
-                
-                const params = new URLSearchParams();
-                params.append('startDateStr', formatDateForExport(startDate));
-                params.append('endDateStr', formatDateForExport(endDate));
-                params.append('format', 'csv');
-                
-                window.location.href = '/admin/audit/export?' + params.toString();
-            }
-            
-            // Nettoyage par période prédéfinie
-            function cleanupByPeriod(period) {
-                const now = new Date();
-                let startDate, endDate;
-                let periodLabel;
-                
-                switch(period) {
-                    case 'today':
-                        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                        endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-                        periodLabel = "aujourd'hui";
-                        break;
-                    case 'week':
-                        startDate = new Date(now);
-                        startDate.setDate(now.getDate() - 7);
-                        endDate = new Date(now);
-                        periodLabel = "les 7 derniers jours";
-                        break;
-                    case 'month':
-                        startDate = new Date(now);
-                        startDate.setDate(now.getDate() - 30);
-                        endDate = new Date(now);
-                        periodLabel = "les 30 derniers jours";
-                        break;
-                    case 'year':
-                        startDate = new Date(now);
-                        startDate.setMonth(now.getMonth() - 12);
-                        endDate = new Date(now);
-                        periodLabel = "les 12 derniers mois";
-                        break;
-                    default:
-                        return;
-                }
-                
-                const startFormatted = formatDateForCleanup(startDate);
-                const endFormatted = formatDateForCleanup(endDate);
-                const startFormattedDisplay = new Date(startDate).toLocaleDateString('fr-FR');
-                const endFormattedDisplay = new Date(endDate).toLocaleDateString('fr-FR');
-                
-                // Afficher le modal de confirmation
-                document.getElementById('confirmCustomCleanupMessage').textContent = 
-                    `Êtes-vous sûr de vouloir supprimer tous les logs de ${periodLabel} (du ${startFormattedDisplay} au ${endFormattedDisplay}) ?\n\nCette action est irréversible et ne peut pas être annulée !`;
-                
-                const confirmModal = new bootstrap.Modal(document.getElementById('confirmCustomCleanupModal'));
-                confirmModal.show();
-                
-                // Créer le formulaire pour la soumission
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/admin/audit/cleanup-by-period';
-                
-                const startInput = document.createElement('input');
-                startInput.type = 'hidden';
-                startInput.name = 'startDate';
-                startInput.value = startFormatted;
-                form.appendChild(startInput);
-                
-                const endInput = document.createElement('input');
-                endInput.type = 'hidden';
-                endInput.name = 'endDate';
-                endInput.value = endFormatted;
-                form.appendChild(endInput);
-                
-                // Ajouter le token CSRF si nécessaire
-                const csrfToken = document.querySelector('meta[name="_csrf"]');
-                if (csrfToken) {
+                    // Add CSRF token input
                     const csrfInput = document.createElement('input');
                     csrfInput.type = 'hidden';
-                    csrfInput.name = '_csrf';
-                    csrfInput.value = csrfToken.getAttribute('content');
+                    csrfInput.name = csrfParamName;
+                    csrfInput.value = csrfToken;
                     form.appendChild(csrfInput);
                 }
-                
-                // Confirmer la suppression via le modal
-                document.getElementById('confirmCustomCleanupBtn').onclick = function() {
-                    confirmModal.hide();
-                    document.body.appendChild(form);
+            } else {
+                console.warn('CSRF token not found in meta tags');
+            }
+            
+            // Add logIds parameter
+            const existingLogIds = form.querySelector('input[name="logIds"]');
+            if (existingLogIds) {
+                existingLogIds.value = id;
+            } else {
+                const logIdsInput = document.createElement('input');
+                logIdsInput.type = 'hidden';
+                logIdsInput.name = 'logIds';
+                logIdsInput.value = id;
+                form.appendChild(logIdsInput);
+            }
+            
+            // Add filter parameters from URL to preserve filters after deletion
+            const urlParams = new URLSearchParams(window.location.search);
+            ['userId', 'action', 'actionType', 'resourceType', 'ipAddress', 'countryCode', 'startDate', 'endDate', 'page', 'size'].forEach(param => {
+                const value = urlParams.get(param);
+                if (value) {
+                    const existingInput = form.querySelector('input[name="' + param + '"]');
+                    if (existingInput) {
+                        existingInput.value = value;
+                    } else {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = param;
+                        input.value = value;
+                        form.appendChild(input);
+                    }
+                }
+            });
+            
+            showConfirmModal(
+                'Êtes-vous sûr de vouloir supprimer le log d\'audit <strong>' + action + '</strong> ? Cette action est irréversible.',
+                function() {
                     form.submit();
-                };
-            }
-            
-            // Afficher la modal d'export personnalisé
-            function showCustomExportModal() {
-                const modal = new bootstrap.Modal(document.getElementById('customExportModal'));
-                modal.show();
-            }
-            
-            // Afficher la modal de nettoyage personnalisé
-            function showCustomCleanupModal() {
-                const modal = new bootstrap.Modal(document.getElementById('customCleanupModal'));
-                modal.show();
-            }
-            
-            // Formater la date pour l'export
-            function formatDateForExport(date) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                const seconds = String(date.getSeconds()).padStart(2, '0');
-                return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-            }
-            
-            // Formater la date pour le nettoyage
-            function formatDateForCleanup(date) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            }
-        </script>
-    </div>
+                }
+            );
+        };
+    </script>
 </div>
 

@@ -89,7 +89,7 @@ public class ReviewController {
             notificationRepository.save(notification);
 
             redirectAttributes.addFlashAttribute("success", 
-                "✅ Avis envoyé avec succès ! Merci pour votre retour. Il sera publié après validation par notre équipe.");
+                "Avis envoyé avec succès ! Merci pour votre retour. Il sera publié après validation par notre équipe.");
             redirectAttributes.addFlashAttribute("redirectToHome", true);
             
             return "redirect:/submit-review";

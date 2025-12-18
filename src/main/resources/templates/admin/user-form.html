@@ -6,9 +6,9 @@
 </head>
 <body>
 <div th:replace="~{admin/layout :: layout(~{::content})}">
-    <div th:fragment="content">
+    <div th:fragment="content" th:with="pageTitleText=${user != null and user.id != null ? 'Modifier l''Utilisateur' : 'Créer un Utilisateur'}">
         <!-- Breadcrumb -->
-        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb('Utilisateurs', '/admin/users', 'fas fa-users', (user.id == null ? 'Créer un Utilisateur' : 'Modifier l''Utilisateur'), 'fas fa-user-edit')}"></div>
+        <div th:replace="~{admin/fragments/breadcrumb :: breadcrumb('Utilisateurs', '/admin/users', 'fas fa-users', ${pageTitleText}, 'fas fa-user-edit')}"></div>
         
         <!-- Back Button -->
         <div class="mb-3">
@@ -28,7 +28,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <h2 class="mb-1 text-white fw-bold">
-                                <span th:text="${user.id == null ? 'Créer un Utilisateur' : 'Modifier l''Utilisateur'}">Utilisateur</span>
+                                <span th:text="${user != null and user.id != null ? 'Modifier l''Utilisateur' : 'Créer un Utilisateur'}">Utilisateur</span>
                             </h2>
                             <p class="mb-0 opacity-90" th:text="${pageDescription ?: 'Gérez les informations de l''utilisateur'}">Formulaire utilisateur</p>
                         </div>
@@ -46,7 +46,7 @@
                 </h3>
             </div>
             <div class="card-body p-4">
-                <form th:action="${user.id == null ? '/admin/users' : #strings.concat('/admin/users/', user.id, '/update')}"
+                <form th:action="${user != null and user.id != null ? #strings.concat('/admin/users/', user.id, '/update') : '/admin/users'}"
                       th:object="${user}" method="post">
 
                     <div th:if="${#fields.hasErrors()}" class="alert alert-danger border-0 shadow-sm" style="border-radius: 10px; border-left: 4px solid #dc3545;">
@@ -154,6 +154,28 @@
                                     <option th:value="false" th:text="'Inactif'"></option>
                                 </select>
                             </div>
+                            <div class="col-md-12" th:if="${user == null or user.id == null}">
+                                <label class="form-label fw-bold" style="color: #2c5aa0;">
+                                    <i class="fas fa-key me-1 text-danger"></i>Mot de passe <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <input type="password" 
+                                           th:field="*{password}" 
+                                           class="form-control" 
+                                           th:classappend="${#fields.hasErrors('password')} ? ' is-invalid' : ''"
+                                           required
+                                           style="border-radius: 10px 0 0 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;" />
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn" style="border-radius: 0 10px 10px 0; border: 2px solid #e9ecef; border-left: none;">
+                                        <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback" th:errors="*{password}"></div>
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1 text-muted"></i>
+                                    Le mot de passe est obligatoire pour créer un nouvel utilisateur. L'utilisateur sera obligé de changer ce mot de passe lors de sa première connexion.
+                                </div>
+                            </div>
+                            
                             <div class="col-md-12" th:if="${user.id != null}">
                                 <label class="form-label fw-bold" style="color: #2c5aa0;">
                                     <i class="fas fa-key me-1 text-danger"></i>Mot de passe
@@ -165,91 +187,14 @@
                                            class="form-control" 
                                            th:classappend="${#fields.hasErrors('password')} ? ' is-invalid' : ''"
                                            style="border-radius: 10px 0 0 10px; border: 2px solid #e9ecef; padding: 12px 15px; transition: all 0.3s ease;" />
-                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn" style="border-radius: 0 10px 10px 0; border: 2px solid #e9ecef; border-left: none;">
-                                        <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtnEdit" style="border-radius: 0 10px 10px 0; border: 2px solid #e9ecef; border-left: none;">
+                                        <i class="fas fa-eye" id="togglePasswordIconEdit"></i>
                                     </button>
                                 </div>
                                 <div class="invalid-feedback" th:errors="*{password}"></div>
                                 <div class="form-text mt-2">
                                     <i class="fas fa-info-circle me-1 text-muted"></i>
                                     Laissez vide pour conserver le mot de passe actuel
-                                </div>
-                            </div>
-                            
-                            <!-- Info Box pour la génération automatique du mot de passe (nouvel utilisateur) -->
-                            <div class="col-md-12" th:if="${user.id == null}">
-                                <div class="info-box mb-0" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #2196f3; border-radius: 15px; padding: 25px; box-shadow: 0 6px 20px rgba(33, 150, 243, 0.15);">
-                                    <div class="d-flex align-items-start">
-                                        <div class="me-3" style="width: 60px; height: 60px; background: rgba(33, 150, 243, 0.15); border-radius: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(33, 150, 243, 0.2);">
-                                            <i class="fas fa-key fa-2x" style="color: #2196f3;"></i>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="mb-3 fw-bold" style="color: #1976d2; font-size: 1.2rem;">
-                                                <i class="fas fa-info-circle me-2"></i>
-                                                Génération automatique du mot de passe
-                                            </h5>
-                                            <div class="alert alert-info mb-0" style="background: white; border: 2px solid #2196f3; border-radius: 12px; padding: 20px;">
-                                                <div class="mb-3 p-3 rounded" style="background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); border-left: 4px solid #ffc107;">
-                                                    <div class="d-flex align-items-center mb-2">
-                                                        <i class="fas fa-lock me-2" style="color: #ff9800; font-size: 1.2rem;"></i>
-                                                        <strong style="color: #856404; font-size: 1.05rem;">Mot de passe aléatoire généré automatiquement</strong>
-                                                    </div>
-                                                    <p class="mb-2 ms-4" style="color: #856404;">
-                                                        Le système génère automatiquement un <strong>mot de passe aléatoire unique</strong> de 10 caractères pour chaque nouvel utilisateur.
-                                                    </p>
-                                                    <div class="ms-4 mb-2">
-                                                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                            <small class="text-muted">
-                                                                <i class="fas fa-key me-1"></i>
-                                                                <strong>Exemple de mot de passe généré :</strong>
-                                                            </small>
-                                                            <code id="examplePasswordUser" 
-                                                                  class="px-3 py-2 rounded fw-bold" 
-                                                                  style="background: #fff; color: #dc3545; font-size: 1.1rem; font-family: 'Courier New', monospace; border: 2px solid #dc3545; letter-spacing: 2px;">
-                                                                Chargement...
-                                                            </code>
-                                                            <button type="button" 
-                                                                    class="btn btn-sm btn-outline-secondary" 
-                                                                    onclick="generateExamplePasswordUser()"
-                                                                    style="border-radius: 20px; padding: 4px 12px; font-size: 0.85rem;">
-                                                                <i class="fas fa-sync-alt me-1"></i>Générer un autre exemple
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <p class="mb-0 ms-4">
-                                                        <small class="text-muted">
-                                                            <i class="fas fa-info-circle me-1"></i>
-                                                            Le mot de passe réel sera généré lors de la création et affiché dans le message de confirmation.
-                                                        </small>
-                                                    </p>
-                                                </div>
-                                                
-                                                <div class="mb-3">
-                                                    <div class="d-flex align-items-start mb-2">
-                                                        <i class="fas fa-exclamation-triangle me-2 mt-1" style="color: #ff9800; font-size: 1.1rem;"></i>
-                                                        <div>
-                                                            <strong style="color: #856404;">Obligation de changement à la première connexion</strong>
-                                                            <p class="mb-0 mt-1" style="color: #6c757d; font-size: 0.95rem;">
-                                                                L'utilisateur sera <strong>obligé</strong> de changer ce mot de passe lors de sa première connexion au système.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="mb-0">
-                                                    <div class="d-flex align-items-start">
-                                                        <i class="fas fa-sign-in-alt me-2 mt-1" style="color: #17a2b8; font-size: 1.1rem;"></i>
-                                                        <div>
-                                                            <strong style="color: #0c5460;">Reconnexion après changement</strong>
-                                                            <p class="mb-0 mt-1" style="color: #6c757d; font-size: 0.95rem;">
-                                                                Après avoir changé son mot de passe, l'utilisateur devra se reconnecter avec son nouveau mot de passe pour accéder au système.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +209,7 @@
                                 onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)';"
                                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';">
                             <i class="fas fa-save me-2"></i>
-                            <span th:text="${user.id == null ? 'Créer l''Utilisateur' : 'Mettre à Jour'}">Enregistrer</span>
+                            <span th:text="${user == null or user.id == null ? 'Créer l''Utilisateur' : 'Mettre à Jour'}">Enregistrer</span>
                         </button>
                         <a th:href="@{/admin/users}" class="btn btn-lg btn-outline-secondary" 
                            style="border-radius: 25px; padding: 12px 30px; font-weight: 600; border: 2px solid #e9ecef; transition: all 0.3s ease;"
@@ -281,56 +226,9 @@
 </div>
 
 <script>
-    // Function to generate example password (same logic as server-side)
-    // Utilise uniquement des majuscules (A-Z) et des chiffres (0-9)
-    function generateExamplePasswordUser() {
-        const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const numbers = "0123456789";
-        const allChars = upperCase + numbers;
-        
-        let password = '';
-        
-        // Assurer au moins une majuscule et un chiffre
-        password += upperCase[Math.floor(Math.random() * upperCase.length)];
-        password += numbers[Math.floor(Math.random() * numbers.length)];
-        
-        // Remplir le reste avec des caractères aléatoires (A-Z et 0-9 uniquement)
-        for (let i = password.length; i < 10; i++) {
-            password += allChars[Math.floor(Math.random() * allChars.length)];
-        }
-        
-        // Mélanger les caractères pour éviter un pattern prévisible
-        const passwordArray = password.split('');
-        for (let i = passwordArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [passwordArray[i], passwordArray[j]] = [passwordArray[j], passwordArray[i]];
-        }
-        
-        return passwordArray.join('');
-    }
-    
-    // Function to display example password
-    function displayExamplePasswordUser() {
-        const examplePasswordElement = document.getElementById('examplePasswordUser');
-        if (examplePasswordElement) {
-            const examplePassword = generateExamplePasswordUser();
-            examplePasswordElement.textContent = examplePassword;
-        }
-    }
-    
-    // Make generateExamplePasswordUser available globally for the button
-    window.generateExamplePasswordUser = function() {
-        displayExamplePasswordUser();
-    };
-    
     // Toggle password visibility
     document.addEventListener('DOMContentLoaded', function() {
-        // Generate and display example password on page load (only for new users)
-        const userForm = document.querySelector('form[th\\:action*="/admin/users"]');
-        if (userForm && !userForm.querySelector('input[th\\:field*="id"]')?.value) {
-            displayExamplePasswordUser();
-        }
-        
+        // Toggle pour le champ mot de passe (création)
         const togglePasswordBtn = document.getElementById('togglePasswordBtn');
         const passwordField = document.querySelector('input[type="password"][th\\:field*="password"]');
         const togglePasswordIcon = document.getElementById('togglePasswordIcon');
@@ -347,6 +245,27 @@
                 } else {
                     togglePasswordIcon.classList.remove('fa-eye');
                     togglePasswordIcon.classList.add('fa-eye-slash');
+                }
+            });
+        }
+        
+        // Toggle pour le champ mot de passe (modification)
+        const togglePasswordBtnEdit = document.getElementById('togglePasswordBtnEdit');
+        const passwordFieldEdit = document.querySelector('input[type="password"][th\\:field*="password"]');
+        const togglePasswordIconEdit = document.getElementById('togglePasswordIconEdit');
+        
+        if (togglePasswordBtnEdit && passwordFieldEdit && togglePasswordIconEdit) {
+            togglePasswordBtnEdit.addEventListener('click', function() {
+                const type = passwordFieldEdit.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordFieldEdit.setAttribute('type', type);
+                
+                // Changer l'icône
+                if (type === 'password') {
+                    togglePasswordIconEdit.classList.remove('fa-eye-slash');
+                    togglePasswordIconEdit.classList.add('fa-eye');
+                } else {
+                    togglePasswordIconEdit.classList.remove('fa-eye');
+                    togglePasswordIconEdit.classList.add('fa-eye-slash');
                 }
             });
         }
